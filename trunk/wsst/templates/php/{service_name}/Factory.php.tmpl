@@ -1,0 +1,77 @@
+<?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * This file contains the class "<%[$package_name]%>_Factory"
+ *
+ * PHP versions 4 and 5
+<%[ if ($php_license_abstract) {
+    $OUT .= " *\n";
+    $php_license_abstract =~ s/^\s+//;
+    $php_license_abstract =~ s/\s+$//;
+    $php_license_abstract =~ s/\n/\n * /g;
+    $OUT .= " * LICENSE: $php_license_abstract\n";
+} ]%> *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+
+require_once 'PEAR.php';
+
+require_once '<%[$package_dir]%>/Request.php';
+require_once '<%[$package_dir]%>/Response.php';
+
+/**
+ * Factory class for Request/Response object.
+ *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+class <%[$package_name]%>_Factory
+{
+    /**
+     * Create Request object and return
+     * 
+     * @return object <%[$package_name]%>_Request
+     */
+    function &createRequest()
+    {
+        require_once '<%[$package_dir]%>/Request/Default.php';
+        $obj =& new <%[$package_name]%>_Request_Default($this);
+        return $obj;
+    }
+    
+    /**
+     * Create Response object and return
+     * 
+     * @param string $status HTTP status line 
+     * @param string $header HTTP header
+     * @param string $content response message content
+     * @return object <%[$package_name]%>_Response
+     */
+    function &createResponse($status = null, $header = null, $content = null)
+    {
+        require_once '<%[$package_dir]%>/Response/Default.php';
+        $obj =& new <%[$package_name]%>_Response_Default($status, $header, $content);
+        return $obj;
+    }
+}
+
+?>

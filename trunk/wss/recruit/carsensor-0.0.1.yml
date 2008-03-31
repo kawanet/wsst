@@ -1,0 +1,991 @@
+# カーセンサーAPI
+
+company_name: Recruit
+service_name: CarSensor
+version: 0.0.1
+title: CarSensor.net Web Service
+title_m17n:
+  ja: カーセンサーnet Webサービス
+abstract: カーセンサーnetに掲載されている中古車情報及び新車カタログ情報を様々な軸で検索できるAPIです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/carsensor/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://webservice.recruit.co.jp/pub/lang/php/Services_Recruit_CarSensor/
+
+methods:
+  - name: usedcar
+    title: 中古車検索API
+    url: http://webservice.recruit.co.jp/carsensor/usedcar/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: id
+        title: 物件ID
+        desc: 物件に割り当てられた番号で検索します。
+        multiple: true
+        examples:
+          - CH9999999999
+      - name: brand
+        title: ブランドコード
+        desc: ブランドで検索します。指定できるコードはブランドマスタAPIを参照。
+        multiple: true
+        examples:
+          - SB
+      - name: model
+        title: 車種名
+        desc: 車種名で検索(部分一致)します。
+        examples:
+          - インプレッサ
+      - name: country
+        title: 国コード
+        desc: ブランドの代表国で検索します。指定できるコードは国マスタAPIを参照。
+        multiple: true
+        examples:
+          - JPN
+      - name: large_area
+        title: 大エリアコード
+        desc: 中古車店の所在エリアから検索します。指定できるコードは大エリアマスタAPIを参照。
+        multiple: true
+        examples:
+          - 1
+      - name: pref
+        title: 都道府県コード
+        desc: 中古車店の所在都道府県から検索します。指定できるコードは都道府県マスタAPIを参照。
+        multiple: true
+        examples:
+          - 13
+      - name: body
+        title: ボディタイプコード
+        desc: ボディの形から検索します。指定できるコードはボディタイプマスタAPIを参照。
+        multiple: true
+        examples:
+          - S
+      - name: person
+        title: 定員
+        desc: 指定した人数以上の定員の車を検索します。
+        examples:
+          - 5
+        note: 整数(例)5
+      - name: color
+        title: カラーコード
+        desc: 車の色で検索します。指定できるコードはカラーマスタAPIを参照。
+        multiple: true
+        examples:
+          - WT
+      - name: price_min
+        title: 最低価格
+        desc: 価格帯から検索します。
+        examples:
+          - 500000
+      - name: price_max
+        title: 最高価格
+        desc: 価格帯から検索します。
+        examples:
+          - 500000
+      - name: keyword
+        title: キーワード
+        desc: ブランド名、車種名、モデル名、説明文、国、色のフリーワード検索(部分一致)が可能です。文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。
+      - name: lat
+        title: 緯度
+        desc: ある地点からの範囲内の中古車店に在庫のある車の検索を行う場合の緯度です。
+        examples:
+          - 35.669220
+      - name: lng
+        title: 経度
+        desc: ある地点からの範囲内の中古車店に在庫のある車の検索を行う場合の経度です。
+        examples:
+          - 139.761457
+      - name: range
+        title: 検索範囲
+        desc: ある地点からの範囲内の中古車店に在庫のある車の検索を行う場合の範囲を指定できます。単位km
+        examples:
+          - 100
+        note: 半角整数。最大200。指定なしは1
+      - name: datum
+        title: 測地系
+        desc: 緯度・経度の測地系を指定できます。world: 世界測地系、tokyo: 旧日本測地系。初期値は world。
+        examples:
+          - world
+      - name: mission
+        title: ミッション種類
+        desc: ATかMTかで絞り込みます。
+        examples:
+          - 1
+        note: |
+          1：AT
+          2：MT
+          指定なし：絞り込みなし
+      - name: nonsmoking
+        title: 禁煙車
+        desc: 禁煙車で絞り込みます。
+        examples:
+          - 1
+        note: |
+          1:絞り込む
+          0:絞り込まない
+          初期値:0
+      - name: leather
+        title: 本革シート
+        desc: 本革シートで絞り込みます。
+        examples:
+          - 1
+        note: |
+          1:絞り込む
+          0:絞り込まない
+          初期値:0
+      - name: welfare
+        title: 福祉車両
+        desc: 福祉車両で絞り込みます。
+        examples:
+          - 1
+        note: |
+          1:絞り込む
+          0:絞り込まない
+          初期値:0
+      - name: year_old
+        title: 登録年式(古い)
+        desc: 登録年式で絞り込みます。
+        examples:
+          - 1998
+        note: |
+          4桁の整数
+          (例)1998
+      - name: year_new
+        title: 登録年式(新しい)
+        desc: 登録年式で絞り込みます。
+        examples:
+          - 1998
+        note: |
+          4桁の整数
+          (例)1998
+      - name: odd_min
+        title: 走行距離(最短)
+        desc: 走行距離で絞り込みます。単位Kmの整数
+        examples:
+          - 50000
+      - name: odd_max
+        title: 走行距離(最長)
+        desc: 走行距離で絞り込みます。単位Kmの整数
+        examples:
+          - 50000
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        examples:
+          - 1
+        note: |
+          0:ブランド順
+          1:価格安い順
+          2:価格高い順
+          3:車種名順
+          4:年式古い順
+          5:年式新しい順
+          6:走行距離少ない順
+          初期値はブランド順。位置から検索を行った場合は距離順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        examples:
+          - 1
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        examples:
+          - 10
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results 
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.0
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: usedcar 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: id 
+              desc: 物件ID
+              examples:
+                - CH9999999999
+            - name: brand 
+              desc: ブランド
+              children:
+                - name: code 
+                  desc: ブランドコード
+                  examples:
+                    - SB
+                - name: name 
+                  desc: ブランド名
+                  examples:
+                    - スバル
+            - name: model 
+              desc: 車種名
+              examples:
+                - インプレッサ
+            - name: grade 
+              desc: グレード名
+              examples:
+                - WRX STi
+            - name: price 
+              desc: 価格
+              examples:
+                - 2260000
+            - name: desc 
+              desc: 説明文
+            - name: body 
+              desc: ボディタイプ
+              children:
+                - name: code 
+                  desc: ボディタイプコード
+                  examples:
+                    - S
+                - name: name 
+                  desc: ボディタイプ名
+                  examples:
+                    - セダン
+            - name: odd 
+              desc: 走行距離
+              examples:
+                - 43000Km
+            - name: year 
+              desc: 登録年
+              examples:
+                - 2002
+            - name: shop 
+              desc: 取扱店
+              children:
+                - name: name 
+                  desc: 店名
+                  examples:
+                    - カーセンサーオート
+                - name: pref 
+                  desc: 都道府県
+                  children:
+                    - name: code 
+                      desc: 都道府県コード
+                      examples:
+                        - 13
+                    - name: name 
+                      desc: 都道府県名
+                      examples:
+                        - 東京都
+                - name: lat 
+                  desc: 緯度
+                  examples:
+                    - 35.660818
+                - name: lng 
+                  desc: 経度
+                  examples:
+                    - 139.775426
+                - name: datum 
+                  desc: 測地系
+                  examples:
+                    - world
+            - name: color 
+              desc: ボディカラー
+              examples:
+                - WRブルー
+            - name: photo 
+              desc: 画像
+              children:
+                - name: main 
+                  desc: メイン画像
+                  children:
+                    - name: l 
+                      desc: メイン画像(大)
+                    - name: s 
+                      desc: メイン画像(小)
+                - name: sub 
+                  desc: その他画像(0〜5個まで、物件によって異なります)
+                  multiple: true
+                  max_occurs: 5
+            - name: urls 
+              desc: 詳細ページURL
+              children:
+                - name: pc 
+                  desc: PC向けURL
+                - name: mobile 
+                  desc: 携帯向けURL
+                - name: qr 
+                  desc: QRコード画像へのURL
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          pref: 13
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: catalog
+    title: カタログAPI
+    url: http://webservice.recruit.co.jp/carsensor/catalog/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: brand 
+        title: ブランドコード 
+        desc: ブランドで検索します。指定できるコードはブランドマスタAPIを参照。*2
+        multiple: true
+        examples:
+          - SB
+      - name: model 
+        title: 車種名 
+        desc: 車種名で検索(部分一致)します。
+        examples:
+          - インプレッサ
+      - name: country 
+        title: 国コード 
+        desc: ブランドの代表国で検索します。指定できるコードは国マスタAPIを参照。*2
+        multiple: true
+        examples:
+          - JPN
+      - name: body 
+        title: ボディタイプコード 
+        desc: ボディの形から検索します。指定できるコードはボディタイプマスタAPIを参照。*2
+        multiple: true
+        examples:
+          - S
+      - name: person 
+        title: 定員 
+        desc: 指定した人数以上の定員の車を検索します。
+        examples:
+          - 5
+        note: 整数(例)5
+      - name: year_old 
+        title: 販売開始年 
+        desc: 販売年で絞り込みます。
+        examples:
+          - 1998
+        note: |
+          4桁の整数
+          (例)1998
+      - name: year_new 
+        title: 販売終了年 
+        desc: 販売年で絞り込みます。
+        examples:
+          - 1998
+        note: |
+          4桁の整数
+          (例)1998
+      - name: welfare 
+        title: 福祉車両 
+        desc: 福祉車両で絞り込みます。
+        examples:
+          - 1
+        note: |
+          1:絞り込む
+          0:絞り込まない(初期値)
+      - name: series 
+        title: 形式 
+        desc: 車の形式で検索します。
+        examples:
+          - GF-GF8
+      - name: keyword 
+        title: キーワード 
+        desc: ブランド名、車種名、モデル名、説明文、のフリーワード検索(部分一致)が可能です。文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。
+      - name: width_max 
+        title: 最大幅 
+        desc: 車の寸法から検索します。単位mm。
+        examples:
+          - 1700
+      - name: height_max 
+        title: 最大高さ 
+        desc: 車の寸法から検索します。単位mm。
+        examples:
+          - 1500
+      - name: length_max 
+        title: 最大長さ
+        desc: 車の寸法から検索します。単位mm。
+        examples:
+          - 4500
+      - name: order 
+        title: ソート順 
+        desc: 検索結果の並び順を指定します。
+        examples:
+          - 1
+        note: |
+          0:ブランド順
+          1:モデル名順
+          指定なし:ブランド順
+      - name: start 
+        title: 検索の開始位置 
+        desc: 検索結果の何件目から出力するかを指定します。
+        examples:
+          - 1
+        note: 初期値:1
+      - name: count 
+        title: 1ページあたりの取得数 
+        desc: 検索結果の最大出力データ数を指定します。
+        examples:
+          - 30
+        note: 初期値：30、最小1、最大30
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: catalog 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: brand 
+              desc: ブランド
+              children:
+                - name: code 
+                  desc: ブランドコード
+                  examples:
+                    - SB
+                - name: name 
+                  desc: ブランド名
+                  examples:
+                    - スバル
+            - name: model 
+              desc: 車種名
+              examples:
+                - レガシィツーリングワゴン
+            - name: grade 
+              desc: グレード名
+              examples:
+                - 2.0GT
+            - name: price 
+              desc: 価格
+              examples:
+                - 3030000
+            - name: desc 
+              desc: 説明文
+              nullable: true
+            - name: body 
+              desc: ボディタイプ
+              children:
+                - name: code 
+                  desc: ボディタイプコード
+                  examples:
+                    - W
+                - name: name 
+                  desc: ボディタイプ名
+                  examples:
+                    - ステーションワゴン
+            - name: person 
+              desc: 定員
+              examples:
+                - 5
+            - name: period 
+              desc: 販売期間(販売中の場合は最後が999999）
+              examples:
+                - 200705-999999
+            - name: series 
+              desc: 形式
+            - name: width 
+              desc: 全幅
+              examples:
+                - 1730
+            - name: height 
+              desc: 全高
+              examples:
+                - 1470
+            - name: length 
+              desc: 全長
+              examples:
+                - 4680
+            - name: photo 
+              desc: 画像
+              children:
+                - name: front 
+                  desc: 前面
+                  children:
+                    - name: caption 
+                      desc: 説明
+                    - name: l 
+                      desc: 画像(大)
+                    - name: s 
+                      desc: 画像(小)
+                - name: rear 
+                  desc: 背面
+                  nullable: true
+                  children:
+                    - name: caption 
+                      desc: 説明
+                    - name: l 
+                      desc: 画像(大)
+                    - name: s 
+                      desc: 画像(小)
+                - name: inpane 
+                  desc: インパネ
+                  children:
+                    - name: caption 
+                      desc: 説明
+                    - name: l 
+                      desc: 画像(大)
+                    - name: s 
+                      desc: 画像(小)
+            - name: urls 
+              desc: 店舗URL
+              children:
+                - name: pc 
+                  desc: PC向けURL
+                - name: mobile 
+                  desc: 携帯向けURL
+                - name: qr 
+                  desc: QRコード画像へのURL
+            - name: desc 
+              desc: 詳細フラグ。1の場合中古車検索API対象店舗
+              examples:
+                - 0
+                - 1
+              note: 0:なし、1:あり
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          country: JPN
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: brand
+    title: ブランドマスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/brand/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: country 
+        title: 国コード 
+        desc: 国で絞り込むことができます。指定するコードは国マスタAPIを参照。
+        examples:
+          - LE
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 6
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 6
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: brand 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: ブランドコード
+            - name: name 
+              desc: ブランド名
+            - name: country 
+              desc: 代表国
+              nullable: true
+              children:
+                - name: code 
+                  desc: 国コード
+                - name: name 
+                  desc: 国名
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          country: JPN
+      - type: lib_error
+
+  - name: country
+    title: 国マスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/country/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 国コード
+        desc: コード指定で特定の国を取得します
+        examples:
+          - JPN
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results 
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 9
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 9
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: country 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: 国コード
+            - name: name 
+              desc: 国名
+              examples:
+                - 関西
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: large_area
+    title: 大エリアマスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/large_area/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 大エリアコード
+        desc: コード指定で特定の大エリアを取得します
+        examples:
+          - 3
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results 
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: large_area 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: 大エリアコード
+            - name: name 
+              desc: 大エリア名
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: pref
+    title: 都道府県マスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/pref/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 都道府県コード
+        desc: コード指定で特定の都道府県を取得します
+        examples:
+          - 02
+      - name: large_area 
+        title: 大エリアコード 
+        desc: 大エリアコードで検索します。*2
+        multiple: true
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: pref 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: 都道府県コード
+            - name: name 
+              desc: 都道府県名
+            - name: large_area
+              nullable: true
+              children:
+                - name: code 
+                  desc: 大エリアコード
+                - name: name 
+                  desc: 大エリア名
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          large_area: 1
+      - type: lib_error
+
+  - name: body
+    title: ボディタイプマスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/body/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: body 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: ボディタイプコード
+            - name: name 
+              desc: ボディタイプ名
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: color
+    title: カラーマスタAPI
+    url: http://webservice.recruit.co.jp/carsensor/color/v1/
+    params:
+      - name: key 
+        title: APIキー 
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format 
+        title: レスポンス形式 
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名を指定する事により、javascript側コールバック関数の名前を指定できます。
+        examples:
+          - xml
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version 
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available 
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 530
+        - name: results_returned 
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 530
+        - name: results_start 
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: color 
+          desc: '[複数要素]'
+          multiple: true
+          children:
+            - name: code 
+              desc: カラーコード
+            - name: name 
+              desc: カラー名
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0

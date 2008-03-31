@@ -1,0 +1,105 @@
+<?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * This file contains the class "<%[$package_name]%>_Response_Default"
+ *
+ * PHP versions 4 and 5
+<%[ if ($php_license_abstract) {
+    $OUT .= " *\n";
+    $php_license_abstract =~ s/^\s+//;
+    $php_license_abstract =~ s/\s+$//;
+    $php_license_abstract =~ s/\n/\n * /g;
+    $OUT .= " * LICENSE: $php_license_abstract\n";
+} ]%> *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+
+require_once 'PEAR.php';
+require_once 'XML/Unserializer.php';
+
+/**
+ * Default implementation of Response class (using XML_Unserializer)
+ *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright) {
+    $OUT .= " * \@copyright  $php_copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+class <%[$package_name]%>_Response_Default extends <%[$package_name]%>_Response
+{
+    /**
+     * XML_Unserializer options
+     * 
+     * @access private
+     * @var array
+     */
+    var $_options = array(XML_UNSERIALIZER_OPTION_COMPLEXTYPE => 'object',
+                          XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => TRUE);
+    
+    /**
+     *　set XML_Unserializer option
+     * 
+     * @access public
+     * @param string $key option key
+     * @param string $val option value
+     */
+    function setOption($key, $val)
+    {
+        $this->_option[$key] = $val;
+    }
+
+    /**
+     * process response data
+     * 
+     * @access public
+     * @param array $conf config
+     * @return void
+     */
+    function processData($conf = array())
+    {
+        $options = $this->_options;    
+        
+        if (array_key_exists('force_array', $conf)) {
+            $options[XML_UNSERIALIZER_OPTION_FORCE_ENUM]
+                = array_key_exists(XML_UNSERIALIZER_OPTION_FORCE_ENUM, $options)
+                  && $options[XML_UNSERIALIZER_OPTION_FORCE_ENUM]
+                    ? array_merge($options[XML_UNSERIALIZER_OPTION_FORCE_ENUM],
+                                  $conf['force_array'])
+                    : $conf['force_array'];
+        }
+    
+        $unserializer =& new XML_Unserializer($options);
+        
+        // remove dust data
+        $content = $this->_content;
+        $first = strpos($content, '<');
+        $last = strrpos($content, '>');
+        $content = substr($content, $first, $last - $first + 1);
+        
+        $status = $unserializer->unserialize($content, false);
+        if (PEAR::isError($status)) {
+            $this->processDataError = $status->getMessage();
+            return;
+        }
+        
+        $this->_data = $unserializer->getUnserializedData();
+    }
+}
+
+?>

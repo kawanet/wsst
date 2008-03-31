@@ -1,0 +1,28 @@
+use strict;
+use ExtUtils::MakeMaker;
+
+my $opt = {
+    NAME                =>  '<%[$package_name]%>',
+    VERSION_FROM        =>  'lib/<%[$package_dir]%>.pm',
+    PREREQ_PM           =>  {
+        'Test::More'        =>  '0',
+        'Class::Accessor'   =>  '0',
+        'Class::Accessor::Children'   =>  '0',
+        'XML::OverHTTP'     =>  '0',
+    },
+    AUTHOR              => '<%[join(", ", @author)]%>',
+};
+
+<%[ if ($perl_abstract||$abstract) {
+    local $abstract = ($perl_abstract || $abstract);
+    $abstract =~ s/^\s+//;
+    $abstract =~ s/\s+$//;
+    $OUT .= "\$opt->{ABSTRACT} =<<END_OF_ABSTRACT_TEXT;\n";
+    $OUT .= $abstract;
+    $OUT .= "\nEND_OF_ABSTRACT_TEXT\n";
+} ]%>
+my $mm = $ExtUtils::MakeMaker::VERSION;
+$mm =~ s/[^\d\.]+//g;
+$opt->{LICENSE} = '<%[$license]%>' if ( $mm >= 6.3001 );
+
+WriteMakefile( %$opt );

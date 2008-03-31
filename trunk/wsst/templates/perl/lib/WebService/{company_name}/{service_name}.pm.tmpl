@@ -1,0 +1,177 @@
+package <%[$package_name]%>;
+
+use strict;
+use base qw( Class::Accessor::Fast );
+use vars qw( $VERSION );
+$VERSION = '<%[$version]%>';
+
+<%[ foreach my $method (@methods) {
+    $OUT .= "use ${package_name}::$method->{class_name};\n";
+} ]%>
+
+my $TPPCFG = [qw( user_agent lwp_useragent http_lite utf8_flag )];
+__PACKAGE__->mk_accessors( @$TPPCFG, 'param' );
+
+sub new {
+    my $package = shift;
+    my $self    = {@_};
+    $self->{user_agent} ||= __PACKAGE__."/$VERSION ";
+    bless $self, $package;
+    $self;
+}
+
+sub add_param {
+    my $self = shift;
+    my $param = $self->param() || {};
+    %$param = ( %$param, @_ ) if scalar @_;
+    $self->param($param);
+}
+
+sub get_param {
+    my $self = shift;
+    my $key = shift;
+    my $param = $self->param() or return;
+    $param->{$key} if exists $param->{$key};
+}
+
+sub init_treepp_config {
+    my $self = shift;
+    my $api  = shift;
+    my $treepp = $api->treepp();
+    foreach my $key ( @$TPPCFG ) {
+        next unless exists $self->{$key};
+        next unless defined $self->{$key};
+        $treepp->set( $key => $self->{$key} );
+    }
+}
+
+sub init_query_param {
+    my $self = shift;
+    my $api  = shift;
+    my $param = $self->param();
+    foreach my $key ( keys %$param ) {
+        next unless defined $param->{$key};
+        $api->add_param( $key => $param->{$key} );
+    }
+}
+
+<%[ foreach my $method (@methods) {
+    $OUT .= include('inc_webservice_method.tmpl', method=>$method);
+    $OUT .= "\n";
+} ]%>
+=head1 NAME
+
+<%[$package_name]%> - An Interface for <%[$title]%>
+
+=head1 SYNOPSIS
+
+    use <%[$package_name]%>;
+    
+    my $service = <%[$package_name]%>->new();
+    
+    my $param = {
+<%[ foreach my $key (sort keys %{$methods[0]{tests}[0]{params}}) {
+    my $val = $methods[0]{tests}[0]{params}{$key};
+    unless ($val =~ s/^\$(.*)$/\$ENV{'$1'}/) {
+        $val = "'$val'";
+    }
+    $OUT .= "        '$key' => $val,\n";
+} ]%>    };
+    my $res = $service-><%[$methods[0]{interface_name}]%>( %$param );
+    my $root = $res->root;
+<%[ my $ret_test = [map {['', $_]} @{$methods[0]{'return'}{children}}];
+    my $n = 5;
+    while (my $ret = shift(@$ret_test)) {
+        last unless $n--;
+        next if $ret->[1]->{nullable} eq 'true';
+        $OUT .= qq|    printf("$ret->[1]->{name}: %s\\n", \$root$ret->[0]\->$ret->[1]->{name});\n|;
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '->[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+]%>    print "...\n";
+
+=head1 DESCRIPTION
+
+<%[$perl_abstract||$abstract]%>
+
+=head1 METHODS
+
+=head2 new
+
+This is the constructor method for this class.
+
+    my $service = <%[$package_name]%>->new();
+
+This accepts optional parameters.
+
+    my $conf = {
+        utf8_flag => 1,
+        param => {
+            # common parameters of this web service 
+        },
+    };
+    my $service = <%[$package_name]%>->new( %$conf );
+
+=head2 add_param
+
+Add common parameter of tihs web service.
+
+    $service->add_param( param_key => param_value );
+
+You can add multiple parameters by calling once.
+
+    $service->add_param( param_key1 => param_value1,
+                         param_key2 => param_value2,
+                         ...);
+
+=head2 get_param
+
+Returns common parameter value of the specified key.
+
+    my $param_value = $service->get( 'param_key' );
+
+<%[ foreach my $method (@methods) {
+    $OUT .=<<EOS;
+=head2 $method->{interface_name}
+
+This makes a request for C<$method->{name}> API.
+See L<${package_name}::$method->{class_name}> for details.
+
+    my \$res = \$service->$method->{interface_name}( %\$param );
+
+EOS
+} ]%>=head2 utf8_flag / user_agent / lwp_useragent / http_lite
+
+This modules uses L<XML::TreePP> module internally.
+Following methods are available to configure it.
+
+    $service->utf8_flag( 1 );
+    $service->user_agent( 'Foo-Bar/1.0 ' );
+    $service->lwp_useragent( LWP::UserAgent->new() );
+    $service->http_lite( HTTP::Lite->new() );
+
+<%[ if ($perl_see_also||$see_also) {
+    local $see_also = ($perl_see_also||$see_also);
+    $OUT .=<<EOS;
+=head1 SEE ALSO
+
+$see_also
+
+EOS
+} ]%>=head1 AUTHOR
+
+<%[join(",\n", @author)]%>
+
+<%[ if ($perl_copyright||$copyright) {
+    local $copyright = ($perl_copyright||$copyright);
+    $OUT .=<<EOS;
+=head1 COPYRIGHT AND LICENSE
+
+$copyright
+
+EOS
+} ]%>=cut
+1;

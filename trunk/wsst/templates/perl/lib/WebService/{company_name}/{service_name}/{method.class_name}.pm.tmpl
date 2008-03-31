@@ -1,0 +1,159 @@
+package <%[$package_name]%>::<%[$method{class_name}]%>;
+
+use strict;
+use base qw( <%[$package_name]%>::Base );
+use vars qw( $VERSION );
+use Class::Accessor::Fast;
+use Class::Accessor::Children::Fast;
+
+$VERSION = '<%[$version]%>';
+
+sub http_method { '<%[$method{request_method}||"GET"]%>'; }
+
+sub url { '<%[$method{url}]%>'; }
+
+sub query_class { '<%[$package_name]%>::<%[$method{class_name}]%>::Query'; }
+
+sub query_fields { [
+    <%[make_query_fields(\%method)]%>
+]; }
+
+sub default_param { {
+    <%[make_default_param(\%method)]%>
+}; }
+
+sub notnull_param { [
+    <%[make_notnull_param(\%method)]%>
+]; }
+
+sub elem_class { '<%[$package_name]%>::<%[$method{class_name}]%>::Element'; }
+
+sub root_elem { '<%[$method{return}{name}]%>'; }
+
+sub elem_fields { {
+    <%[make_elem_fields(\%method)]%>
+}; }
+
+sub force_array { [
+    <%[make_force_array(\%method)]%>
+]; }
+
+# __PACKAGE__->mk_query_accessors();
+
+@<%[$package_name]%>::<%[$method{class_name}]%>::Query::ISA = qw( Class::Accessor::Fast );
+<%[$package_name]%>::<%[$method{class_name}]%>::Query->mk_accessors( @{query_fields()} );
+
+# __PACKAGE__->mk_elem_accessors();
+
+@<%[$package_name]%>::<%[$method{class_name}]%>::Element::ISA = qw( Class::Accessor::Children::Fast );
+<%[$package_name]%>::<%[$method{class_name}]%>::Element->mk_ro_accessors( root_elem() );
+<%[$package_name]%>::<%[$method{class_name}]%>::Element->mk_child_ro_accessors( %{elem_fields()} );
+
+=head1 NAME
+
+<%[$package_name]%>::<%[$method{class_name}]%> - <%[$title]%> "<%[$method{name}]%>" API
+
+=head1 SYNOPSIS
+
+    use <%[$package_name]%>;
+    
+    my $service = <%[$package_name]%>->new();
+    
+    my $param = {
+<%[ foreach my $key (sort keys %{$method{tests}[0]{params}}) {
+    my $val = $method{tests}[0]{params}{$key};
+    unless ($val =~ s/^\$(.*)$/\$ENV{'$1'}/) {
+        $val = "'$val'";
+    }
+    $OUT .= "        '$key' => $val,\n";
+} ]%>    };
+    my $res = $service-><%[$method{interface_name}]%>( %$param );
+    my $data = $res->root;
+<%[ my $ret_test = [map {['', $_]} @{$method{'return'}{children}}];
+    my $n = 5;
+    while (my $ret = shift(@$ret_test)) {
+        last unless $n--;
+        next if $ret->[1]->{nullable} eq 'true';
+        $OUT .= qq|    print "$ret->[1]->{name}: \$data$ret->[0]\->$ret->[1]->{name}\\n";\n|;
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '->[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+]%>    print "...\n";
+
+=head1 DESCRIPTION
+
+This module is a interface for the C<<%[$method{name}]%>> API.
+It accepts following query parameters to make an request.
+
+    my $param = {
+<%[ foreach my $param (@{$method{params}}) {
+    next if $param->{fixed};
+    my $key = $param->{name};
+    my $val = $param->{examples}->[0] || 'XXXXXXXX';
+    $val = "'$val'";
+    $OUT .= "        '$key' => $val,\n";
+} ]%>    };
+    my $res = $service-><%[$method{interface_name}]%>( %$param );
+
+C<$service> above is an instance of L<<%[$package_name]%>>.
+
+=head1 METHODS
+
+=head2 root
+
+This returns the root element of the response.
+
+    my $root = $res->root;
+
+You can retrieve each element by the following accessors.
+
+<%[ my $ret_test = [map {['', $_]} @{$method{'return'}{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        $OUT .= "    \$root$ret->[0]\->$ret->[1]->{name}\n";
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '->[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+]%>
+
+=head2 xml
+
+This returns the raw response context itself.
+
+    print $res->xml, "\n";
+
+=head2 code
+
+This returns the response status code.
+
+    my $code = $res->code; # usually "200" when succeeded
+
+=head2 is_error
+
+This returns true value when the response has an error.
+
+    die 'error!' if $res->is_error;
+
+=head1 SEE ALSO
+
+L<<%[$package_name]%>>
+
+=head1 AUTHOR
+
+<%[join(",\n", @author)]%>
+
+<%[ if ($perl_copyright||$copyright) {
+    local $copyright = ($perl_copyright||$copyright);
+    $OUT .=<<EOS;
+=head1 COPYRIGHT AND LICENSE
+
+$copyright
+
+EOS
+} ]%>=cut
+1;
