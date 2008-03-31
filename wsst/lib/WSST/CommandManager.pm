@@ -55,7 +55,7 @@ sub init {
     
     my $pm = WSST::PluginManager->instance;
     foreach my $plugin (@{$pm->{plugins}}) {
-        next unless $plugin->isa("WSST::PluginCommand");
+        next unless $plugin->isa("WSST::Command");
         push(@{$self->{commands}}, $plugin);
         my $pn = $plugin->name;
         foreach my $n (@{$plugin->command_names}) {

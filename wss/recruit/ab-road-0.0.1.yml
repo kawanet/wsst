@@ -1,0 +1,1302 @@
+# エイビーロードAPI
+
+company_name: Recruit
+service_name: AbRoad
+version: 0.0.1
+title: AB-ROAD Web Service
+title_m17n:
+  ja: エイビーロードWebサービス
+abstract: エイビーロードWebサービスを使うことで、エイビーロード(AB-ROAD)に掲載されている、海外旅行ツアー情報にアクセスして、アプリケーションを構築することができます。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/ab-road/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: tour
+    title: 海外旅行検索API
+    desc: エイビーロード(AB-ROAD)に掲載中のツアー情報から、複数の軸での検索が可能です。
+    url: http://webservice.recruit.co.jp/ab-road/tour/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: id
+        title: ツアーID
+        desc: ツアー毎のIDこの項目を指定した場合はym,ymdを除くその他の絞込みクエリはすべて無視されます。複数指定可能*2
+        note: (例)AB123456
+        multiple: true
+        examples:
+          - AB123456
+      - name: area
+        title: エリアコード
+        desc: エリアマスタAPI参照。同時にcountryやcityの指定があった場合は無視される。複数指定可能*2
+        note: (例)EUR
+        multiple: true
+        examples:
+          - EUR
+      - name: country
+        title: 国コード
+        desc: 国マスタAPI参照。同時にcityの指定があった場合は無視される。複数指定可能*2
+        note: (例)BE
+        multiple: true
+        examples:
+          - BE
+      - name: city
+        title: 都市コード
+        desc: 都市マスタAPI参照。複数指定可能*2
+        note: (例)NYC
+        multiple: true
+        examples:
+          - NYC
+      - name: hotel
+        title: ホテルコード
+        desc: ホテルマスタAPI参照。複数指定可能*2
+        note: (例)73393
+        multiple: true
+        examples:
+          - 73393
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)ベトナム　癒し
+        multiple: true
+        examples:
+          - ベトナム　癒し
+      - name: dept
+        title: 出発地
+        desc: コードで指定。複数指定可能*2。
+        note: |
+          TYO:東京
+          NGO：名古屋
+          OSA:大阪
+          FUK:福岡
+          999:その他
+        multiple: true
+      - name: ym
+        title: 出発月
+        desc: 200708 (6桁yyymm)または 0708 (4桁yymm)または 08 (2桁mm:今年の8月)または 8 (1桁m:今年の8月)。あるいは今月からの相対指定も可能 *3
+        note: (例)0708
+        examples:
+          - 0708
+      - name: ymd
+        title: 出発日
+        desc: 20070812 (8桁yyyymmdd)または 070812 (6桁yymmdd)または 0812 (4桁mmdd:今年の8月12日)。ymとymd両方を指定していた場合はymdが優先。あるいは今月からの相対指定も可能 *3
+        note: (例)070812
+        examples:
+          - 070812
+      - name: price_min
+        title: 価格帯下限
+        desc: この価格以上のツアーを検索。 単位は円
+        note: (例)30000
+        examples:
+          - 30000
+      - name: price_max
+        title: 価格帯上限
+        desc: この価格以下のツアーを検索。 単位は円
+        note: (例)100000
+        examples:
+          - 100000
+      - name: term_min
+        title: 期間下限
+        desc: この期間以上のツアーを検索。 単位は日
+        note: (例)3
+        examples:
+          - 3
+      - name: term_max
+        title: 期間上限
+        desc: この期間以下のツアーを検索。 単位は日
+        note: (例)10
+        examples:
+          - 10
+      - name: airline
+        title: 航空会社
+        desc: 航空会社マスタPI参照。複数指定可能*2
+        note: (例)A0
+        multiple: true
+        examples:
+          - A0
+      - name: kodaw
+        title: こだわり項目
+        desc: こだわりマスタ参照。コードで指定。複数指定可能*2
+        note: |
+          1:フリープラン
+          2:午前便
+          3:午後便
+          4:夜便
+          5:添乗員つき
+          6:子供・幼児割引
+          7:送迎つき
+          8:航空会社指定
+          9:ホテル指定
+          10:アーリーチェックイン
+          11:レイトチェックアウト
+        multiple: true
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します
+        note: |
+          0:新着順(更新日付が新しいツアーから表示、デフォルト)
+          1:価格安い順
+          2:価格高い順
+          3:期間短い順
+          4:期間長い順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: tour
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: id
+              desc: ツアーのID
+              examples:
+                - AD236272
+            - name: last_update
+              desc: 最終更新日時
+              examples:
+                - 2007-12-31T11:11:11Z
+            - name: term
+              desc: 期間
+              examples:
+                - 8
+            - name: title
+              desc: ツアー名
+              examples:
+                - マサイマラ5つ星ホテルに4連泊。チータを探そう
+            - name: airline
+              desc: 利用航空会社[複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 航空会社名コード
+                - name: name
+                  desc: 航空会社名（船利用の場合は「船」）
+                  examples:
+                    - エイビーロード航空
+            - name: airline_summary
+              desc: 利用航空会社要約（航空会社の文字列airline要素のnameを接続した文字列）
+              examples:
+                - エイビーロード航空、世界航空
+            - name: brand
+              desc: ブランド
+              children:
+                - name: code
+                  desc: ブランド名のコード
+                  examples:
+                    - 1866299001
+                - name: name
+                  desc: 旅行のブランド名
+                  examples:
+                    - AB TRAVEL 世界の旅
+            - name: city_summary
+              desc: 宿泊地要約（すべての宿泊地の文字列city要素のnameを接続した文字列）
+              examples:
+                - サンブル、ナクル、マサイマラ、ナイロビ
+            - name: dept_city
+              desc: 出発地
+              children:
+                - name: name
+                  desc: 出発地名称
+                  examples:
+                    - 東京
+                - name: code
+                  desc: 出発地コード
+                  examples:
+                    - TYO
+            - name: hotel
+              desc: ホテル(宿泊地ごと)[複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: ホテルコード（ホテル指定の場合のみ、コードあり）
+                  nullable: true
+                  examples:
+                    - 73393
+                - name: name
+                  desc: ホテル名（クラス名や、同等の場合もあり）
+                  examples:
+                    - サファリ・ロッジ・ホテル
+                - name: city
+                  desc: ホテル所在都市
+                  children:
+                    - name: code
+                      desc: ホテル所在都市コード
+                      examples:
+                        - C14
+                    - name: name
+                      desc: ホテル所在都市名
+                      examples:
+                        - ナクル
+            - name: hotel_summary
+              desc: ホテル要約（すべてのホテルの文字列city要素のnameを接続した文字列）
+              examples:
+                - インターナショナルホテル又は同等クラス(ナイロビ)、サファリ・ロッジ・ホテル(マサイマラ)
+            - name: kodawari
+              desc: 詳細条件[複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 条件コード
+                  examples:
+                    - 1
+                - name: name
+                  desc: 名称
+                  examples:
+                    - フリープラン
+            - name: price
+              desc: 価格
+              children:
+                - name: all_month
+                  desc: 全期間（申し込み可能な期間）の価格
+                  children:
+                    - name: min
+                      desc: 全期間の最低価格(円)
+                      examples:
+                        - 10000
+                    - name: max
+                      desc: 全期間の最高価格(円)
+                      examples:
+                        - 100000
+                - name: min
+                  desc: 検索対象期間の最低価格(円)
+                  examples:
+                    - 20000
+                - name: max
+                  desc: 検索対象期間の最高価格(円)
+                  examples:
+                    - 50000
+            - name: sche
+              desc: 宿泊地(行程順)[複数要素]
+              multiple: true
+              children:
+                - name: day
+                  desc: 日（通し番号）
+                  examples:
+                    - 1
+                - name: city
+                  desc: 宿泊地の都市（機中泊等もあり）
+                  children:
+                    - name: code
+                      desc: 都市コード
+                      examples:
+                        - C14
+                    - name: name
+                      desc: 都市名
+                      examples:
+                        - ナクル
+                    - name: lat
+                      desc: 緯度 (世界測地系) *1
+                      examples:
+                        - 51.5091700000
+                    - name: lng
+                      desc: 経度 (世界測地系) *1
+                      examples:
+                        - -0.1263430000
+                    - name: area
+                      desc: 都市が属するエリア
+                      children:
+                        - name: code
+                          desc: エリアコード
+                          examples:
+                            - CAF
+                        - name: name
+                          desc: エリア名
+                          examples:
+                            - アフリカ・他
+                    - name: country
+                      desc: 都市が属する国
+                      children:
+                        - name: code
+                          desc: エリアコード
+                          examples:
+                            - KE
+                        - name: name
+                          desc: エリア名
+                          examples:
+                            - ケニア
+            - name: urls
+              desc: エイビーロード(AB-ROAD)のツアー詳細ページのURL
+              children:
+                - name: mobile
+                  desc: モバイル用
+                  examples:
+                    - URL
+                - name: pc
+                  desc: PC用
+                  examples:
+                    - URL
+                - name: qr
+                  desc: QRコード画像の表示
+                  examples:
+                    - URL
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          area: EUR
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: area
+    title: エリアマスタAPI
+    desc: 国の上位グループである、エリアのマスタを取得します。
+    url: http://webservice.recruit.co.jp/ab-road/area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: area
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: エリアコード
+              examples:
+                - EUR
+            - name: name
+              desc: エリア名
+              examples:
+                - ヨーロッパ
+            - name: tour_count
+              desc: このエリアに行くツアーの件数
+              examples:
+                - 37
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: country
+    title: 国マスタAPI
+    desc: エリアごとの国一覧取得や、国名での検索も可能です。
+    url: http://webservice.recruit.co.jp/ab-road/country/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: area
+        title: エリアコード
+        desc: 複数指定可能*2
+        note: (例)EUR
+        multiple: true
+        examples:
+          - EUR
+      - name: country
+        title: 国コード
+        desc: 複数指定可能*2
+        note: (例)BE
+        multiple: true
+        examples:
+          - BE
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)ベトナム
+        multiple: true
+        examples:
+          - ベトナム
+      - name: in_use
+        title: ツアー有無
+        desc: 1:そこに行くツアーが存在する国のみ返す(デフォルト)。0:ツアーの存在有無に関係なく全件を返す。
+        note: 1:有のみ(デフォルト)、0:全件
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:コード順（デフォルト）1:名前順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: country
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 国コード
+              examples:
+                - IN
+            - name: name
+              desc: 国名
+              examples:
+                - インド
+            - name: name_en
+              desc: 英語国名(未登録の場合、*が入る場合もあり。)
+              examples:
+                - INDIA
+            - name: tour_count
+              desc: この国に行くツアーの件数
+              examples:
+                - 89
+            - name: area
+              children:
+                - name: code
+                  desc: エリアコード
+                  examples:
+                    - AAS
+                - name: name
+                  desc: エリア名
+                  examples:
+                    - アジア
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: city
+    title: 都市マスタAPI
+    desc: 国ごとの都市一覧の取得や、都市名の検索が可能です。
+    url: http://webservice.recruit.co.jp/ab-road/city/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: area
+        title: エリアコード
+        desc: 複数指定可能*2
+        note: (例)EUR
+        multiple: true
+        examples:
+          - EUR
+      - name: country
+        title: 国コード
+        desc: 複数指定可能*2
+        note: (例)BE
+        multiple: true
+        examples:
+          - BE
+      - name: city
+        title: 都市コード
+        desc: 複数指定可能*2
+        note: (例)NYC
+        multiple: true
+        examples:
+          - NYC
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)ベトナム
+        multiple: true
+        examples:
+          - ベトナム
+      - name: in_use
+        title: ツアー有無
+        desc: 1:そこに行くツアーが存在する都市のみ返す(デフォルト)。0:ツアーの存在有無に関係なく全件を返す。
+        note: 1:有のみ(デフォルト)、0:全件
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:国名＋都市名(デフォルト)1:都市名順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: city
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 都市コード
+              examples:
+                - ELS
+            - name: name
+              desc: 都市名
+              examples:
+                - イーストロンドン
+            - name: name_en
+              desc: 英語都市名(未登録の場合、*が入る場合もあり。)
+              examples:
+                - EAST LONDON
+            - name: tour_count
+              desc: この都市に行くツアーの件数
+              examples:
+                - 120
+            - name: lat
+              desc: 緯度 (世界測地系) *1
+              examples:
+                - 51.5091700000
+            - name: lng
+              desc: 経度 (世界測地系) *1
+              examples:
+                - -0.1263430000
+            - name: area
+              children:
+                - name: code
+                  desc: エリアコード
+                  examples:
+                    - CAF
+                - name: name
+                  desc: エリア名
+                  examples:
+                    - アフリカ・他
+            - name: country
+              children:
+                - name: code
+                  desc: 国コード
+                  examples:
+                    - ZA
+                - name: name
+                  desc: 国名
+                  examples:
+                    - 南アフリカ
+                - name: name_en
+                  desc: 英語国名(未登録の場合、*が入る場合もあり。)
+                  examples:
+                    - SOUTH AFRICA
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: hotel
+    title: ホテルマスタAPI
+    desc: 都市ごとのホテル一覧取得や、ホテル名での検索が可能です。
+    url: http://webservice.recruit.co.jp/ab-road/hotel/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: area
+        title: エリアコード
+        desc: 複数指定可能*2
+        note: (例)EUR
+        multiple: true
+        examples:
+          - EUR
+      - name: country
+        title: 国コード
+        desc: 複数指定可能*2
+        note: (例)BE
+        multiple: true
+        examples:
+          - BE
+      - name: city
+        title: 都市コード
+        desc: 複数指定可能*2
+        note: (例)NYC
+        multiple: true
+        examples:
+          - NYC
+      - name: hotel
+        title: ホテルコード
+        desc: 複数指定可能*2
+        note: (例)73393
+        multiple: true
+        examples:
+          - 73393
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)グランド
+        multiple: true
+        examples:
+          - グランド
+      - name: in_use
+        title: ツアー有無
+        desc: 1:ツアーで利用予定のあるホテルのみ返す(デフォルト)。0:利用予定の有無に関係なく全件を返す。※hotelパラメータを指定した場合は自動的に 0 になります。
+        note: 1:有のみ(デフォルト)、0:全件
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:ホテル名(デフォルト)1:エリア名＋国名＋都市名＋ホテル名
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: hotel
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: ホテルコード
+              examples:
+                - 1234567
+            - name: name
+              desc: ホテル名
+              examples:
+                - グランドロイヤルホテル
+            - name: name_en
+              desc: 英語ホテル名
+              examples:
+                - GRAND HOTEL LONDON
+            - name: tour_count
+              desc: このホテルを利用するツアーの件数
+              examples:
+                - 120
+            - name: city
+              children:
+                - name: code
+                  desc: 都市コード
+                  examples:
+                    - ELS
+                - name: name
+                  desc: 都市名
+                  examples:
+                    - イーストロンドン
+                - name: name_en
+                  desc: 英語都市名(未登録の場合、*が入る場合もあり。)
+                  examples:
+                    - SOUTH AFRICA
+                - name: area
+                  children:
+                    - name: code
+                      desc: エリアコード
+                      examples:
+                        - CAF
+                    - name: name
+                      desc: エリア名
+                      examples:
+                        - アフリカ・他
+                - name: country
+                  children:
+                    - name: code
+                      desc: 国コード
+                      examples:
+                        - ZA
+                    - name: name
+                      desc: 国名
+                      examples:
+                        - 南アフリカ
+                    - name: name_en
+                      desc: 英語国名(未登録の場合、*が入る場合もあり。)
+                      examples:
+                        - SOUTH AFRICA
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          area: EUR
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: airline
+    title: 航空会社マスタAPI
+    url: http://webservice.recruit.co.jp/ab-road/airline/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: airline
+        title: 航空会社コード
+        desc: 複数指定可能*2
+        note: (例)XX
+        multiple: true
+        examples:
+          - XX
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)スペイン
+        multiple: true
+        examples:
+          - スペイン
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: airline
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 航空会社コード
+              examples:
+                - XX
+            - name: name
+              desc: 航空会社名（船利用の場合は、「船」になります。）
+              examples:
+                - 世界航空
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: kodawari
+    title: こだわりマスタAPI
+    url: http://webservice.recruit.co.jp/ab-road/kodawari/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: kodawari
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: こだわりコード
+              examples:
+                - 1
+            - name: name
+              desc: こだわり名称
+              examples:
+                - フリープラン
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: spot
+    title: 観光地マスタAPI
+    desc: AB-ROADに登録されている世界中の観光地を検索できます。国や都市ごとの絞込みが可能です。
+    url: http://webservice.recruit.co.jp/ab-road/spot/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: spot
+        title: 観光地コード
+        desc: 複数指定可能*2
+        note: 000921
+        multiple: true
+      - name: area
+        title: エリアコード
+        desc: 複数指定可能*2
+        note: (例)EUR
+        multiple: true
+        examples:
+          - EUR
+      - name: country
+        title: 国コード
+        desc: 複数指定可能*2
+        note: (例)BE
+        multiple: true
+        examples:
+          - BE
+      - name: city
+        title: 都市コード
+        desc: 複数指定可能*2
+        note: (例)NYC
+        multiple: true
+        examples:
+          - NYC
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)教会
+        multiple: true
+        examples:
+          - 教会
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: spot
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 観光地コード
+              examples:
+                - 000921
+            - name: name
+              desc: 観光地名
+              examples:
+                - モダーブ城
+            - name: name_en
+              desc: 英語観光地名 (一部観光地のみ対応)
+              nullable: true
+              examples:
+                - MODAVE CASTLE
+            - name: title
+              desc: タイトル
+              examples:
+                - 断崖に建つ、ルイ14世様式の貴族の館
+            - name: description
+              desc: 詳細説明
+              examples:
+                - 13世紀にオーユ川沿いの60メートルの断崖に...
+            - name: lat
+              desc: 緯度 (世界測地系) *1
+              examples:
+                - 50.4703980000
+            - name: lng
+              desc: 経度 (世界測地系) *1
+              examples:
+                - -0.1263430000
+            - name: map_scale
+              desc: 地図にプロットする際の表示拡大率の参考値
+              examples:
+                - 10 (0～10)
+            - name: area
+              children:
+                - name: code
+                  desc: エリアコード
+                  examples:
+                    - EUR
+                - name: name
+                  desc: エリア名
+                  examples:
+                    - ヨーロッパ
+            - name: country
+              children:
+                - name: code
+                  desc: 国コード
+                  examples:
+                    - BE
+                - name: name
+                  desc: 国名
+                  examples:
+                    - ベルギー
+            - name: city
+              children:
+                - name: code
+                  desc: 都市コード
+                  examples:
+                    - G60
+                - name: name
+                  desc: 都市名
+                  examples:
+                    - ナミュール
+            - name: url
+              desc: AB-ROAD詳細ページへのURL
+              examples:
+                - http://...
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: tour_tally
+    title: キーワード都市集計API
+    desc: キーワードを元に、そのキーワードにマッチした海外旅行ツアーが訪れる「都市」の集計結果を取得できます。例) "登山" で検索 → 登山に関連するツアーが最も多く含まれる都市を返します: 1.チューリッヒ、2.グリンデルワルト、3.エアーズロック...
+    url: http://webservice.recruit.co.jp/ab-road/tour_tally/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: keyword
+        title: キーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)登山、聖堂、世界遺産 など
+        require: true
+        multiple: true
+        examples:
+          - 登山
+          - 聖堂
+          - 世界遺産
+      - name: dept
+        title: 出発地
+        desc: ※これらの項目は海外旅行検索APIと同様の指定方法で利用できます。
+      - name: ym
+        title: 出発月
+      - name: ymd
+        title: 出発日
+      - name: price_min
+        title: 価格帯下限
+      - name: price_max
+        title: 価格帯上限
+      - name: term_min
+        title: 期間下限
+      - name: term_max
+        title: 期間上限
+      - name: airline
+        title: 航空会社
+      - name: kodaw
+        title: こだわり項目
+      - name: axis
+        title: 集計軸
+        desc: デフォルトは都市(city)で集計されますが、あるいは上位の国(country)やエリア(area)で集計させる事が出来ます。
+        note: city (初期値), country, area
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: |
+          0: 該当ツアー数多い順 > 都市名順 (デフォルト)
+          1: 該当ツアー数少ない順 > 都市名順
+          2: エリアコード > 国名 > 都市名順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値:10,最小1,最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: tour_tally
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: type
+              desc: 集計軸 (検索クエリaxisで指定した値)
+              examples:
+                - city, country, area のいずれか
+            - name: code
+              desc: 都市コード (↑typeがcountryなら国コード、areaならエリアコード)
+              examples:
+                - ZRH
+            - name: name
+              desc: 都市名 (↑typeがcountryなら国名、areaならエリア名)
+              examples:
+                - チューリッヒ
+            - name: tour_count
+              desc: そこに訪れるツアー件数
+              examples:
+                - 128
+            - name: lat
+              desc: 緯度 (世界測地系) *1
+              examples:
+                - 47.3974200000
+            - name: lng
+              desc: 経度 (世界測地系) *1
+              examples:
+                - 8.5401540000
+            - name: area
+              desc: ※↑type=cityまたはcountryの場合のみ含まれます
+              children:
+                - name: code
+                  desc: エリアコード
+                  examples:
+                    - EUR
+                - name: name
+                  desc: エリア名
+                  examples:
+                    - ヨーロッパ
+            - name: country
+              desc: ※↑type=cityの場合のみ含まれます
+              children:
+                - name: code
+                  desc: 国コード
+                  examples:
+                    - CH
+                - name: name
+                  desc: 国名
+                  examples:
+                    - スイス
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          keyword: 登山
+      - type: lib_error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0
