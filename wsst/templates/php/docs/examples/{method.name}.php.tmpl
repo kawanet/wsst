@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * Example of <%[$package_name]%>::<%[$method{interface_name}]%>
+ *  
+ * PHP versions 4 and 5
+<%[ if ($php_license_abstract) {
+    $OUT .= " *\n";
+    $php_license_abstract =~ s/^\s+//;
+    $php_license_abstract =~ s/\s+$//;
+    $php_license_abstract =~ s/\n/\n * /g;
+    $OUT .= " * LICENSE: $php_license_abstract\n";
+} ]%> *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+
+error_reporting(E_ALL);
+ini_set('display_errors', true);
+
+require_once '<%[$package_dir]%>.php';
+
+// create <%[$package_name]%> object.
+$service =& new <%[$package_name]%>();
+
+// call <%[$method{interface_name}]%> and get response.
+<%[ if ($method{tests}) {
+    my $test = $method{tests}->[0];
+    my $php_params = make_php_array($test->{params});
+    $php_params =~ s/'\$([a-zA-Z0-9_]+)'/getenv('$1')/g;
+    $OUT .= "\$params = $php_params;\n";
+    $OUT .= "\$res =& \$service->$method{interface_name}\(\$params);\n";
+} else {
+    $OUT .= "\$res =& \$service->$method{interface_name}\();\n";
+} ]%>
+// check library error.
+if (PEAR::isError($res)) {
+    echo "Error: " . $res->getMessage() . "\n";
+    exit(1);
+}
+
+// get response data.
+$data =& $res->getData();
+
+// print response data.
+<%[ my $ret_test = [map {['', $_]} @{$method{'return'}{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        $OUT .= qq|echo "$ret->[1]->{name}: {\$data$ret->[0]\->$ret->[1]->{name}}\\n";\n|
+            unless $ret->[1]->{children};
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+]%>
+
+?>

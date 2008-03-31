@@ -1,0 +1,35 @@
+package <%[$package_name]%>::Base;
+use strict;
+use base qw( XML::OverHTTP );
+use vars qw( $VERSION );
+$VERSION = '0.10';
+
+use Class::Accessor::Children::Fast;
+
+sub attr_prefix { ''; }
+
+sub is_error {
+    my $self = shift;
+    my $root = $self->root();
+    return $root ? 0 : 1;
+}
+
+=head1 NAME
+
+WebService::<%[$company_name]%>::<%[$service_name]%>::Base - Base class for <%[$title]%>
+
+=head1 DESCRIPTION
+
+This is a base class for <%[$title]%>.
+L<WebService::<%[$company_name]%>::<%[$service_name]%>> uses this internally.
+
+<%[ if ($perl_copyright||$copyright) {
+    local $copyright = ($perl_copyright||$copyright);
+    $OUT .=<<EOS;
+=head1 COPYRIGHT AND LICENSE
+
+$copyright
+
+EOS
+} ]%>=cut
+1;

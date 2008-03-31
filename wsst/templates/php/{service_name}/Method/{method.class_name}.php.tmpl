@@ -1,0 +1,90 @@
+<?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * This file contains the class "<%[$package_name]%>_Method_<%[$method{class_name}]%>"
+ *
+ * PHP versions 4 and 5
+<%[ if ($php_license_abstract) {
+    $OUT .= " *\n";
+    $php_license_abstract =~ s/^\s+//;
+    $php_license_abstract =~ s/\s+$//;
+    $php_license_abstract =~ s/\n/\n * /g;
+    $OUT .= " * LICENSE: $php_license_abstract\n";
+} ]%> *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+
+require_once '<%[$package_dir]%>/Method.php';
+
+/**
+ * Implementation of Method class for accessing "<%[$method{name}]%>"
+ *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_name]%>_Method
+{
+    /**
+     * Returns the URL
+     * 
+     * @return string URL
+     */
+    function getUrl()
+    {
+        return '<%[$method{url}]%>';
+    }
+
+    /**
+     * Returns request method
+     * 
+     * @access public
+     * @return string request method
+     */
+    function getRequestMethod()
+    {
+        return '<%[$method{request_method}||'GET']%>';
+    }
+    
+    /**
+     * Returns the conf of parameters
+     * 
+     * @access public
+     * @return array conf
+     */
+    function getParamsConf()
+    {
+        return <%[make_params_conf(\%method,2)||'array()']%>;
+    }
+    
+    /**
+     * Returns the conf of respoonse
+     * 
+     * @access public
+     * @return array conf
+     */
+    function getResponseConf()
+    {
+        return <%[make_response_conf(\%method,2)||'array()']%>;
+    }
+}
+
+?>

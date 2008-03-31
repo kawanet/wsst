@@ -1,0 +1,189 @@
+<?php
+
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * This file contains the class "<%[$package_name]%>_Request"
+ *
+ * PHP versions 4 and 5
+<%[ if ($php_license_abstract) {
+    $OUT .= " *\n";
+    $php_license_abstract =~ s/^\s+//;
+    $php_license_abstract =~ s/\s+$//;
+    $php_license_abstract =~ s/\n/\n * /g;
+    $OUT .= " * LICENSE: $php_license_abstract\n";
+} ]%> *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+
+require_once 'PEAR.php';
+
+require_once '<%[$package_dir]%>/Factory.php';
+require_once '<%[$package_dir]%>/Response.php';
+
+/**
+ * Class encapsulating the HTTP Request
+ *
+ * @category   Services
+ * @package    <%[$package_name]%>
+<%[ foreach (@author) {
+    $OUT .= " * \@author     $_\n";
+} ]%><%[ if ($php_copyright||$copyright) {
+    local $copyright = ($php_copyright||$copyright);
+    $OUT .= " * \@copyright  $copyright\n";
+} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
+ * @version    Release: @package_version@
+ * @link       <%[$php_link]%>
+ */
+class <%[$package_name]%>_Request
+{
+    /**
+     * Factory object
+     *
+     * @access protected
+     * @var object
+     */
+    var $fac;
+    
+    /**
+     * Destination URL
+     *
+     * @access private
+     * @var string
+     */
+    var $_url = null;
+    
+    /**
+     * Parameters to send
+     *
+     * @access private
+     * @var array
+     */
+    var $_params = array();
+    
+    /**
+     * Request method
+     *
+     * @access private
+     * @var string
+     */
+    var $_requestMethod = 'GET';
+
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param object $fac Factory object
+     */
+    function <%[$package_name]%>_Request(&$fac)
+    {
+        $this->fac =& $fac;
+    }
+    
+    /**
+     * Get URL
+     *
+     * @access public
+     * @return string URL
+     */
+    function getUrl()
+    {
+        return $this->_url;
+    }
+    
+    /**
+     * Set URL
+     *
+     * @access public
+     * @param string $url URL
+     * @return void 
+     */
+    function setUrl($url)
+    {
+        $this->_url = $url;
+    }
+    
+    /**
+     * Get parameters
+     *
+     * @access public
+     * @return array parameters
+     */
+    function getParams()
+    {
+        return $this->_params;
+    }
+    
+    /**
+     * Set parameters
+     *
+     * @access public
+     * @param array $params parameters
+     * @return void
+     */
+    function setParams($params)
+    {
+        $this->_params = $params;
+    }
+    
+    /**
+     * Add parameters
+     * 
+     * @access public
+     * @param array $params parameters
+     * @return void
+     */
+    function addParams($params)
+    {
+        $this->_params = array_merge($this->_params, $params);
+    }
+    
+    /**
+     * Get request method
+     *
+     * @access public
+     * @return string request method
+     */
+    function getRequestMethod()
+    {
+        return $this->_requestMethod;
+    }
+    
+    /**
+     * Set request method
+     *
+     * @access public
+     * @param string $requestMethod request method
+     * @return void
+     */
+    function setRequestMethod($requestMethod)
+    {
+        $this->_requestMethod = strtoupper($requestMethod);
+    }
+    
+    /**
+     * Send Request to destination URL
+     *
+     * @access public
+     * @return mixed <%[$package_name]%>_Response|PEAR_Error
+     */
+    function &send()
+    {
+        if (is_null($this->_url)) {
+            return PEAR::raiseError('URL has not been set.');
+        }
+
+        return PEAR::raiseError('Not implemented.');
+    }
+}
+
+?>

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BIN_DIR=`dirname $0`
+LIB_DIR="${BIN_DIR}/../lib"
+
+exec perl -I ${LIB_DIR} ${BIN_DIR}/wsst.pl "$@"
