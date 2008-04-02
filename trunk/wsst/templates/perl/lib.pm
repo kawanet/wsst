@@ -134,9 +134,87 @@ sub make_pod_test_files {
 #    print STDERR "<<< done make-dist.sh\n\n";
 #}
 
-my $test_seq_val = 1;
+my $test_seq_val = 4;
 sub test_seq {
     return sprintf("%02d", $test_seq_val++);
+}
+
+sub make_env_params_check {
+    my (@methods) = @_;
+    
+    my $env_params = {};
+    foreach my $method (@methods) {
+        foreach my $test (@{$method->{tests}}) {
+            foreach my $param (values %{$test->{params}}) {
+                next unless $param =~ /^\$(.*)$/;
+                $env_params->{$1}++;
+            }
+        }
+    }
+    
+    return "" unless keys %$env_params;
+
+    my $keys = join(", ", map {"'$_'"} sort keys %$env_params);
+    my $result =<<EOS;
+{
+    my \$errs = [];
+    foreach my \$key ($keys) {
+        next if exists \$ENV{\$key};
+        push(\@\$errs, \$key);
+    }
+    plan skip_all => sprintf('set %s env to test this', join(", ", \@\$errs))
+        if \@\$errs;
+}
+EOS
+    
+    $result =~ s/\s+$//;
+    
+    return $result;
+}
+
+sub make_test_count {
+    my ($base_cnt, @methods) = @_;
+    
+    my $cnt = $base_cnt;
+    
+    foreach my $method (@methods) {
+        foreach my $test (@{$method->{tests}}) {
+            if ($test->{type} eq 'lib_error') {
+                # die
+                $cnt++;
+            } elsif ($test->{type} eq 'error') {
+                # die / is_error / root
+                $cnt += 3;
+                
+                # each element's can_ok / ok
+                $cnt += _calc_ret_elms($method->{error});
+            } else {
+                # die / is_error / root
+                $cnt += 3;
+                
+                # each element's can_ok / ok
+                $cnt += _calc_ret_elms($method->{return});
+            }
+        }
+    }
+    
+    return $cnt;
+}
+
+sub _calc_ret_elms {
+    my ($ret_root) = @_;
+    
+    my $result = 0;
+    my $ret_elms = [@{$ret_root->{children}}];
+    while (my $ret = shift(@$ret_elms)) {
+        next if $ret->{nullable} eq 'true';
+        $result += 2;
+        $result++ if $ret->{multiple} eq 'true';
+        next unless $ret->{children};
+        push(@$ret_elms, @{$ret->{children}});
+    }
+    
+    return $result;
 }
 
 1;

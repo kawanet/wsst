@@ -134,6 +134,32 @@ class <%[$package_name]%>_Request_DefaultTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals($reqStr, $obj->_createReqStr($purl));
     }
+    
+    public static function provideDecodeChunked()
+    {
+        return array(
+            array(
+                "1a; parameter\r\n" .
+                "abcdefghijklmnopqrstuvwxyz\r\n" .
+                "a\r\n" .
+                "1234567890\r\n" .
+                "0\r\n" .
+                "footer1: some-value\r\n" .
+                "footer2: another-value\r\n" .
+                "\r\n",
+                "abcdefghijklmnopqrstuvwxyz1234567890",
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider provideDecodeChunked
+     */
+    public function testDecodeChunked($chunked, $expected)
+    {
+        $obj = new <%[$package_name]%>_Request_Default($this->factory);
+        $this->assertEquals($expected, $obj->_decodeChunked($chunked));
+    }
 }
 
 ?>
