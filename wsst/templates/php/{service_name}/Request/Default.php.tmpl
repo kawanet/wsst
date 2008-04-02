@@ -134,6 +134,10 @@ class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
         }
         
         fclose($fp);
+
+        if ($headers['Transfer-Encoding'] == 'chunked') {
+            $content = $this->_decodeChunked($content);
+        }
         
         return $this->fac->createResponse($status, $headers, $content);
     }
@@ -211,6 +215,41 @@ class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
         } 
         
         return $reqStr;
+    }
+
+    /**
+     * Decodes chunked content.
+     * 
+     * @param string $src chunked content
+     * @return string decoded content
+     */
+    function _decodeChunked($src)
+    {
+        $result = "";
+        
+        while (strlen($src) > 0) {
+            $pos = strpos($src, "\n");
+            if ($pos === false) {
+                break;
+            }
+            
+            $chunk = substr($src, 0, $pos + 1);
+            $chunk_len = strlen($chunk);
+            list($len) = sscanf($chunk, "%x");
+            if ($len == 0) {
+                break;
+            }
+            
+            $result .= substr($src, $chunk_len, $len);
+            
+            $pos = strpos($src, "\n", $chunk_len + $len);
+            if ($pos === false) {
+                $pos = $chunk_len + $len;
+            }
+            $src = substr($src, $pos + 1);
+        }
+        
+        return $result;
     }
 }
 
