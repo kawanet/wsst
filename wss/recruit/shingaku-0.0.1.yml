@@ -1,0 +1,731 @@
+# リクルート進学ネット Webサービス
+
+company_name: Recruit
+service_name: Shingaku
+version: 0.0.1
+title: Recruit Shingaku net Web Service
+title_m17n:
+  ja: リクルート進学ネット Webサービス
+abstract: リクルート進学ネットに掲載されている学校および各種学問・仕事・資格を様々な軸で検索できるAPIです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/shingaku/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: school
+    title: 学校検索API
+    url: http://webservice.recruit.co.jp/shingaku/school/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 学校コード
+        desc: 学校に割り当てられた番号で検索します。*2
+        note: （例）SC999999
+        multiple: true
+        examples:
+          - SC999999
+      - name: name
+        title: 学校名
+        desc: 学校名で検索します。（部分一致）（UTF-8、URLエンコーディング）
+        note: （例）銀座大学
+        examples:
+          - 銀座大学
+      - name: kana
+        title: 学校名カナ
+        desc: 学校名のカナで検索します。（部分一致）（UTF-8、URLエンコーディング）
+        note: （例）リクルート
+        examples:
+          - リクルート
+      - name: faculty
+        title: 学部名
+        desc: 学部名称で検索します。（部分一致）（UTF-8、URLエンコーディング）
+        note: （例）広告学部
+        examples:
+          - 広告学部
+      - name: department
+        title: 学科名
+        desc: 学科名で検索します。（部分一致）（UTF-8、URLエンコーディング）
+        note: （例）メディア学科
+        examples:
+          - メディア学科
+      - name: pref_cd
+        title: エリアコード
+        desc: エリアに割り当てられた番号で検索します。*2
+        note: （例）13
+        multiple: true
+        examples:
+          - 13
+      - name: category_cd
+        title: 校種コード
+        desc: 校種に割り当てられた番号で検索します。*2
+        note: （例）11
+        multiple: true
+        examples:
+          - 11
+      - name: address
+        title: 住所
+        desc: 住所で検索します。（部分一致）（UTF-8、URLエンコーディング）
+        note: （例）東京都中央区銀座8
+        examples:
+          - 東京都中央区銀座8
+      - name: lat
+        title: 緯度
+        desc: ある地点からの範囲内の学校の検索を行う場合の緯度です。
+        note: (例)35.66922072646455
+        examples:
+          - 35.66922072646455
+      - name: lng
+        title: 経度
+        desc: ある地点からの範囲内の学校の検索を行う場合の経度です。
+        note: (例)139.7614574432373
+        examples:
+          - 139.7614574432373
+      - name: range
+        title: 検索範囲
+        desc: ある地点からの範囲内の学校の検索を行う場合の検索範囲です。
+        note: 1:300m,2:500m,3:1000m,4:2000m,5:3000m。デフォルト3
+      - name: datum
+        title: 測地系
+        desc: 緯度・経度の測地系を指定できます。world (世界測地系)、tokyo (日本測地系)
+        note: 初期値はworld
+      - name: station
+        title: 駅名
+        desc: 駅名で検索します。（UTF-8、URLエンコーディング）
+        note: （例）新橋
+        examples:
+          - 新橋
+      - name: keyword
+        title: フリーワード
+        desc: 学校名、学校名かな、学部、学科、キャンパス名、住所、説明のフリーワード検索が可能です。（UTF-8、URLエンコーディング）
+        note: （例）東京 広告
+        examples:
+          - 東京 広告
+      - name: subject_cd
+        title: 学問コード
+        desc: 学問に割り当てられた番号で検索します。*2
+        note: （例）a1010
+        multiple: true
+        examples:
+          - a1010
+      - name: work_cd
+        title: 仕事コード
+        desc: 仕事に割り当てられた番号で検索します。*2
+        note: （例）a2010
+        multiple: true
+        examples:
+          - a2010
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:進学ネットおすすめ順(デフォルト）、1:距離順（位置検索をした場合のデフォルト）、2:エリア順、3:学校名五十音順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: school
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 学校コード
+              examples:
+                - SC999999
+            - name: name
+              desc: 学校名
+              examples:
+                - リクルート大学
+            - name: kana
+              desc: 学校名カナ
+              examples:
+                - リクルートダイガク
+            - name: campus
+              desc: 所在地 [複数要素]
+              multiple: true
+              children:
+                - name: name
+                  desc: キャンパス名
+                  examples:
+                    - 本部所在地
+                - name: address
+                  desc: 住所
+                  examples:
+                    - 〒105-0021東京都港区東新橋1-2-5
+                - name: datum
+                  desc: 測地系
+                  examples:
+                    - tokyo
+                - name: latitude
+                  desc: 緯度
+                  examples:
+                    - 35.049349
+                - name: longitude
+                  desc: 経度
+                  examples:
+                    - 137.05293
+                - name: station
+                  desc: 駅名
+                  examples:
+                    - 新橋
+            - name: category
+              children:
+                - name: code
+                  desc: 校種コード
+                  examples:
+                    - 0011
+                - name: name
+                  desc: 校種
+                  examples:
+                    - 国立大学
+            - name: faculty
+              desc: 学部 [複数要素]
+              multiple: true
+              children:
+                - name: name
+                  desc: 学部名
+                  examples:
+                    - 工芸学部
+                - name: department
+                  desc: 学科コース
+                  examples:
+                    - 芸術・表現行動学科
+            - name: pref
+              children:
+                - name: code
+                  desc: エリアコード
+                  examples:
+                    - 13
+                - name: name
+                  desc: エリア名
+                  examples:
+                    - 東京
+            - name: urls
+              children:
+                - name: mobile
+                  desc: 携帯URL
+                - name: pc
+                  desc: URL
+                - name: qr
+                  desc: QRコード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          pref_cd: 12
+          keyword: 数学
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: subject
+    title: 学問検索API
+    url: http://webservice.recruit.co.jp/shingaku/subject/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 学問コード
+        desc: 学問に割り当てられた番号で検索します。*2
+        note: （例）a1010
+        multiple: true
+        examples:
+          - a1010
+      - name: keyword
+        title: フリーワード
+        desc: 学問名や説明文などのフリーワード検索が可能です。（UTF-8、URLエンコーディング）
+        note: （例）東京 広告
+        examples:
+          - 東京 広告
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: subject
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 学問コード
+              examples:
+                - a1050
+            - name: name
+              desc: 学問名
+              examples:
+                - 日本文化学
+            - name: desc
+              desc: 説明
+              examples:
+                - 日本独自の文化について研究する
+            - name: license
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 資格コード
+                  examples:
+                    - v0530
+                - name: name
+                  desc: 資格名
+                  examples:
+                    - 葬祭ディレクター
+            - name: work
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 仕事コード
+                  examples:
+                    - q1020
+                - name: name
+                  desc: 仕事名
+                  examples:
+                    - 中学校教諭
+            - name: urls
+              children:
+                - name: mobile
+                  desc: 携帯URL
+                - name: pc
+                  desc: URL
+                - name: qr
+                  desc: QRコード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          keyword: 数学
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: work
+    title: 仕事検索API
+    url: http://webservice.recruit.co.jp/shingaku/work/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 仕事コード
+        desc: 仕事に割り当てられた番号で検索します。*2
+        note: （例）a1010
+        multiple: true
+        examples:
+          - a1010
+      - name: keyword
+        title: フリーワード
+        desc: 仕事名や説明文などのフリーワード検索が可能です。（UTF-8、URLエンコーディング）
+        note: （例）東京 広告
+        examples:
+          - 東京 広告
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: work
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 仕事コード
+              examples:
+                - a1050
+            - name: name
+              desc: 仕事名
+              examples:
+                - 刑務官
+            - name: desc
+              desc: 説明
+              examples:
+                - 服役中の人たちの生活指導や職業訓練にあたる
+            - name: license
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 資格コード
+                  examples:
+                    - v0020
+                - name: name
+                  desc: 資格名
+                  examples:
+                    - 刑務官＜国＞
+            - name: subject
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 学問コード
+                  examples:
+                    - b1010
+                - name: name
+                  desc: 学問名
+                  examples:
+                    - 法学
+            - name: urls
+              children:
+                - name: mobile
+                  desc: 携帯URL
+                - name: pc
+                  desc: URL
+                - name: qr
+                  desc: QRコード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          keyword: 財務
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: license
+    title: 資格検索API
+    url: http://webservice.recruit.co.jp/shingaku/license/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 資格コード
+        desc: 資格に割り当てられた番号で検索します。*2
+        note: （例）a1010
+        multiple: true
+        examples:
+          - a1010
+      - name: keyword
+        title: フリーワード
+        desc: 資格名や説明文などのフリーワード検索が可能です。（UTF-8、URLエンコーディング）
+        note: （例）東京 広告
+        examples:
+          - 東京 広告
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: license
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 資格コード
+              examples:
+                - v5402
+            - name: name
+              desc: 資格名
+              examples:
+                - 児童福祉司任用資格
+            - name: desc
+              desc: 説明
+              examples:
+                - 児童の保護や福祉に携わる児童福祉司になるための資格
+            - name: subject
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 学問コード
+                  examples:
+                    - c1010
+                - name: name
+                  desc: 学問名
+                  examples:
+                    - 社会学
+            - name: work
+              desc: [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: 仕事コード
+                  examples:
+                    - a1020
+                - name: name
+                  desc: 仕事名
+                  examples:
+                    - 地方公務員
+            - name: urls
+              children:
+                - name: mobile
+                  desc: 携帯URL
+                - name: pc
+                  desc: URL
+                - name: qr
+                  desc: QRコード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          keyword: 数学
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: pref
+    title: エリアマスタAPI
+    url: http://webservice.recruit.co.jp/shingaku/pref/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: pref
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: エリアコード
+              examples:
+                - 13
+            - name: name
+              desc: エリア名
+              examples:
+                - 東京
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: category
+    title: 校種マスタAPI
+    url: http://webservice.recruit.co.jp/shingaku/category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 校種コード
+              examples:
+                - 0011
+            - name: name
+              desc: 校種テキスト
+              examples:
+                - 国立大学
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0

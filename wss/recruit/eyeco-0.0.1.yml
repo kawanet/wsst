@@ -1,0 +1,351 @@
+# eyeco Webサービス
+
+company_name: Recruit
+service_name: Eyeco
+version: 0.0.1
+title: Eyeco Web Service
+title_m17n:
+  ja: eyeco Webサービス
+abstract: eyeco[アイコ]に掲載されている商品をさまざまな検索軸で探せる商品情報APIです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/eyeco/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: item
+    title: 商品検索API
+    url: http://webservice.recruit.co.jp/eyeco/item/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 掲載コード
+        desc: 商品に割り当てられた番号で検索します。(10個まで指定可能*2)
+        note: (例)99999
+        multiple: true
+        examples:
+          - 99999
+      - name: name
+        title: 商品名
+        desc: 商品名で検索します。（部分一致）（UTF-8・URLエンコーディング）
+        note: (例)トレー
+        examples:
+          - トレー
+      - name: large_category
+        title: 大カテゴリーコード
+        desc: 大カテゴリーで検索します。(3個まで指定可能*2)
+        note: (例)101
+        multiple: true
+        examples:
+          - 101
+      - name: small_category
+        title: 小カテゴリーコード
+        desc: 小カテゴリーで検索します。(10個まで指定可能*2)
+        note: (例)210001
+        multiple: true
+        examples:
+          - 210001
+      - name: keyword
+        title: キーワード
+        desc: 販社名、ブランド名、商品名、キャッチの全文検索をします。（UTF-8・URLエンコーディング）
+        note: (例)お手入れ
+        examples:
+          - お手入れ
+      - name: price_min
+        title: 最低価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)2000
+        examples:
+          - 2000
+      - name: price_max
+        title: 最高価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)5400
+        examples:
+          - 5400
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:eyeco[アイコ]おすすめ順(デフォルト)、1:価格安い順、2:価格高い順、3:商品名順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.0
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: item
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 掲載コード
+              examples:
+                - 94757
+            - name: shop_code
+              desc: 号コード
+              examples:
+                - L0778
+            - name: name
+              desc: 商品名
+              examples:
+                - “chop it” まな板付包丁
+            - name: price
+              desc: 価格
+              examples:
+                - 4800
+            - name: catch_copy
+              desc: キャッチコピー
+              examples:
+                - パーティ好きにもズボラさんにも。はさんで切って料理！
+            - name: desc
+              desc: 商品説明
+              examples:
+                - 鳥のくちばし形のはさみ？　いえいえ、実はコレ、まな板いらずの包丁なんです。使い方は簡単。食材をはさんで切るだけ。これがあれば、ボウルの中で野菜を  切るだけで、立派なサラダができるというワケ。パーティでなら、お肉やピザをチョキチョキ切って大活躍してくれます。刃は切れ味も鋭く、柔らかい食材も  ＯＫ！
+            - name: image
+              children:
+                - name: pc
+                  desc: PC用画像URL
+                - name: mobile
+                  desc: 携帯用画像URL
+            - name: large_category
+              children:
+                - name: code
+                  desc: 大カテゴリーコード
+                  examples:
+                    - 102
+                - name: name
+                  desc: 大カテゴリー
+                  examples:
+                    - キッチン
+            - name: small_category
+              children:
+                - name: code
+                  desc: 小カテゴリーコード
+                  examples:
+                    - 102004
+                - name: name
+                  desc: 小カテゴリー
+                  examples:
+                    - キッチン雑貨
+            - name: start_date
+              desc: 販売開始日
+              examples:
+                - 2007-08-22
+            - name: end_date
+              desc: 販売終了日
+              examples:
+                - 2007-12-22
+            - name: urls
+              children:
+                - name: mobile
+                  desc: リンク先URL（携帯）
+                - name: pc
+                  desc: リンク先URL(PC)
+                - name: qr
+                  desc: リンク先URL（QRコード）
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          large_category: 101
+          large_category: 102
+          price_max: 5000
+          order: 1
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: large_category
+    title: 大カテゴリマスタAPI
+    url: http://webservice.recruit.co.jp/eyeco/large_category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: large_code
+        title: 大カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)102
+        multiple: true
+        examples:
+          - 102
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 1
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 1
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: large_category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 大カテゴリコード
+              examples:
+                - 102
+            - name: name
+              desc: 大カテゴリーテキスト
+              examples:
+                - キッチン
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: small_category
+    title: 小カテゴリマスタAPI
+    url: http://webservice.recruit.co.jp/eyeco/small_category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: large_code
+        title: 大カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)102
+        multiple: true
+        examples:
+          - 102
+      - name: small_code
+        title: 小カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)102004
+        multiple: true
+        examples:
+          - 102004
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)ベビー
+        multiple: true
+        examples:
+          - ベビー
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: small_category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 小カテゴリコード
+              examples:
+                - 102004
+            - name: name
+              desc: 小カテゴリ名
+              examples:
+                - キッチン雑貨
+            - name: large_category
+              children:
+                - name: code
+                  desc: 大カテゴリコード
+                  examples:
+                    - 102
+                - name: name
+                  desc: 大カテゴリテキスト
+                  examples:
+                    - キッチン
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0

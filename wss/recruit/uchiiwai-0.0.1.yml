@@ -1,0 +1,409 @@
+# 赤すぐ内祝い Webサービス
+
+company_name: Recruit
+service_name: AkasuguUchiiwai
+version: 0.0.1
+title: AkasuguUchiiwai Web Service
+title_m17n:
+  ja: 赤すぐ内祝い Webサービス
+abstract: 赤すぐ内祝いに掲載されている商品をさまざまな検索軸で探せる商品情報APIです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/uchiiwai/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: item
+    title: 商品検索API
+    url: http://webservice.recruit.co.jp/uchiiwai/item/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 商品コード
+        desc: 商品に割り当てられた番号で検索します。(10個まで指定可能*2)
+        note: (例)9999-999
+        multiple: true
+        examples:
+          - 9999-999
+      - name: name
+        title: 商品名
+        desc: 商品名で検索します。（部分一致）（UTF-8・URLエンコーディング）
+        note: (例)ガーゼケット　りす
+        examples:
+          - ガーゼケット　りす
+      - name: category
+        title: カテゴリーコード
+        desc: カテゴリーで検索します。(3個まで指定可能*2)
+        note: (例)3695
+        multiple: true
+        examples:
+          - 3695
+      - name: price_min
+        title: 最低価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)2000
+        examples:
+          - 2000
+      - name: price_max
+        title: 最高価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)5400
+        examples:
+          - 5400
+      - name: keyword
+        title: キーワード
+        desc: ブランド名、商品名、商品説明、商品スペックの全文検索をします。（UTF-8・URLエンコーディング）
+        note: (例)赤すぐオリジナル
+        examples:
+          - 赤すぐオリジナル
+      - name: target
+        title: あげる人コード
+        desc: あげる人コードで検索します。
+        note: (例)1
+        examples:
+          - 1
+      - name: feature
+        title: 特集コード
+        desc: 特集コードで検索します。
+        note: (例)1
+        examples:
+          - 1
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:赤すぐ内祝いおすすめ順(デフォルト)、1:価格安い順、2:価格高い順、3:商品名順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.01
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: item
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 商品コード
+              examples:
+                - 6019-400
+            - name: brand
+              desc: ブランド名
+              examples:
+                - 赤すぐオリジナル
+            - name: name
+              desc: 商品名
+              examples:
+                - ガーゼケット　りす
+            - name: price
+              desc: 価格
+              examples:
+                - 5565
+            - name: desc
+              desc: 商品説明
+              examples:
+                - 上質な５重織のガーゼケット。肌触り、通気性がばつぐんで通年使えるアイテムです。ねんねだけでなく、軽いのでベビーカーの膝掛けとしても使えます。
+            - name: spec
+              desc: 商品スペック
+              examples:
+                - ●サイズ(約)：85×115cm●素材：綿100％●日本製●ハコサイズ(約)：18×14×11cm
+            - name: image
+              children:
+                - name: pc_l
+                  desc: PC用画像URL大
+                - name: pc_m
+                  desc: PC用画像URL中
+                - name: pc_s
+                  desc: PC用画像URL小
+                - name: mobile_l
+                  desc: 携帯用画像URL大
+                - name: mobile_s
+                  desc: 携帯用画像URL小
+            - name: category
+              children:
+                - name: code
+                  desc: カテゴリーコード
+                  examples:
+                    - 3695
+                - name: name
+                  desc: カテゴリー
+                  examples:
+                    - タオル・寝具
+            - name: target
+              children:
+                - name: code
+                  desc: あげる人コード
+                  examples:
+                    - 1
+                - name: name
+                  desc: あげる人テキスト
+                  examples:
+                    - 特別な人へ贈る
+            - name: feature
+              children:
+                - name: code
+                  desc: 特集コード
+                  examples:
+                    - 1
+                - name: name
+                  desc: 特集名
+                  examples:
+                    - 「赤すぐオリジナル」ギフト
+            - name: start_date
+              desc: 開始日
+              examples:
+                - 2007-09-15
+            - name: end_date
+              desc: 終了日
+              examples:
+                - 2008-04-30
+            - name: urls
+              children:
+                - name: mobile
+                  desc: リンク先URL（携帯）
+                - name: pc
+                  desc: リンク先URL(PC)
+                - name: qr
+                  desc: リンク先URL（QRコード）
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          target: 1
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: category
+    title: カテゴリマスタAPI
+    url: http://webservice.recruit.co.jp/uchiiwai/category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: カテゴリコード
+        desc: カテゴリーコードで絞込みをします。(複数指定可能*2)
+        note: (例)3695
+        multiple: true
+        examples:
+          - 3695
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 4
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 4
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: カテゴリコード
+              examples:
+                - 3695
+            - name: name
+              desc: カテゴリーテキスト
+              examples:
+                - タオル・寝具
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: target
+    title: あげる人マスタAPI
+    url: http://webservice.recruit.co.jp/uchiiwai/target/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: あげる人コード
+        desc: あげる人コードで絞込みをします。(複数指定可能*2)
+        note: (例)1
+        multiple: true
+        examples:
+          - 1
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: target
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: あげる人コード
+              examples:
+                - 1
+            - name: name
+              desc: あげる人テキスト
+              examples:
+                - 特別な人へ贈る
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: feature
+    title: 特集マスタAPI
+    url: http://webservice.recruit.co.jp/uchiiwai/feature/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 特集コード
+        desc: 特集コードで絞込みをします。(複数指定可能*2)
+        note: (例)1
+        multiple: true
+        examples:
+          - 1
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: feature
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 特集コード
+              examples:
+                - 1
+            - name: name
+              desc: 特集名
+              examples:
+                - 「赤すぐオリジナル」ギフト
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0
