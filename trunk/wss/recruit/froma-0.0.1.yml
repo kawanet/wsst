@@ -1,0 +1,347 @@
+# フロム・エー ナビ Webサービス
+
+company_name: Recruit
+service_name: FromA
+version: 0.0.1
+title: FromA Navi Web Service
+title_m17n:
+  ja: フロム・エー ナビ Webサービス
+abstract: |
+  お仕事検索webサービスは、フロム・エー ナビ上に登録されているお仕事情報を取得できるAPI です。
+  リクエストURL にパラメータを付けたHTTP リクエストに対し、XML 形式でレスポンスを返します（REST 方式）。リクエストパラメータとしては、職種、勤務期間、勤務日数、勤務時間帯、検索パターン、取得件数、データ取得エリア（市区町村レベル）など様々なパラメータを備えています。
+  また、戻り値として返されるXMLには、お仕事に関する基本的な情報だけでなく、勤務地の郵便番号や勤務地の緯度・経度情報、写真画像のURLなども含まれており、様々な情報サービスへの展開が期待できる仕様となっています。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://froma.yahoo.co.jp/s/contents/info/cont/web_service/index.html
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: jobSearch
+    title: お仕事検索Web サービス
+    desc: FromA navi 及びFromA 社員navi 上に登録されているお仕事を検索します。
+    url: http://xml.froma.yahoo.co.jp/s/r/jobSearch.jsp
+    params:
+      - name: api_key
+        desc: 事務局から割り当てられたAPI利用キーを指定します。
+        type: string
+        require: true
+      - name: ksjcd
+        desc: |
+          検索パターン（例：職種から探す）に対応する検索軸コード値を指定します。
+          詳しくは、「3.4 検索パターン一覧」をご参照下さい。
+        type: uint
+        require: true
+        examples:
+          - 04
+          - 18
+          - 10
+          - 07
+          - 12
+          - 13
+      - name: edition_cd
+        desc: |
+          検索対象とする版（例：関東版、関西版、留学生版）を指定します。(default: 1 関東版)
+          コード値は、「3.5.1 版マスタコード値一覧」をご参照下さい。
+        type: uint
+        note: default:1
+        examples:
+          - 1
+      - name: xml_block
+        desc: |
+          検索結果の何ブロック目から取得するか指定します。
+          (default:1)
+          ※1回のリクエストで返される結果は最大1ブロック(20件)です。
+          　 1ブロック目=1〜20件目、2ブロック目=21〜40件目となります。
+        type: uint
+        note: default:1
+        examples:
+          - 1
+      - name: m_area_cd
+        desc: |
+          中エリア（都道府県名など）を指定します。
+          コード値は、「3.5.2 中エリアマスタコード値一覧」をご参照下さい。
+          小エリアコードとは排他で指定する必要があります。
+        type: uint
+        note: default:指定無, 排他:s_area_cd
+        examples:
+          - i1
+      - name: s_area_cd
+        desc: |
+          小エリア（市区町村名など）を指定します。
+          コード値は、「3.5.3 小エリアマスタコード値一覧」をご参照下さい。
+          中エリアコードとは排他で指定する必要があります。
+        type: uint
+        note: default:指定無, 排他:m_area_cd
+        examples:
+          - 1i1001
+      - name: nv_jb_type_cd
+        desc: |
+          職種を指定します。
+          コード値は「3.5.4 職種マスタコード値一覧」をご参照下さい。
+        type: uint
+        note: default:指定無
+        examples:
+          - 101
+      - name: shrt_indx_cd
+        desc: |
+          勤務期間を指定します。
+          コード値は「3.5.5 勤務期間マスタコード値一覧」をご参照下さい。
+        type: uint
+        note: default:指定無
+        examples:
+          - 1001
+      - name: wrk_dy_num_ctgry_cd
+        desc: |
+          勤務日数を指定します。
+          コード値は「3.5.6 勤務日数検索マスタコード値一覧」をご参照下さい。
+        type: uint
+        note: default:指定無
+        examples:
+          - 01
+      - name: hours_ctgry_cd
+        desc: |
+          勤務時間帯を指定します。
+          コード値は「3.5.7 時間帯マスタコード値一覧」をご参照下さい。
+        type: uint
+        note: default:指定無
+        examples:
+          - 01
+      - name: regu_indx_s_class_cd
+        desc: |
+          「初心者大歓迎」などといった定番インデックスを指定します。
+          コード値は「3.5.8 定番インデックス小分類マスタコード値」をご参照下さい。
+        type: uint
+        note: default:指定無
+        examples:
+          - 1101
+      - name: emp_ed_m_area_cd
+        desc: |
+          社員版用中エリアcd値を指定します。
+          小エリアコード、中エリアコードとは排他で指定する必要があります。
+        type: uint
+        note: default:指定無, 排他:area_cd・m_area
+        examples:
+          - i1
+      - name: employ_frm_ctgry_cd
+        desc: 雇用形態種別cd値を指定します。
+        type: uint
+        note: default:指定無
+        examples:
+          - 01
+      - name: pull_sal_cd
+        desc: プルダウン表示用給与cd値を指定します。
+        type: uint
+        note: default:指定無
+        examples:
+          - 01
+      - name: no_exp_ok_f
+        desc: 未経験OKフラグ値を指定します。
+        type: uint
+        note: default:指定無
+        examples:
+          - 1
+    return:
+      name: OfferList
+      desc: クエリーレスポンスの全てを含むルートタグ
+      children:
+        - name: Code
+          desc: |
+            ステータスコード
+            正常に検索できた場合は200
+          examples:
+            - 200
+        - name: TotalOfferAvailable
+          desc: 検索にマッチした全原稿数
+          examples:
+            - 99
+        - name: TotalOfferReturned
+          desc: このXML に含んでいる原稿数
+          examples:
+            - 20
+        - name: PageNumber
+          desc: |
+            検索結果の何ブロック目から表示しているか
+            リクエストしたxml_block に対応します。
+          examples:
+            - 2
+        - name: EditionName
+          desc: |
+            版名
+            リクエストしたedition_cd に対応します。
+          examples:
+            - 関東
+        - name: Offer
+          desc: |
+            原稿
+            1 つの原稿全体を囲います。
+          note: 検索結果が0 件の場合は、Offer タグ及びその子要素は出力されません。
+          multiple: true
+          children:
+            - name: Catch
+              desc: 原稿のキャッチコピー
+              examples:
+                - 「将来」を考えながら歩く。立ち止まるよりずっといい。 ＜アルバイト→社員へ、大歓迎！＞
+            - name: OfferId
+              desc: 原稿ID
+              examples:
+                - 01950488
+            - name: Url
+              desc: ホームページリンクURL
+              note: "*4"
+              nullable: true
+              examples:
+                - "http://www.hogehoge.co.jp/"
+            - name: OfferStartDate
+              desc: 掲載開始日時(YYYY-MM-DD）
+            - name: OfferEndDate
+              desc: 掲載終了日時（YYYY-MM-DD）
+            - name: Zipcode
+              desc: 郵便番号（7 桁、ハイフン無し）
+              nullable: true
+              examples:
+                - 1080011
+            - name: Prefecture
+              desc: 都道府県名
+              examples:
+                - 東京
+            - name: City
+              desc: 市区郡名
+              note: "*2"
+              examples:
+                - 葛飾区
+            - name: VisualIndices
+              desc: |
+                ビジュアルインデックスリスト
+                VisualIndex を子要素として1 つまたは複数含みます。
+              children:
+                - name: VisualIndex
+                  desc: |
+                    ビジュアルインデックス
+                    VisualSize、VisualName、VisualImageUrl を子要素として含みます。
+                  multiple: true
+                  children:
+                    - name: VisualSize
+                      desc: ビジュアルサイズ(Large またはSmall）
+                      examples:
+                        - Large
+                        - Small
+                    - name: VisualName
+                      desc: ビジュアルインデックス名
+                      note: "*3"
+                      examples:
+                        - いただきます！タダご飯
+                        - 名物スタッフが職場紹介
+                    - name: VisualImageUrl
+                      desc: ビジュアル画像URL
+            - name: TimeIndices
+              desc: |
+                時間帯リスト
+                出勤時間帯を示すTimeIndex タグを子要素として1 つまたは複数含みます。
+              children:
+                - name: TimeIndex
+                  desc: |
+                    時間帯名
+                    朝･昼・夕方夜・深夜早朝のうち該当する時間帯名を表示。（該当する各時間帯ごとにTimeIndex タグを出力します。）
+                  multiple: true
+                  examples:
+                    - 朝
+                    - 昼
+            - name: MinimumWorkDays
+              desc: 週あたり必須最低勤務日数(1〜7)
+              examples:
+                - 3
+            - name: ShortIndex
+              desc: |
+                1 ヶ月以内、10 日以内などの短期勤務期間（テキスト）
+                3 ヶ月以内の場合のみ表示します。
+              examples:
+                - 3 ヶ月以内
+            - name: CorporateName
+              desc: 掲載社名
+              examples:
+                - 株式会社 居酒屋○○
+            - name: TransPortation
+              desc: 交通
+              examples:
+                - 面接地/ＪＲ目白駅徒歩3 分・高田馬場駅徒歩8 分
+            - name: JobTypeDetail
+              desc: 職種詳細
+              examples:
+                - A/ホール※未経験者歓迎、社／調理※経験者優遇
+            - name: PayText
+              desc: 給与
+              examples:
+                - A/時給800 円（経験・年齢により優遇)、社/月給17 万円(経験・年齢により優遇
+            - name: OfferConditionList
+              desc: |
+                雇用形態リスト
+                OfferCondition タグを子要素として1 つまたは複数含みます
+              children:
+                - name: OfferCondition
+                  desc: |
+                    雇用形態
+                    TypeOfEmployment を子要素として1 つ含みます
+                  multiple: true
+                  children:
+                    - name: TypeOfEmployment
+                      desc: 雇用形態名
+                      examples:
+                        - アルバイト
+                        - 社員
+            - name: GeoPointList
+              desc: |
+                位置情報リスト
+                GeoPoint を子要素として1 つまたは複数含みます
+              children:
+                - name: GeoPoint
+                  desc: |
+                    位置情報
+                    GeoPointText、GeoPointLatitude、GeoPointLongitude を子要素として含みます。
+                  multiple: true
+                  chidren:
+                    - name: GeoPointText
+                      desc: 位置情報テキスト
+                      examples:
+                        - 勤務地
+                        - 面接地
+                    - name: GeoPointLatitude
+                      desc: 緯度
+                      note: "*5"
+                      examples:
+                        - N35.51.25
+                        - N35.51.26
+                    - name: GeoPointLongitude
+                      desc: 経度
+                      note: "*5"
+                      examples:
+                        - E139.43.44
+                        - E139.43.45
+    error:
+      name: Error
+      children:
+        - name: Code
+          examples:
+            - 400
+            - 403
+            - 500
+        - name: Message
+    tests:
+      - type: good
+        params:
+          api_key: $WEBSERVICE_RECRUIT_FROMA_KEY
+          ksjcd: 04
+          shrt_indx_cd: 1001
+      - type: error
+        params:
+          api_key: $WEBSERVICE_RECRUIT_FROMA_KEY
+          ksjcd: 07
+          edition_cd: 1
+          s_area_cd: 103002
+          hours_ctgry_cd: 04
+      - type: lib_error
+
+meta-spec:
+  version: 1.0

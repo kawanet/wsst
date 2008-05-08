@@ -320,12 +320,10 @@ methods:
                         - ナクル
                     - name: lat
                       desc: 緯度 (世界測地系) *1
-                      nullable: true
                       examples:
                         - 51.5091700000
                     - name: lng
                       desc: 経度 (世界測地系) *1
-                      nullable: true
                       examples:
                         - -0.1263430000
                     - name: area
@@ -333,12 +331,10 @@ methods:
                       children:
                         - name: code
                           desc: エリアコード
-                          nullable: true
                           examples:
                             - CAF
                         - name: name
                           desc: エリア名
-                          nullable: true
                           examples:
                             - アフリカ・他
                     - name: country
@@ -346,12 +342,10 @@ methods:
                       children:
                         - name: code
                           desc: エリアコード
-                          nullable: true
                           examples:
                             - KE
                         - name: name
                           desc: エリア名
-                          nullable: true
                           examples:
                             - ケニア
             - name: urls

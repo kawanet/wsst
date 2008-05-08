@@ -1,0 +1,364 @@
+# アイケント Webサービス
+
+company_name: Recruit
+service_name: Aikento
+version: 0.0.1
+title: Aikento Web Service
+title_m17n:
+  ja: アイケント Webサービス
+abstract: アイケントに掲載されている商品をさまざまな検索軸で探せる商品情報APIです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/aikento/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: item
+    title: 商品検索API
+    url: http://webservice.recruit.co.jp/aikento/item/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 掲載コード
+        desc: 商品に割り当てられた番号で検索します。(10個まで指定可能*2)
+        note: (例)99999
+        multiple: true
+        examples:
+          - 99999
+      - name: name
+        title: 商品名
+        desc: 商品名で検索します。（部分一致）（UTF-8・URLエンコーディング）
+        note: (例)トレー
+        examples:
+          - トレー
+      - name: large_category
+        title: 大カテゴリーコード
+        desc: 大カテゴリーで検索します。(3個まで指定可能*2)
+        note: (例)101
+        multiple: true
+        examples:
+          - 101
+      - name: small_category
+        title: 小カテゴリーコード
+        desc: 小カテゴリーで検索します。(10個まで指定可能*2)
+        note: (例)210001
+        multiple: true
+        examples:
+          - 210001
+      - name: keyword
+        title: キーワード
+        desc: 販社名、ブランド名、商品名、キャッチの全文検索をします。（UTF-8・URLエンコーディング）
+        note: (例)お手入れ
+        examples:
+          - お手入れ
+      - name: price_min
+        title: 最低価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)2000
+        examples:
+          - 2000
+      - name: price_max
+        title: 最高価格
+        desc: 価格帯で絞り込みます。単位：円。
+        note: (例)5400
+        examples:
+          - 5400
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。
+        note: 0:アイケントおすすめ順(デフォルト)、1:価格安い順、2:価格高い順、3:商品名順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.0
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: item
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 掲載コード
+              examples:
+                - 60082A
+            - name: shop_code
+              desc: ショップコード
+              examples:
+                - D0731
+            - name: brand
+              desc: ブランド
+              nullable: true
+              examples:
+                - ナチュラルハーベスト
+            - name: name
+              desc: 商品名
+              examples:
+                - Ｍｙ　Ｌｉｔｔｌｅ　Ｄａｒｌｉｎｇ
+            - name: price
+              desc: 価格
+              examples:
+                - 4800
+            - name: catch_copy
+              desc: キャッチコピー
+              examples:
+                - 食べる量が少ない小型犬のために開発されました
+            - name: desc
+              desc: 商品説明
+              examples:
+                - 厳選された30種類以上の食材を使用。食が細く食べる量が少ない、小型犬のためにつくられました。小さな粒で食べやすく、嗜好性も抜群です。
+            - name: image
+              children:
+                - name: pc
+                  desc: PC用画像URL
+                - name: mobile
+                  desc: 携帯用画像URL
+            - name: large_category
+              children:
+                - name: code
+                  desc: 大カテゴリーコード
+                  examples:
+                    - 201
+                - name: name
+                  desc: 大カテゴリー
+                  examples:
+                    - フード
+            - name: small_category
+              children:
+                - name: code
+                  desc: 小カテゴリーコード
+                  examples:
+                    - 201001
+                - name: name
+                  desc: 小カテゴリー
+                  examples:
+                    - ドライフード
+            - name: page
+              desc: 掲載号・ページ
+              examples:
+                - 2007年12月号171ページ
+            - name: start_date
+              desc: 販売開始日
+              examples:
+                - 2007-08-22
+            - name: end_date
+              desc: 販売終了日
+              examples:
+                - 2007-12-22
+            - name: urls
+              children:
+                - name: mobile
+                  desc: リンク先URL（携帯）
+                - name: pc
+                  desc: リンク先URL(PC)
+                - name: qr
+                  desc: リンク先URL（QRコード）
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          large_category: 202
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: large_category
+    title: 大カテゴリマスタAPI
+    url: http://webservice.recruit.co.jp/aikento/large_category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: large_code
+        title: 大カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)201
+        multiple: true
+        examples:
+          - 201
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)フード
+        multiple: true
+        examples:
+          - フード
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 1
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 1
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: large_category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 大カテゴリコード
+              examples:
+                - 201
+            - name: name
+              desc: 大カテゴリーテキスト
+              examples:
+                - フード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: small_category
+    title: 小カテゴリマスタAPI
+    url: http://webservice.recruit.co.jp/aikento/small_category/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: large_code
+        title: 大カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)201
+        multiple: true
+        examples:
+          - 201
+      - name: small_code
+        title: 小カテゴリコード
+        desc: 複数指定可能*2
+        note: (例)201001
+        multiple: true
+        examples:
+          - 201001
+      - name: keyword
+        title: フリーワード
+        desc: 文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        note: (例)ベビー
+        multiple: true
+        examples:
+          - ベビー
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xmlまたはjsonまたはjsonp
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: small_category
+          desc: [複数要素]
+          multiple: true
+          children:
+            - name: code
+              desc: 小カテゴリコード
+              examples:
+                - 201001
+            - name: name
+              desc: 小カテゴリ名
+              examples:
+                - ドライフード
+            - name: large_category
+              children:
+                - name: code
+                  desc: 大カテゴリコード
+                  examples:
+                    - 201
+                - name: name
+                  desc: 大カテゴリテキスト
+                  examples:
+                    - フード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0

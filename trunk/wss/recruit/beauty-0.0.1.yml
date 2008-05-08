@@ -1,0 +1,975 @@
+# ホットペッパーBeauty Webサービス
+
+company_name: Recruit
+service_name: HotPepperBeauty
+version: 0.0.1
+title: HotPepperBeauty Web Service
+title_m17n:
+  ja: ホットペッパーBeauty Webサービス
+abstract: ホットペッパーBeauty Webサービスを使うことで、ホットペッパーBeautyに掲載されている、サロン情報にアクセスして、アプリケーションを構築することができます。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/beauty/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: salon
+    title: サロンサーチAPI
+    url: http://webservice.recruit.co.jp/beauty/salon/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: id
+        title: サロンID
+        desc: サロンに割り当てられた番号で検索します。
+        note: (例) H0123456789
+        examples:
+          - H0123456789
+      - name: name
+        title: サロン名
+        desc: サロンの名前で検索(部分一致)します。
+      - name: name_kana
+        title: サロン名かな
+        desc: サロンの読みがなで検索(部分一致)します。
+      - name: address
+        title: 住所
+        desc: サロンの住所で検索(部分一致)します。
+      - name: service_area
+        title: サービスエリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: (例) SA
+        examples:
+          - SA
+      - name: middle_area
+        title: 中エリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: (例) AAAA
+        examples:
+          - AAAA
+      - name: small_area
+        title: 小エリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: (例) X001
+        examples:
+          - X001
+      - name: keyword
+        title: フリーワード
+        desc: サロン名、サロン名かな、住所、キャッチのフリーワード検索(部分一致)が可能です。
+      - name: lat
+        title: 緯度
+        desc: ある地点からの範囲内のサロンの検索を行う場合の緯度です。小数点13桁まで対応。
+        note: (例) 35.669220
+        examples:
+          - 35.669220
+      - name: lng
+        title: 経度
+        desc: ある地点からの範囲内のサロンの検索を行う場合の経度です。小数点13桁まで対応。
+        note: (例) 139.761457
+        examples:
+          - 139.761457
+      - name: range
+        title: 検索範囲
+        desc: ある地点からの範囲内のサロンの検索を行う場合の範囲を5段階で指定できます。
+        note: |
+          1: 300m
+          2: 500m
+          3: 1000m (初期値)
+          4: 2000m
+          5: 3000m
+      - name: datum
+        title: 測地系
+        desc: 緯度・経度の測地系を指定できます。world: 世界測地系、tokyo: 旧日本測地系。初期値は world。
+        note: (例) world
+        examples:
+          - world
+      - name: hair_image
+        title: イメージコード
+        desc: スタイルのイメージに割り当てられたコード番号で検索します。指定できるコード番号は髪イメージマスタAPIを参照。
+        note: (例) 2
+        examples:
+          - 2
+      - name: hair_length
+        title: 長さコード
+        desc: 髪の長さで絞込むことができます。指定できるコード番号は髪長さマスタAPIを参照。
+        note: (例) 5
+        examples:
+          - 5
+      - name: hair_ryou
+        title: 髪量コード
+        desc: 髪量で絞り込むことができます。
+        note: |
+          1: 少ない
+          2: 普通
+          3: 多い
+      - name: hair_shitsu
+        title: 髪質コード
+        desc: 髪質で絞り込むことができます。
+        note: |
+          1: 柔かい
+          2: 普通
+          3: 硬い
+      - name: hair_futosa
+        title: 髪の太さコード
+        desc: 髪の太さで絞り込むことができます。
+        note: |
+          1: 細い
+          2: 普通
+          3: 太い
+      - name: hair_kuse
+        title: 髪のクセコード
+        desc: 髪のクセで絞り込むことができます。
+        note: |
+          1: なし
+          2: 少し
+          3: 強い
+      - name: hair_kaogata
+        title: 顔型コード
+        desc: 顔型で絞り込むことができます。
+        note: |
+          1: 丸型
+          2: 卵型
+          3: 四角
+          4: 逆三角
+          5: ベース
+      - name: kodawari
+        title: こだわり条件コード
+        desc: こだわり条件で絞り込むことができます。指定できるコード番号はこだわりマスタAPIを参照。複数選択可*2
+        note: (例) 4
+        multiple: true
+        examples:
+          - 4
+      - name: kodawari_setsubi
+        title: こだわり設備条件コード
+        desc: 設備・サービスのこだわり条件で絞り込むことができます。指定できるコード番号はこだわりマスタAPIを参照。複数選択可*2
+        note: (例) 2
+        multiple: true
+        examples:
+          - 2
+      - name: kodawari_menu
+        title: こだわりメニュー条件コード
+        desc: メニューのこだわり条件で絞り込むことができます。指定できるコード番号はこだわりメニューマスタAPIを参照。複数選択可*2
+        note: (例) 3
+        multiple: true
+        examples:
+          - 3
+      - name: order
+        title: ソート順
+        desc: 検索結果の並び順を指定します。※位置検索の場合は指定に関係なく、強制的に距離順でソートされます。
+        note: |
+          0: ランダム(初期値)
+          1: サロン名かな順
+          2: 小エリアコード順
+      - name: start
+        title: 検索の開始位置（何件目か？）
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値: 1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 1〜100までの半角数字。初期値: 10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値: xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 251
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 10
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: salon
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: id
+              desc: サロンID
+              examples:
+                - H0123456789
+            - name: last_update
+              desc: 最終更新日時
+              examples:
+                - 2007-12-31T11:11:11Z
+            - name: name
+              desc: サロン名
+              examples:
+                - ホットペッパービューティサロン
+            - name: name_kana
+              desc: サロン名かな
+              examples:
+                - ホットペッパービューティサロン
+            - name: urls
+              desc: URL
+              children:
+                - name: pc
+                  desc: PC用サロンURL
+                  examples:
+                    - URL
+            - name: coupon_urls
+              desc: クーポンページURL
+              children:
+                - name: pc
+                  desc: PC用クーポンページURL
+                  examples:
+                    - URL
+            - name: address
+              desc: 住所
+              examples:
+                - 東京都中央区銀座８-４-１７
+            - name: service_area
+              desc: サービスエリア
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 関東
+            - name: middle_area
+              desc: 中エリア
+              children:
+                - name: code
+                  desc: 中エリアコード
+                  examples:
+                    - AA
+                - name: name
+                  desc: 中エリア名
+                  examples:
+                    - 新宿・下北沢・四ツ谷
+            - name: small_area
+              desc: 小エリア
+              children:
+                - name: code
+                  desc: 小エリアコード
+                  examples:
+                    - X001
+                - name: name
+                  desc: 小エリア名
+                  examples:
+                    - 新宿・高田馬場
+            - name: open
+              desc: 営業時間
+              examples:
+                - 12:00〜24:00（最終受付24:00）
+            - name: close
+              desc: 定休日
+              examples:
+                - 毎週火曜日
+            - name: credit_card
+              desc: クレジットカード
+              examples:
+                - 全て
+            - name: price
+              desc: カット価格
+              examples:
+                - 2400〜
+            - name: stylist_num
+              desc: スタイリスト数
+              examples:
+                - ３人
+            - name: capacity
+              desc: 席数
+              examples:
+                - ３席
+            - name: parking
+              desc: 駐車場
+              examples:
+                - 3台有
+            - name: note
+              desc: 備考
+              nullable: true
+              examples:
+                - 予約優先。
+            - name: kodawari
+              desc: こだわり条件
+              examples:
+                - ４席以下の小型サロン/夜１９時以降も受付OK/一人のスタイリストが仕上げまで担当
+            - name: lat
+              desc: 緯度（測地系は検索時に指定したもの）
+              examples:
+                - 35.6608183454
+            - name: lng
+              desc: 経度（測地系は検索時に指定したもの）
+              examples:
+                - 139.7754267645
+            - name: catch_copy
+              desc: キャッチ
+              examples:
+                - TV・雑誌で話題☆海外でも絶賛！
+            - name: description
+              desc: ディスクリプション
+              examples:
+                - お勤め帰りやお買い物ついでに立ち寄れる便利な立地にあるサロン。
+            - name: main
+              desc: メインコンテンツ
+              children:
+                - name: photo
+                  desc: メインフォト
+                  children:
+                    - name: s
+                      desc: Sサイズ（119x89)
+                      examples:
+                        - 画像URL
+                    - name: m
+                      desc: Mサイズ（219x164）
+                      examples:
+                        - 画像URL
+                    - name: l
+                      desc: Lサイズ（349x262）
+                      examples:
+                        - 画像URL
+                - name: caption
+                  desc: キャプション
+                  examples:
+                    - 贅沢な空間でリラックスできます。
+            - name: mood
+              desc: サロンの雰囲気[複数要素]
+              multiple: true
+              nullable: true
+              children:
+                - name: photo
+                  desc: サロンの雰囲気フォト
+                  examples:
+                    - 画像URL
+                - name: caption
+                  desc: サロンの雰囲気キャプション
+                  examples:
+                    - モダンデザインの外観フォルム
+            - name: feature
+              desc: 特集 [複数要素]
+              multiple: true
+              children:
+                - name: name
+                  desc: 特集名
+                  examples:
+                    - 夏のイチオシスタイルがあるサロン
+                - name: caption
+                  desc: キャッチ
+                  examples:
+                    - 誰にも真似のできないあなただけのオリジナルカラー
+                - name: description
+                  desc: ディスクリプション
+                  examples:
+                    - カラーやパーマでは９種ものトリートメントで髪の内部から補修。
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          name: サロン
+          order: 3
+      - type: error
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: service_area
+    title: サービスエリアマスタAPI
+    desc: サービスエリアのマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/service_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置（何件目か？）
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: １〜１００までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 3
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 3
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: service_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: サービスエリアコード
+              examples:
+                - SA
+            - name: name
+              desc: サービスエリア名
+              examples:
+                - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: middle_area
+    title: 中エリアマスタAPI
+    desc: 中エリアのマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/middle_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: service_area
+        title: サービスエリア
+        desc: 該当するサービスエリアで絞込みます。複数選択可*1
+        note: (例) SA
+        examples:
+          - SA
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 1〜100までの半角数字。初期値: 10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: middle_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 中エリアコード
+              examples:
+                - AA
+            - name: name
+              desc: 中エリア名
+              examples:
+                - 新宿・下北沢・四ツ谷
+            - name: service_area
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: small_area
+    title: 小エリアマスタAPI
+    desc: 小エリアのマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/small_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: middle_area
+        title: 中エリア
+        desc: 該当する中エリアで絞込みます。複数選択可*1
+        note: (例) AB
+        examples:
+          - AB
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 1〜100までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: small_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 小エリアコード
+              examples:
+                - X001
+            - name: name
+              desc: 小エリア名
+              examples:
+                - 新宿・高田馬場
+            - name: middle_area
+              children:
+                - name: code
+                  desc: 中エリアコード
+                  examples:
+                    - AA
+                - name: name
+                  desc: 中エリア名
+                  examples:
+                    - 新宿・下北沢・四ツ谷
+            - name: service_area
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: hair_image
+    title: イメージマスタAPI
+    desc: 髪型のイメージマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/hair_image/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: １〜１００までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: hair_image
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: イメージコード
+              examples:
+                - 1
+            - name: name
+              desc: イメージ名
+              examples:
+                - フェミニン
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: hair_length
+    title: 長さマスタAPI
+    desc: 髪の長さマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/hair_length/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 1〜100までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: hair_length
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 髪の長さコード
+              examples:
+                - 1
+            - name: name
+              desc: 髪の長さ名
+              examples:
+                - ロング
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: kodawari
+    title: こだわりマスタAPI
+    desc: こだわりマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/kodawari/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 1〜100までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: kodawari
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: こだわり条件コード
+              examples:
+                - 1
+            - name: name
+              desc: こだわり条件名
+              examples:
+                - １５席以上の大型サロン
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: kodawari_setsubi
+    title: こだわり設備マスタAPI
+    desc: こだわり設備マスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/kodawari_setsubi/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: １〜１００までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: kodawari_setsubi
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: こだわり設備条件コード
+              examples:
+                - 1
+            - name: name
+              desc: こだわり設備条件名
+              examples:
+                - 朝１０時前でも受付OK
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+  - name: kodawari_menu
+    title: こだわりメニューマスタAPI
+    desc: こだわりメニューマスタを取得します。
+    url: http://webservice.recruit.co.jp/beauty/kodawari_menu/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: １〜１００までの半角数字。初期値:10
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: xml または json または jsonp。初期値:xml。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.00
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 7
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 7
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+        - name: kodawari_menu
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: こだわりメニュー条件コード
+              examples:
+                - 1
+            - name: name
+              desc: こだわりメニュー条件名
+              examples:
+                - 白髪染め（若白髪含む）
+            - name: category
+              desc: メニューカテゴリ [複数要素]
+              multiple: true
+              children:
+                - name: code
+                  desc: カテゴリコード
+                  examples:
+                    - 1
+                - name: name
+                  desc: カテゴリ名
+                  examples:
+                    - カラー
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: lib_error
+
+meta-spec:
+  version: 1.0
