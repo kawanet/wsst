@@ -1,0 +1,18 @@
+--- #YAML:1.0
+name:                WebService-Flickr-Test
+version:             0.0.1
+abstract:            Yet another interface for Flickr Services powered by WSST
+
+license:             BSD
+author:              
+    - Yusuke Kawasaki <u-suke [at] kawa.net>
+generated_by:        ExtUtils::MakeMaker version 6.44
+distribution_type:   module
+requires:     
+    Class::Accessor:               0
+    Class::Accessor::Children:     0
+    Test::More:                    0
+    XML::OverHTTP:                 0
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

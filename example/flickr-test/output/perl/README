@@ -1,0 +1,84 @@
+NAME
+    WebService::Flickr::Test - An Interface for Flickr Services: Test API
+    Methods
+
+SYNOPSIS
+        use WebService::Flickr::Test;
+    
+        my $service = WebService::Flickr::Test->new();
+    
+        my $param = {
+            'api_key' => $ENV{'FLICKR_API_KEY'},
+        };
+        my $res = $service->echo( %$param );
+        my $root = $res->root;
+        printf("stat: %s\n", $root->stat);
+        printf("method: %s\n", $root->method);
+        printf("api_key: %s\n", $root->api_key);
+        print "...\n";
+
+DESCRIPTION
+    Yet another interface for Flickr Services powered by WSST
+
+METHODS
+  new
+    This is the constructor method for this class.
+
+        my $service = WebService::Flickr::Test->new();
+
+    This accepts optional parameters.
+
+        my $conf = {
+            utf8_flag => 1,
+            param => {
+                # common parameters of this web service 
+            },
+        };
+        my $service = WebService::Flickr::Test->new( %$conf );
+
+  add_param
+    Add common parameter of tihs web service.
+
+        $service->add_param( param_key => param_value );
+
+    You can add multiple parameters by calling once.
+
+        $service->add_param( param_key1 => param_value1,
+                             param_key2 => param_value2,
+                             ...);
+
+  get_param
+    Returns common parameter value of the specified key.
+
+        my $param_value = $service->get( 'param_key' );
+
+  echo
+    This makes a request for "echo" API. See WebService::Flickr::Test::Echo
+    for details.
+
+        my $res = $service->echo( %$param );
+
+  login
+    This makes a request for "login" API. See
+    WebService::Flickr::Test::Login for details.
+
+        my $res = $service->login( %$param );
+
+  utf8_flag / user_agent / lwp_useragent / http_lite
+    This modules uses XML::TreePP module internally. Following methods are
+    available to configure it.
+
+        $service->utf8_flag( 1 );
+        $service->user_agent( 'Foo-Bar/1.0 ' );
+        $service->lwp_useragent( LWP::UserAgent->new() );
+        $service->http_lite( HTTP::Lite->new() );
+
+SEE ALSO
+    http://www.flickr.com/services/api/
+
+AUTHOR
+    Yusuke Kawasaki <u-suke [at] kawa.net>
+
+COPYRIGHT
+    Copyright 2008 Yusuke Kawasaki
+

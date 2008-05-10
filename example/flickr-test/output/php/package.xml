@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Services_Flickr_Test</name>
+ <channel>__uri</channel>
+ <summary>An Interface for Flickr Services: Test API Methods</summary>
+ <description>Yet another interface for Flickr Services powered by WSST</description>
+ <lead>
+  <name>Yusuke Kawasaki</name>
+  <user>u-suke [at] kawa.net</user>
+  <email>u-suke [at] kawa.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2008-05-11</date>
+ <time>03:55:42</time>
+ <version>
+  <release>0.0.1</release>
+  <api>0.0.1</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+ <notes>#</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="Services/Flickr" md5sum="af384df8ebba658b8f6906fafdb9d3a5" name="Test.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="36affd05cabb02790aa1ae050b44c34b" name="docs/examples/echo.php" role="doc">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="3b3d955c6f2f79bb210eaa0c7407fa7f" name="docs/examples/login.php" role="doc">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="8c571d07a38997a37c604b99ee68a53c" name="tests/AllTests.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="beef31a34fae330521247b875c8c62d9" name="tests/Services/Flickr/TestTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="7c03551a7e4cd0e7a197f2094cd59217" name="tests/Services/Flickr/Test/RequestTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="e5a5b20dc4d3a46134123f2ba5aa4cad" name="tests/Services/Flickr/Test/ResponseTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="a886ed6a515c4caa069c4b48c032f1e7" name="tests/Services/Flickr/Test/FactoryTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="186c12bb69c071b6f29a7752ee1cfb97" name="tests/Services/Flickr/Test/Response/DefaultTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="3225608d34a876108490181fa618abdf" name="tests/Services/Flickr/Test/Method/EchoTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="58ee1efc423ca8105c2f1718f7cb829d" name="tests/Services/Flickr/Test/Method/LoginTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="45028e9fa8286ede3a7ba33b8eae66b6" name="tests/Services/Flickr/Test/Request/DefaultTest.php" role="test">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="d6732d13417aebe51630679d89b274cd" name="Test/Request.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="cf6a130c852966d85eb7a4ae63247e9a" name="Test/Response.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="008614bd17b5846a0e9cb838adc101d6" name="Test/Method.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="7d75d99dfcd855bb5372ce62fa16af1e" name="Test/Factory.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="b1ed18f9a07de75e125c331ea448457f" name="Test/Response/Default.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="ba97fa0d314513fa675900ee21f6b6cb" name="Test/Method/Echo.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="85fb0b0d7608ddcf09cd926db836bab1" name="Test/Method/Login.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="Services/Flickr" md5sum="043d33f9ff2cfd125dbf1992b00294d7" name="Test/Request/Default.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.0.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>XML_Serializer</name>
+    <channel>pear.php.net</channel>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>PHPUnit</name>
+    <channel>pear.phpunit.de</channel>
+    <min>3.2.8</min>
+   </package>
+  </optional>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.0.1</release>
+    <api>0.0.1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2008-05-11</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD</license>
+   <notes>#</notes>
+  </release>
+ </changelog>
+</package>

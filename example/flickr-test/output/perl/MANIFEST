@@ -1,0 +1,16 @@
+lib/WebService/Flickr/Test.pm
+lib/WebService/Flickr/Test/Base.pm
+lib/WebService/Flickr/Test/Echo.pm
+lib/WebService/Flickr/Test/Login.pm
+make-dist.sh
+Makefile.PL
+MANIFEST			This list of files
+README
+t/00_pod.t
+t/01_new.t
+t/02_new_methods.t
+t/03_setget.t
+t/04_Method_Echo.t
+t/05_Method_Login.t
+t/06_Test.t
+META.yml                                 Module meta-data (added by MakeMaker)
