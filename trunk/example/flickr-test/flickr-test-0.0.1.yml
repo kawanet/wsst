@@ -1,0 +1,90 @@
+# Flickr Services: flickr.test.* methods
+
+company_name: Flickr
+service_name: Test
+version: 0.0.1
+title: Flickr Services: Test API Methods
+abstract: Yet another interface for Flickr Services powered by WSST
+license: BSD
+author:
+  - Yusuke Kawasaki <u-suke [at] kawa.net>
+see_also: http://www.flickr.com/services/api/
+copyright: Copyright 2008 Yusuke Kawasaki
+php_link: http://wsst.googlecode.com/svn/trunk/
+meta-spec:
+  version: 1.0
+methods:
+
+### flickr.test.echo
+  - name: echo
+    title: flickr.test.echo
+    url: http://api.flickr.com/services/rest/
+    params:
+      - name: method
+        require: true
+        fixed: flickr.test.echo
+      - name: api_key
+        require: true
+    return:
+      name: rsp
+      children:
+        - name: stat
+        - name: method
+        - name: api_key
+    error:
+      name: rsp
+      children:
+        - name: stat
+        - name: err 
+          children:
+            - name: code
+            - name: msg
+    tests:
+      - type: good
+        params:
+          api_key: $FLICKR_API_KEY
+      - type: error
+        params:
+          api_key: invalid_api_key
+
+### flickr.test.login
+  - name: login
+    title: flickr.test.login
+    url: http://api.flickr.com/services/rest/
+    params:
+      - name: method
+        require: true
+        fixed: flickr.test.login
+      - name: api_key
+        require: true
+      - name: api_sig
+        require: true
+      - name: auth_token
+        require: true
+    return:
+      name: rsp
+      children:
+        - name: stat
+        - name: user
+          children:
+            - name: id
+            - name: username
+    error:
+      name: rsp
+      children:
+        - name: stat
+        - name: err 
+          children:
+            - name: code
+            - name: msg
+    tests:
+      - type: good
+        params:
+          api_key: $FLICKR_API_KEY
+          api_sig: $FLICKR_API_SIG
+          auth_token: $FLICKR_AUTH_TOKEN
+      - type: error
+        params:
+          api_key: invalid_api_key
+          api_sig: invalid_api_sig
+          auth_token: invalid_auth_token
