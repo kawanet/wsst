@@ -1,0 +1,3233 @@
+# じゃらん Webサービス
+
+company_name: Recruit
+service_name: Jalan
+version: 0.0.1
+title: Jalan Web Service
+title_m17n:
+  ja: じゃらん Webサービス
+abstract: |
+  じゃらんWebサービスは、じゃらんnetの提供する日本全国の宿泊施設情報を活用して、新しいコンテンツサービスを作ろうとする、開発者やサイト制作者、アフィリエイトサイトオーナーの皆様のために情報提供をしています。
+  皆様は、じゃらんnetの宿泊施設情報をアプリケーションに組み込んだり、情報サイトのコンテンツとして活用することができます。
+  広く皆様にご活用いただけるよう、各種APIの使い方、ツールの活用のしかたについて、少しずつではありますが、チュートリアルという形で紹介していきたいと思います。
+  もしここに書かれていることの他に、こんなことがわからない、こんな使い方はできないのか？といったことがあれば、「ご要望・お問合せ(http://www.jalan.net/frame/toiawase.html)」からお寄せください。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://jws.jalan.net/ws/viw/U00001
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: HotelSearchAdvance
+    title: じゃらん宿表示API　アドバンス
+    desc: 宿表示APIは、じゃらんnetに公開されている宿泊施設の情報を検索する機能を提供します。
+    url: http://jws.jalan.net/APIAdvance/HotelSearch/V1/
+    params:
+      - name: key
+        title: APIキー
+        desc: |
+          APIを利用するためのキーです。
+          アカウント登録時に割り当てられるAPIキーを指定してください。
+        note: 半角英数字16桁以下
+        require: true
+      - name: reg
+        title: 広域コード
+        desc: 各広域に割り当てられたコードで検索を行います。
+        note: |
+          エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+          
+          この中から最大5件まで組み合わせて指定することが可能です。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br><br>
+          この中から最大5件まで組み合わせて指定することが可能です。
+      - name: pref
+        title: 都道府県コード
+        desc: 各都道府県に割り当てられたコードで検索を行います。
+        note: |
+          エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+          
+          この中から最大5件まで組み合わせて指定することが可能です。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br><br>
+          この中から最大5件まで組み合わせて指定することが可能です。
+      - name: l_area
+        title: 大エリアコード
+        desc: 都道府県を各地域ごとに分けたエリアのコードで検索を行います。
+        note: |
+          エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+          
+          この中から最大5件まで組み合わせて指定することが可能です。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br><br>
+          この中から最大5件まで組み合わせて指定することが可能です。
+      - name: s_area
+        title: 小エリアコード
+        desc: 大エリアを更に詳細に分けたエリアのコードで検索を行います。
+        note: |
+          エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+          
+          この中から最大5件まで組み合わせて指定することが可能です。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br><br>
+          この中から最大5件まで組み合わせて指定することが可能です。
+      - name: h_id
+        title: 宿番号
+        desc: |
+          宿に割り当てられた番号で検索を行います。
+          ※ この項目を指定した場合、宿番号での検索条件が最優先となり、他の検索条件は無視されます。
+        html_desc: |
+          宿に割り当てられた番号で検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿番号での検索条件が最優先となり、他の検索条件は無視されます。</span>
+        note: |
+          半角数字6桁。複数指定可能。
+          最大10件まで指定することが可能です。
+      - name: o_area_id
+        title: 温泉地コード
+        desc: 温泉地に結び付けられた宿の検索を行います。
+        note: |
+          半角数字5桁
+          温泉検索APIでの検索結果を参考にしてください。
+        html_note: |
+          半角数字5桁<br>
+          <a href="/ws/viw/U01004" target="_self">温泉検索API</a>での検索結果を参考にしてください。
+      - name: o_id
+        title: 温泉コード
+        desc: 温泉に結び付けられた宿の検索を行います。
+        note: |
+          半角数字4桁
+          温泉検索APIでの検索結果を参考にしてください。
+        html_note: |
+          半角数字4桁<br>
+          <a href="/ws/viw/U01004" target="_self">温泉検索API</a>での検索結果を参考にしてください。
+      - name: x
+        title: 経度
+        desc: ある地点からの範囲内の宿の検索を行う場合の経度です。
+        note: |
+          439200000 〜 554400000までの半角数字9桁
+          日本測地系（ミリ秒）
+          
+          例（東経 139度 43分 57.529秒）＝503037529
+        examples:
+          - 503037529
+      - name: y
+        title: 緯度
+        desc: ある地点からの範囲内の宿の検索を行う場合の緯度です。
+        note: |
+          72000000 〜 165600000までの半角数字9桁
+          日本測地系（ミリ秒）
+          
+          例（北緯 35度 39分 26.212秒）＝128366212
+        examples:
+          - 128366212
+      - name: range
+        title: 範囲
+        desc: |
+          ある地点からの範囲内の宿の検索を行う場合の範囲です。
+          緯度（y）、経度（x）を中心に東西南北に伸びる距離を指定してください。
+        note: |
+          0.1 〜 50までの半角数字
+          小数点第一位まで
+          単位：km
+      - name: h_name
+        title: 宿名
+        desc: 宿名の検索を行います。
+        note: |
+          全角・半角
+          ※ 日本語を指定する場合は、文字コードをUTF-8にしてください。
+        html_note: |
+          全角・半角<br>
+          <span class="alert">※ 日本語を指定する場合は、文字コードをUTF-8にしてください。</span>
+      - name: h_type
+        title: 宿タイプ
+        desc: 宿泊施設のタイプで絞り込みを行うかどうかを指定します。
+        note: |
+          0:絞込みなし（初期値）
+          1:旅館
+          2:ペンション・民宿・ロッジ
+          3:貸し別荘・コンドミニアム
+          4:ホテル・ビジネスホテル
+          5:公共の宿
+      - name: o_pool
+        title: 屋外プール
+        desc: 「施設内に屋外プールがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: parking
+        title: 駐車場無料
+        desc: 「駐車場が無料の宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pub_bath
+        title: 内湯・大浴場
+        desc: 「館内に内湯・大浴場がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: onsen
+        title: 温泉
+        desc: 「温泉がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_bath
+        title: 貸切風呂
+        desc: 「貸切風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。 
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: v_bath
+        title: 展望風呂
+        desc: 「展望風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sauna
+        title: サウナ
+        desc: 「サウナ設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: jacz
+        title: ジャグジー
+        desc: 「ジャグジー設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: mssg
+        title: マッサージ
+        desc: 「マッサージサービスがある、もしくは、手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_ski
+        title: 貸しスキー
+        desc: 「館内・敷地内に宿泊者向けに貸しスキーがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_brd
+        title: 貸しボード
+        desc: 「館内・敷地内に宿泊者向けに貸しスノーボードがある宿泊施設」という条件で絞込みを行うかどうかを指定します。 
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pet
+        title: ペットOKの宿
+        desc: 「施設にペット同伴可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: esthe
+        title: エステ設備
+        desc: 「エステ設備が施設内か近隣にある、もしくはエステサービスを手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_pong
+        title: 卓球あり
+        desc: 「館内に卓球台が設置されている宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: limo
+        title: 送迎あり
+        desc: 「最寄の駅からの送迎サービスがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: room_b
+        title: 部屋で朝食
+        desc: 「部屋で朝食が食べられる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: room_d
+        title: 部屋で夕食
+        desc: 「部屋で夕食が食べられる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_b
+        title: 個室で朝食
+        desc: 「食事専用の個室で朝食が食べられる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_d
+        title: 個室で夕食
+        desc: 「食事専用の個室で夕食が食べられる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: early_in
+        title: チェックイン14時以前
+        desc: 「チェックインが14時以前の宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: late_out
+        title: チェックアウト11時以降
+        desc: 「チェックアウトが11時以降の宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: no_smk
+        title: 禁煙ルーム
+        desc: 「禁煙ルームのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: net
+        title: 部屋でインターネットOK
+        desc: 「部屋でインターネットが利用できる宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_room
+        title: 露天風呂付き客室
+        desc: 「露天風呂付き客室に泊まれる宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: high
+        title: じゃらんハイクラス掲載の宿
+        desc: 「じゃらんnet編集部が設けた一定の基準を満たした高級感・上質感のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_ok
+        title: ポイント割引OKの宿
+        desc: 「じゃらんポイント割引が利用できる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sp_room
+        title: 特別室・離れ・スイート
+        desc: 「特別室・離れ・スイートのいずれかに宿泊できる宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: bath_to
+        title: バス・トイレ付き
+        desc: 「客室内にバス・トイレが付いている宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: o_bath
+        title: 露天風呂
+        desc: 「露天風呂のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pour
+        title: 天然温泉掛け流し
+        desc: 「天然温泉掛け流しの温泉のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: cloudy
+        title: にごり湯
+        desc: 「にごり湯の温泉のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: i_pool
+        title: 屋内プール
+        desc: 「施設内に屋内プールがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: fitness
+        title: フィットネスジム
+        desc: 「施設内にフィットネスジムがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: gym
+        title: 体育館
+        desc: 「施設内に体育館がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_field
+        title: グラウンド
+        desc: 「施設内にグラウンドがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: bbq
+        title: バーベキュー施設
+        desc: 「施設内にバーベキュー施設がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: hall
+        title: 宴会場
+        desc: 「施設内に宴会場がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_station
+        title: 駅から徒歩5分
+        desc: 「最寄り駅から徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_beach
+        title: ビーチから徒歩5分
+        desc: 「最寄りのビーチから徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_slope
+        title: ゲレンデから徒歩5分
+        desc: 「最寄りのゲレンデから徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_card
+        title: クレジットカードが利用可能
+        desc: 「クレジットカードが利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_jcb
+        title: クレジットカード（JCB）が利用可能
+        desc: 「クレジットカード（JCB）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_visa
+        title: クレジットカード（VISA）が利用可能
+        desc: 「クレジットカード（VISA）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_master
+        title: クレジットカード（Master）が利用可能
+        desc: 「クレジットカード（Master）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_amex
+        title: クレジットカード（AMEX）が利用可能
+        desc: 「クレジットカード（AMEX）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_uc
+        title: クレジットカード（UC）が利用可能
+        desc: 「クレジットカード（UC）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_dc
+        title: クレジットカード（DC）が利用可能
+        desc: 「クレジットカード（DC）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_nicos
+        title: クレジットカード（NICOS）が利用可能
+        desc: 「クレジットカード（NICOS）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_diners
+        title: クレジットカード（ダイナース）が利用可能
+        desc: 「クレジットカード（ダイナース）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_saison
+        title: クレジットカード（セゾン）が利用可能
+        desc: 「クレジットカード（セゾン）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_ufj
+        title: クレジットカード（UFJ）が利用可能
+        desc: 「クレジットカード（UFJ）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: cvs
+        title: コンビニまで徒歩5分
+        desc: 「最寄のコンビニまで徒歩5分以内の宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: no_meal
+        title: 食事なしプランあり
+        desc: 「食事なしの宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: b_only
+        title: 朝食のみプランあり
+        desc: 「朝食のみの宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: d_only
+        title: 夕食のみプランあり
+        desc: 「夕食のみの宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 2_meals
+        title: 朝夕食付プランあり
+        desc: 「朝食、夕食付きの宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sng_room
+        title: シングルルームあり
+        desc: |
+          「シングルベッド（幅100cm程度）、もしくはセミダブルベッド（幅120cm程度）が1つ設置されている客室のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+          スタジオツインは「シングル」扱いとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: twn_room
+        title: ツインルームあり
+        desc: |
+          「ベッド（ベッド幅は問わない）が2つ設置されている客室のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+          1台がエキストラベッドの場合はシングルとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: dbl_room
+        title: ダブルルームあり
+        desc: 「ダブルベッド（幅140cm程度）が1つ設置されている客室のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: tri_room
+        title: トリプルルームあり
+        desc: |
+          「ベッド（ベッド幅は問わない）が3つ設置されている客室のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+          1台がエキストラベッドの場合はツインとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 4bed_room
+        title: 4ベッドルームあり
+        desc: 「ベッド（ベッド幅は問わない）が4つ設置されている客室のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: jpn_room
+        title: 和室あり
+        desc: 「畳敷きの客室がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: j_w_room
+        title: 和洋室あり
+        desc: 「洋室部分にベッドが設置され、和室・洋室部分どちらにも寝泊まりできる客室がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: child_price
+        title: 子供料金設定あり
+        desc: 「子供の宿泊料金設定がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_bed_meal
+        title: 幼児向けに布団・食事ともにあり
+        desc: 「幼児向けに布団・食事ともにある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_no_bed_meal
+        title: 幼児向けに布団・食事ともになし
+        desc: 「幼児向けに布団・食事ともにない宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_meal_only
+        title: 幼児向けに食事のみあり
+        desc: 「幼児向けの食事がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_bed_only
+        title: 幼児向けに布団のみあり
+        desc: 「幼児向けの布団がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pict_size
+        title: 画像サイズ
+        desc: 宿泊施設の画像のサイズを指定します。
+        note: |
+          0:pictSS
+          1:pictS
+          2:pict
+          3:pictM（初期値）
+          4:pictL
+          5:pictLL
+          
+          画像のサンプルは http://jws.jalan.net/content/data/pictsample.html をご覧ください。
+        html_note: |
+          0:pictSS<br>
+          1:pictS<br>
+          2:pict<br>
+          3:pictM（初期値）<br>
+          4:pictL<br>
+          5:pictLL<br>
+          <br>
+          画像のサンプルは<a href="/content/data/pictsample.html" target="_blank">こちら</a>をご覧ください。
+      - name: picts
+        title: 宿画像個数
+        desc: 出力される宿の画像の出力個数を指定します。
+        note: |
+          1 〜 5までの半角数字。
+          初期値:1
+      - name: order
+        title: 並び順
+        desc: |
+          出力されるデータの並び順を指定します。
+          ※この項目を指定せずに宿番号を指定した検索を行った場合は、入力された宿番号順に表示されます。
+          ※この項目を指定せずに緯度経度の検索を行った場合は、指定した緯度経度から近い順に表示されます。
+        html_desc: |
+          出力されるデータの並び順を指定します。<br>
+          <span class="alert">※この項目を指定せずに宿番号を指定した検索を行った場合は、入力された宿番号順に表示されます。</span><br>
+          <span class="alert">※この項目を指定せずに緯度経度の検索を行った場合は、指定した緯度経度から近い順に表示されます。</span><br>
+        note: |
+          0:宿番号順（初期値）
+          1:50音順
+          2:参考料金の安い順
+          3:参考料金の高い順
+          4:クチコミ評点の高い順
+      - name: start
+        title: 表示From
+        desc: 出力されるデータの何件目から表示するかを指定します。
+        note: |
+          半角数字。
+          初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 表示件数
+        desc: |
+          出力されるデータの最大出力件数を指定します。
+          該当件数が出力件数よりも少ない場合は、全て表示されます。
+        note: |
+          1 〜 100までの半角数字。
+          初期値:10
+        page_param_size: true
+      - name: xml_ptn
+        title: 出力項目の範囲
+        desc: レスポンスフィールドに出力される項目の範囲を指定します。
+        note: |
+          0:基本情報（初期値）
+          1:料金情報・クチコミ評点情報を含む
+          2:プラン名まで含む
+          
+          出力される範囲については、レスポンスフィールドの説明の「範囲」を参考にしてください。
+    return:
+      name: Results
+      children:
+        - name: NumberOfResults
+          desc: 該当件数
+          type: int
+          examples:
+            - 9
+          options:
+            occurs: 1
+          page_total_entries: true
+        - name: DisplayPerPage
+          desc: 表示件数
+          type: int
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_entries_per_page: true
+        - name: DisplayFrom
+          desc: 表示From
+          type: int
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: APIVersion
+          desc: APIバージョン
+          type: string
+          html_type: 半角数字・記号
+          examples:
+            - 1.2
+          options:
+            occurs: 1
+        - name: Hotel
+          multiple: true
+          options:
+            occurs: 表示件数分
+          children:
+            - name: HotelID
+              desc: 宿番号
+              type: int
+              examples:
+                - 300624
+              options:
+                occurs: 1
+                range: 0
+            - name: HotelName
+              desc: 宿名漢字
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 天空の城三宜亭本館
+              options:
+                occurs: 1
+                range: 0
+            - name: PostCode
+              desc: 郵便番号
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 395-0034
+              options:
+                occurs: 1
+                range: 0
+            - name: HotelAddress
+              desc: 住所
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 長野県飯田市追手町２−６４１−１０
+              options:
+                occurs: 1
+                range: 0
+            - name: Area
+              options:
+                occurs: 1
+              children:
+                - name: Region
+                  desc: 地域_広域エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 甲信越
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: Prefecture
+                  desc: 地域_都道府県漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 長野県
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: LargeArea
+                  desc: 地域_大エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 伊那・駒ヶ根・飯田・昼神
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: SmallArea
+                  desc: 地域_小エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 飯田・天竜峡
+                  options:
+                    occurs: 1
+                    range: 0
+            - name: HotelType
+              desc: 宿種名
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 旅館
+              options:
+                occurs: 1
+                range: 0
+            - name: HotelDetailURL
+              desc: 宿詳細ページURL
+              type: string
+              html_type: 半角英数記号（URL）
+              examples:
+                - http://jws.jalan.net/Redirect/V1/?key=**************&rd_key=MzAwNjI0ICAgIDAwMDE=
+              options:
+                occurs: 1
+                range: 0
+            - name: HotelCatchCopy
+              desc: キャッチ
+              type: string
+              html_type: 全角漢字
+              examples:
+                - 飯田城址の高台に建つ眺望・味覚・天然温泉の御宿。
+              options:
+                occurs: 1
+                range: 0
+            - name: HotelCaption
+              desc: コピー
+              type: string
+              html_type: 全角漢字
+              examples:
+                - 飯田城址の高台に建つ、眺望・味覚・天然温泉の御宿です。大浴場からは遠く南アルプスを望み、眼下に飯田市街をご覧頂けます。湯上りには、四季折々旬の素材を大切にした季節の会席膳をお楽しみください。
+              options:
+                occurs: 1
+                range: 0
+            - name: PictureURL
+              desc: 宿画像URL
+              type: string
+              html_type: 半角英数記号（URL）
+              multiple: true
+              examples:
+                - http://www.jalan.net/jalan/images/pictM/8/00218/00218461.jpg
+              options:
+                occurs: pictsで指定した数
+                range: 0
+            - name: PictureCaption
+              desc: 宿画像キャプション
+              type: string
+              html_type: 全角・半角
+              multiple: true
+              examples:
+                - 南アルプスを一望、飯田市街を眼下に臨む最高の見晴らし
+              options:
+                occurs: pictsで指定した数
+                range: 0
+            - name: AccessInformation
+              desc: 交通案内
+              multiple: true
+              options:
+                occurs: 1 〜 3
+                range: 0
+              children:
+                - name: name
+                  desc: 交通案内のタイトル
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 東京より
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: _text
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 車／中央道名古屋方面〜飯田〜R153を飯田市街へ15分 車以外／JR飯田線飯田駅タクシー5分
+            - name: CheckInTime
+              desc: |
+                標準的なチェックイン時刻
+                ※宿泊プランごとにチェックイン時間の設定がある場合は、そちらが優先されます。
+              html_desc: |
+                標準的なチェックイン時刻<br>
+                <span class="alert">※宿泊プランごとにチェックイン時間の設定がある場合は、そちらが優先されます。</span>
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 15:00
+              options:
+                occurs: 1
+                range: 0
+            - name: CheckOutTime
+              desc: |
+                標準的なチェックアウト時刻
+                ※宿泊プランごとにチェックアウト時間の設定がある場合は、そちらが優先されます。
+              html_desc: |
+                標準的なチェックアウト時刻<br>
+                <span class="alert">※宿泊プランごとにチェックアウト時間の設定がある場合は、そちらが優先されます。</span>
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 10:00
+              options:
+                occurs: 1
+                range: 0
+            - name: X
+              desc: |
+                経度（ミリ秒）
+                ※緯度・経度は日本測地系の値です。
+              html_desc: |
+                経度（ミリ秒）<br>
+                <span class="alert">※緯度・経度は日本測地系の値です。</span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 496212164
+              options:
+                occurs: 1
+                range: 0
+            - name: Y
+              desc: |
+                緯度（ミリ秒）
+                ※緯度・経度は日本測地系の値です。
+              html_desc: |
+                緯度（ミリ秒）<br>
+                <span class="alert">※緯度・経度は日本測地系の値です。</span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 127830116
+              options:
+                occurs: 1
+                range: 0
+            - name: SampleRateFrom
+              desc: |
+                参考料金
+                ※ 全プランのうち、最も安い料金（1室2名利用時の1泊1名料金）を表示します。上記、料金が存在しなかった場合は、空要素が出力されます。 
+              html_desc: |
+                参考料金<br>
+                <span class="alert">※ 全プランのうち、最も安い料金（1室2名利用時の1泊1名料金）を表示します。上記、料金が存在しなかった場合は、空要素が出力されます。 </span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 14700
+              options:
+                occurs: 1
+                range: 1
+            - name: LastUpdate
+              desc: 情報更新日
+              options:
+                occurs: 1
+                range: 0
+              children:
+                - name: day
+                  desc: 情報更新日（日）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 30
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: month
+                  desc: 情報更新日（月）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 01
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: year
+                  desc: 情報更新日（年）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 2007
+                  options:
+                    occurs: 1
+                    range: 0
+            - name: OnsenName
+              desc: 温泉名
+              type: string
+              html_type: 全角漢字
+              nullable: true
+              examples:
+                - 十勝川温泉
+              options:
+                occurs: 1
+                range: 1
+            - name: HotelNameKana
+              desc: 宿名かな
+              type: string
+              html_type: 全角かな
+              examples:
+                - てんくうのしろさんぎていほんかん
+              options:
+                occurs: 1
+                range: 1
+            - name: CreditCard
+              desc: |
+                クレジットカード
+                ※（AMEX, DC, DINNERS
+                ETC（その他）, JCB, MASTER
+                MILLION, NICOS, SAISON
+                UC, UFJ, VISA）
+                以上12種類から使用できるものが表示されます。
+              html_desc: |
+                クレジットカード<br>
+                <span class="alert">※（AMEX,
+                DC,
+                DINNERS<br>
+                ETC（その他）,
+                JCB,
+                MASTER<br>
+                MILLION,
+                NICOS,
+                SAISON<br>
+                UC,
+                UFJ,
+                VISA）<br>
+                以上12種類から使用できるものが表示されます。</span>
+              options:
+                occurs: 1
+                range: 1
+              children:
+                - name: AMEX
+                  desc: クレジットカード（AMEX）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: DC
+                  desc: クレジットカード（DC）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: DINNERS
+                  desc: クレジットカード（DINNERS）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: ETC
+                  desc: クレジットカード（その他）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - false
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: JCB
+                  desc: クレジットカード（JCB）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: MASTER
+                  desc: クレジットカード（MASTER）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: MILLION
+                  desc: |
+                    クレジットカード（MILLION）が使用可能
+                    ※常にfalseとなります。
+                  html_desc: |
+                    クレジットカード（MILLION）が使用可能<br>
+                    <span class="alert">※常にfalseとなります。</span><br>
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - false
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: NICOS
+                  desc: クレジットカード（NICOS）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: SAISON
+                  desc: クレジットカード（SAISON）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - false
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: UC
+                  desc: クレジットカード（UC）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: UFJ
+                  desc: クレジットカード（UFJ）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: VISA
+                  desc: クレジットカード（VISA）が使用可能
+                  type: boolean
+                  html_type: true/false
+                  examples:
+                    - true
+                  options:
+                    occurs: 1
+                    range: 1
+                - name: _text
+                  type: string
+                  html_type: 半角英数記号
+                  examples:
+                    - |
+                      AMEX,DC,DINNERS,JCB,MASTER,
+                      NICOS,UC,VISA,UFJ
+            - name: NumberOfRatings
+              desc: クチコミ件数
+              type: int
+              html_type: 半角数字
+              examples:
+                - 3
+              options:
+                occurs: 1
+                range: 1
+            - name: Rating
+              desc: |
+                クチコミ評点
+                ※クチコミ件数が5件未満の宿泊施設については、評点は表示しておりません。
+              html_desc: |
+                クチコミ評点<br>
+                <span class="alert">※クチコミ件数が5件未満の宿泊施設については、評点は表示しておりません。</span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 0
+              options:
+                occurs: 1
+                range: 1
+            - name: Plan
+              multiple: true
+              options:
+                occurs: プラン数分
+              children:
+                - name: PlanName
+                  desc: プラン名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 絶景！　パノラマ天然温泉大浴場■季節の会席膳２食付
+                  options:
+                    occurs: 1
+                    range: 2
+                - name: RoomType
+                  desc: 部屋タイプ
+                  type: string
+                  html_type: 全角・半角
+                  multiple: true
+                  examples:
+                    - 和室
+                  options:
+                    occurs: 設備数分
+                    range: 2
+                - name: RoomName
+                  desc: 部屋名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 和室10畳
+                  options:
+                    occurs: 1
+                    range: 2
+                - name: PlanCheckIn
+                  desc: チェックイン
+                  type: string
+                  html_type: 半角
+                  examples:
+                    - 15:00
+                  options:
+                    occurs: 1
+                    range: 2
+                - name: PlanCheckOut
+                  desc: チェックアウト
+                  type: string
+                  html_type: 半角
+                  examples:
+                    - 10:00
+                  options:
+                    occurs: 1
+                    range: 2
+                - name: PlanPictureURL
+                  desc: プラン画像URL
+                  type: string
+                  html_type: 半角英数記号（URL）
+                  multiple: true
+                  examples:
+                    - http://www.jalan.net/jalan/images/pictM/Y4/Y300624/Y300624003.jpg
+                  options:
+                    occurs: 3
+                    range: 2
+                - name: PlanPictureCaption
+                  desc: プラン画像説明
+                  type: string
+                  html_type: 全角・半角
+                  multiple: true
+                  examples:
+                    - 南アルプス、飯田市街を一望！
+                  options:
+                    occurs: 3
+                    range: 2
+                - name: Meal
+                  desc: 食事条件
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 朝/夕あり
+                  options:
+                    occurs: 1
+                    range: 2
+                - name: PlanSampleRateFrom
+                  desc: |
+                    参考料金
+                    ※最も安く宿泊できる日の料金（1室2名利用時の1泊1名料金）を表示します。上記、料金が存在しなかった場合は、空要素が出力されます。
+                  html_desc: |
+                    参考料金<br>
+                    <span class="alert">※最も安く宿泊できる日の料金（1室2名利用時の1泊1名料金）を表示します。上記、料金が存在しなかった場合は、空要素が出力されます。 </span>
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 19950
+                  options:
+                    occurs: 1
+                    range: 2
+    error_status:
+      - 400
+      - 403
+      - 503
+    error:
+      name: Error
+      children:
+        - name: Message
+          error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_JALAN_KEY
+          s_area: 162612
+          count: 1
+          xml_ptn: 2
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: HotelSearchLite
+    title: じゃらん宿表示API　ライト
+    desc: 宿表示APIは、じゃらんnetに公開されている宿泊施設の情報を検索する機能を提供します。
+    url: http://jws.jalan.net/APILite/HotelSearch/V1/
+    params:
+      - name: key
+        title: APIキー
+        desc: |
+          APIを利用するためのキーです。
+          アカウント登録時に割り当てられるAPIキーを指定してください。
+        require: true
+        note: 半角数字16桁以下
+      - name: pref
+        title: 都道府県コード
+        desc: 各都道府県に割り当てられたコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: l_area
+        title: 大エリアコード
+        desc: 都道府県を各地域ごとに分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: s_area
+        title: 小エリアコード
+        desc: 大エリアを更に詳細に分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: h_id
+        title: 宿番号
+        desc: |
+          宿に割り当てられた番号で検索を行います。
+          ※ この項目を指定した場合、宿番号での検索条件が最優先となり、他の検索条件は無視されます。
+        html_desc: |
+          宿に割り当てられた番号で検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿番号での検索条件が最優先となり、他の検索条件は無視されます。</span>
+        note: 半角数字6桁。
+      - name: h_type
+        title: 宿タイプ
+        desc: 宿泊施設のタイプで絞り込みを行うかどうかを指定します。
+        note: |
+          0:指定なし（初期値）
+          1:旅館
+          2:ペンション・民宿
+          3:貸別荘・コンドミニアム
+          4:ホテル・ビジネスホテル
+      - name: o_pool
+        title: 屋外プール
+        desc: 「施設内に屋外プールがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: parking
+        title: 駐車場無料
+        desc: 「駐車場が無料の宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pub_bath
+        title: 内湯・大浴場
+        desc: 「館内に内湯・大浴場がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: onsen
+        title: 温泉
+        desc: 「温泉がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_bath
+        title: 貸切風呂
+        desc: 「貸切風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: v_bath
+        title: 展望風呂
+        desc: 「展望風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sauna
+        title: サウナ
+        desc: 「サウナ設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: jacz
+        title: ジャグジー
+        desc: 「ジャグジー設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: mssg
+        title: マッサージ
+        desc: 「マッサージサービスがある、もしくは、手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_ski
+        title: 貸しスキー
+        desc: 「館内・敷地内に宿泊者向けに貸しスキーがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_brd
+        title: 貸しボード
+        desc: 「館内・敷地内に宿泊者向けに貸しスノーボードがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pet
+        title: ペットOKの宿
+        desc: 「施設にペット同伴可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: esthe
+        title: エステ設備
+        desc: 「エステ設備が施設内か近隣にある、もしくはエステサービスを手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_pong
+        title: 卓球あり
+        desc: 「館内に卓球台が設置されている宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: limo
+        title: 送迎あり
+        desc: 「最寄の駅からの送迎サービスがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: late_out
+        title: チェックアウト11時以降
+        desc: 「チェックアウトが11時以降の宿泊プランのある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pict_size
+        title: 画像サイズ
+        desc: 宿泊施設の画像のサイズを指定します。
+        note: |
+          0:pictSS
+          1:pictS
+          2:pict
+          3:pictM（初期値）
+          4:pictL
+          5:pictLL
+          
+          画像のサンプルは http://jws.jalan.net/content/data/pictsample.html をご覧ください。
+        html_note: |
+          0:pictSS<br>
+          1:pictS<br>
+          2:pict<br>
+          3:pictM（初期値）<br>
+          4:pictL<br>
+          5:pictLL<br>
+          <br>
+          画像のサンプルは<a href="http://jws.jalan.net/content/data/pictsample.html" target="_blank">こちら</a>をご覧ください。
+      - name: order
+        title: 並び順
+        desc: 出力されるデータの並び順を指定します。
+        note: |
+          0:宿コード順（初期値）
+          1:50音順
+      - name: start
+        title: 表示From
+        desc: 出力されるデータの何件目から表示するかを指定します。
+        note: |
+          半角数字。
+          初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 表示件数
+        desc: |
+          出力されるデータの最大出力件数を指定します。
+          該当件数が出力件数よりも少ない場合は、全て表示されます。
+        note: |
+          1 〜 100までの半角数字。
+          初期値:10
+        page_param_size: true
+    return:
+      name: Results
+      options:
+        occurs: 1
+      children:
+        - name: NumberOfResults
+          desc: 該当件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 6
+          options:
+            occurs: 1
+          page_total_entries: true
+        - name: DisplayPerPage
+          desc: 表示件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_entries_per_page: true
+        - name: DisplayFrom
+          desc: 表示From
+          type: int
+          html_type: 半角数字
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: APIVersion
+          desc: APIバージョン
+          type: string
+          html_type: 半角数字・記号
+          examples:
+            - 1.2
+          options:
+            occurs: 1
+        - name: Hotel
+          multiple: true
+          options:
+            occurs: 表示件数分
+          children:
+            - name: HotelID
+              desc: 宿番号
+              type: int
+              html_type: 半角数字
+              examples:
+                - 300624
+              options:
+                occurs: 1
+            - name: HotelName
+              desc: 宿名漢字
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 天空の城三宜亭本館
+              options:
+                occurs: 1
+            - name: PostCode
+              desc: 郵便番号
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 395-0034
+              options:
+                occurs: 1
+            - name: HotelAddress
+              desc: 住所
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 長野県飯田市追手町２−６４１−１０
+              options:
+                occurs: 1
+            - name: Area
+              options:
+                occurs: 1
+              children:
+                - name: Region
+                  desc: 地域_広域エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 甲信越
+                  options:
+                    occurs: 1
+                - name: Prefecture
+                  desc: 地域_都道府県漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 長野県
+                  options:
+                    occurs: 1
+                - name: LargeArea
+                  desc: 地域_大エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 伊那・駒ヶ根・飯田・昼神
+                  options:
+                    occurs: 1
+                - name: SmallArea
+                  desc: 地域_小エリア漢字名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 飯田・天竜峡
+                  options:
+                    occurs: 1
+            - name: HotelType
+              desc: 宿種名
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 旅館
+              options:
+                occurs: 1
+            - name: HotelDetailURL
+              desc: 宿詳細ページURL
+              type: string
+              html_type: 半角英数記号（URL）
+              examples:
+                - http://jws.jalan.net/Redirect/V1/?key=**************&rd_key=MzAwNjI0ICAgIDAwMDA=
+              options:
+                occurs: 1
+            - name: HotelCatchCopy
+              desc: キャッチ
+              type: string
+              html_type: 全角漢字
+              examples:
+                - 飯田城址の高台に建つ眺望・味覚・天然温泉の御宿。
+              options:
+                occurs: 1
+            - name: HotelCaption
+              desc: コピー
+              type: string
+              html_type: 全角漢字
+              examples:
+                - 飯田城址の高台に建つ、眺望・味覚・天然温泉の御宿です。大浴場からは遠く南アルプスを望み、眼下に飯田市街をご覧頂けます。湯上りには、四季折々旬の素材を大切にした季節の会席膳をお楽しみください。
+              options:
+                occurs: 1
+            - name: PictureURL
+              desc: 宿画像URL
+              type: string
+              html_type: 半角英数記号（URL）
+              examples:
+                - http://www.jalan.net/jalan/images/pictM/8/00218/00218461.jpg
+              options:
+                occurs: 1
+            - name: PictureCaption
+              desc: 宿画像キャプション
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 南アルプスを一望、飯田市街を眼下に臨む最高の見晴らし
+              options:
+                occurs: 1
+            - name: AccessInformation
+              desc: 交通案内
+              multiple: true
+              options:
+                occurs: 1 〜 3
+              children:
+                - name: name
+                  desc: 交通案内のタイトル
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 東京より
+                  options:
+                    occurs: 1
+                - name: _text
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 車／中央道名古屋方面〜飯田〜R153を飯田市街へ15分 車以外／JR飯田線飯田駅タクシー5分
+            - name: CheckInTime
+              desc: |
+                標準的なチェックイン時刻
+                ※宿泊プランごとにチェックイン時間の設定がある場合は、そちらが優先されます。
+              html_desc: |
+                標準的なチェックイン時刻<br>
+                <span class="alert">※宿泊プランごとにチェックイン時間の設定がある場合は、そちらが優先されます。</span>
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 15:00
+              options:
+                occurs: 1
+            - name: CheckOutTime
+              desc: |
+                標準的なチェックアウト時刻
+                ※宿泊プランごとにチェックアウト時間の設定がある場合は、そちらが優先されます。
+              html_desc: |
+                標準的なチェックアウト時刻<br>
+                <span class="alert">※宿泊プランごとにチェックアウト時間の設定がある場合は、そちらが優先されます。</span>
+              type: string
+              html_type: 半角数字・記号
+              examples:
+                - 10:00
+              options:
+                occurs: 1
+            - name: X
+              desc: |
+                経度（ミリ秒）
+                ※緯度・経度は日本測地系の値です。
+              html_desc: |
+                経度（ミリ秒）<br>
+                <span class="alert">※緯度・経度は日本測地系の値です。</span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 496212164
+              options:
+                occurs: 1
+            - name: Y
+              desc: |
+                緯度（ミリ秒）
+                ※緯度・経度は日本測地系の値です。
+              html_desc: |
+                緯度（ミリ秒）<br>
+                <span class="alert">※緯度・経度は日本測地系の値です。</span>
+              type: int
+              html_type: 半角数字
+              examples:
+                - 127830116
+              options:
+                occurs: 1
+            - name: LastUpdate
+              desc: 情報更新日
+              options:
+                occurs: 1
+              children:
+                - name: day
+                  desc: 情報更新日（日）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 30
+                  options:
+                    occurs: 1
+                - name: month
+                  desc: 情報更新日（月）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 01
+                  options:
+                    occurs: 1
+                - name: year
+                  desc: 情報更新日（年）
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 2007
+                  options:
+                    occurs: 1
+    error_status:
+      - 400
+      - 403
+      - 503
+    error:
+      name: Error
+      children:
+        - name: Message
+          error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_JALAN_KEY
+          pref: 160000
+          l_area: 162600
+          s_area: 162612
+          h_type: 1
+          start: 1
+          count: 1
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: StockSearch
+    title: 空室検索API
+    desc: 空室検索APIは、じゃらんnetに公開されている宿泊施設の空室情報を検索する機能を提供します。
+    url: http://jws.jalan.net/APIAdvance/StockSearch/V1/
+    params:
+      - name: key
+        title: APIキー
+        desc: |
+          APIを利用するためのキーです。
+          アカウント登録時に割り当てられるAPIキーを指定してください。
+        note: 半角英数字16桁以下
+        require: true
+      - name: reg
+        title: 広域コード
+        desc: |
+          各広域に割り当てられたコードで検索を行います。
+          ※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。
+        html_desc: |
+          各広域に割り当てられたコードで検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。</span>
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。 
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。
+      - name: pref
+        title: 都道府県コード
+        desc: |
+          各都道府県に割り当てられたコードで検索を行います。
+          ※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。
+        html_desc: |
+          各都道府県に割り当てられたコードで検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。</span>
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。 
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。
+      - name: l_area
+        title: 大エリアコード
+        desc: 都道府県を各地域ごとに分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。 
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。
+      - name: s_area
+        title: 小エリアコード
+        desc: 大エリアを更に詳細に分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。 
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。
+      - name: h_id
+        title: 宿番号
+        desc: |
+          宿に割り当てられた番号で検索を行います。
+          ※ この項目を指定した場合、宿番号での検索条件が最優先となるため、 宿泊施設の絞り込み条件については無視されます。
+        html_desc: |
+          宿に割り当てられた番号で検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿番号での検索条件が最優先となるため、
+          宿泊施設の絞り込み条件については無視されます。</span>
+        note: |
+          半角数字6桁。複数指定可能。
+          最大10件まで指定することが可能です。
+      - name: o_area_id
+        title: 温泉地コード
+        desc: 温泉地に結び付けられた宿の検索を行います。
+        note: |
+          半角数字5桁
+          温泉検索APIでの検索結果を参考にしてください。
+        html_note: |
+          半角数字5桁<br>
+          <a href="/ws/viw/U01004" target="_self">温泉検索API</a>での検索結果を参考にしてください。
+      - name: o_id
+        title: 温泉コード
+        desc: 温泉に結び付けられた宿の検索を行います。
+        note: |
+          半角数字4桁
+          温泉検索APIでの検索結果を参考にしてください。
+        html_note: |
+          半角数字4桁<br>
+          <a href="/ws/viw/U01004" target="_self">温泉検索API</a>での検索結果を参考にしてください。
+      - name: x
+        title: 経度
+        desc: ある地点からの範囲内の宿の検索を行う場合の経度です。
+        note: |
+          439200000 〜 554400000までの半角数字9桁
+          日本測地系（ミリ秒）
+          
+          例（東経 139度 43分 57.529秒）＝503037529
+        examples:
+          - 503037529
+      - name: y
+        title: 緯度
+        desc: ある地点からの範囲内の宿の検索を行う場合の緯度です。
+        note: |
+          72000000 〜 165600000までの半角数字9桁
+          日本測地系（ミリ秒）
+          
+          例（北緯 35度 39分 26.212秒）＝128366212
+        examples:
+          - 128366212
+      - name: range
+        title: 範囲
+        desc: |
+          ある地点からの範囲内の宿の検索を行う場合の範囲です。
+          緯度（y）、経度（x）を中心に東西南北に伸びる距離を指定してください。
+        note: |
+          0.1 〜 50までの半角数字
+          小数点第一位まで
+          単位：km
+      - name: h_name
+        title: 宿名
+        desc: |
+          宿名の検索を行います。
+          ※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。
+        html_desc: |
+          宿名の検索を行います。<br>
+          <span class="alert">※ この項目を指定した場合、宿泊開始日（stay_date）は指定できません。</span>
+        note: |
+          全角・半角
+          ※ 日本語を指定する場合は、文字コードをUTF-8にしてください。
+        html_note: |
+          全角・半角<br>
+          <span class="alert">※ 日本語を指定する場合は、文字コードをUTF-8にしてください。</span>
+      - name: stay_date
+        title: 宿泊開始日
+        desc: 宿泊開始日を指定します。
+        note: |
+          日付（yyyymmdd形式）
+          最大 5 件まで指定することが可能です。
+          ※ 値を省略した場合は、宿泊日未定で検索を行います。
+          宿泊日未定で検索の場合、宿泊数の値は無視されます。
+        html_note: |
+          日付（yyyymmdd形式）<br>
+          最大 5 件まで指定することが可能です。<br>
+          <span class="alert">※ 値を省略した場合は、宿泊日未定で検索を行います。<br>宿泊日未定で検索の場合、宿泊数の値は無視されます。</span>
+      - name: stay_count
+        title: 宿泊数
+        desc: 宿泊日数を指定します。
+        note: |
+          1 〜 9 までの半角数字
+          初期値:1
+      - name: room_count
+        title: 部屋数
+        desc: 予約する部屋数を指定します。
+        note: |
+          1 〜 10 までの半角数字
+          初期値:1
+      - name: adult_num
+        title: 1室あたりの大人人数
+        desc: 1室あたりに宿泊する大人の人数を指定します。
+        note: |
+          1 〜 10 までの半角数字
+          初期値:1
+      - name: sc_num
+        title: 1室あたりの子供人数 - 小学生
+        desc: 1室あたりに宿泊する小学生の人数を指定します。
+        note: |
+          0 〜 5 までの半角数字
+          初期値:0
+      - name: lc_num_bed_meal
+        title: 1室あたりの子供人数 - 幼児（食事・布団あり）
+        desc: 1室あたりに宿泊する幼児（食事・布団あり）の人数を指定します。
+        note: |
+          0 〜 5 までの半角数字
+          初期値:0
+      - name: lc_num_meal_only
+        title: 1室あたりの子供人数 - 幼児（食事あり）
+        desc: 1室あたりに宿泊する幼児（食事あり）の人数を指定します。
+        note: |
+          0 〜 5 までの半角数字
+          初期値:0
+      - name: lc_num_bed_only
+        title: 1室あたりの子供人数 - 幼児（布団あり）
+        desc: 1室あたりに宿泊する幼児（布団あり）の人数を指定します。
+        note: |
+          0 〜 5 までの半角数字
+          初期値:0
+      - name: lc_num_no_bed_meal
+        title: 1室あたりの子供人数 - 幼児（食事・布団なし）
+        desc: 1室あたりに宿泊する幼児（食事・布団なし）の人数を指定します。
+        note: |
+          0 〜 5 までの半角数字
+          初期値:0
+      - name: min_rate
+        title: 予算下限
+        desc: 1泊 1室あたりの料金の下限を指定します。
+        note: |
+          1 〜 1000000000 までの半角数字
+          初期値:下限なし
+      - name: max_rate
+        title: 予算上限
+        desc: 1泊 1室あたりの料金の上限を指定します。
+        note: |
+          1 〜 1000000000 までの半角数字
+          初期値:上限なし
+      - name: h_type
+        title: 宿タイプ
+        desc: 宿泊施設のタイプで絞り込みを行うかどうかを指定します。
+        note: |
+          0:絞込みなし（初期値）
+          1:旅館
+          2:ペンション・民宿・ロッジ
+          3:貸し別荘・コンドミニアム
+          4:ホテル・ビジネスホテル
+          5:公共の宿
+      - name: o_pool
+        title: 屋外プール
+        desc: 「施設内に屋外プールがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: parking
+        title: 駐車場無料
+        desc: 「駐車場が無料の宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pub_bath
+        title: 内湯・大浴場
+        desc: 「館内に内湯・大浴場がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: onsen
+        title: 温泉
+        desc: 「温泉がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_bath
+        title: 貸切風呂
+        desc: 「貸切風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: v_bath
+        title: 展望風呂
+        desc: 「展望風呂がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sauna
+        title: サウナ
+        desc: 「サウナ設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: jacz
+        title: ジャグジー
+        desc: 「ジャグジー設備がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: mssg
+        title: マッサージ
+        desc: 「マッサージサービスがある、もしくは、手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_ski
+        title: 貸しスキー
+        desc: 「館内・敷地内に宿泊者向けに貸しスキーがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_brd
+        title: 貸しボード
+        desc: 「館内・敷地内に宿泊者向けに貸しスノーボードがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pet
+        title: ペットOKの宿
+        desc: 「施設にペット同伴可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: esthe
+        title: エステ設備
+        desc: 「エステ設備が施設内か近隣にある、もしくはエステサービスを手配可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_pong
+        title: 卓球あり
+        desc: 「館内に卓球台が設置されている宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: limo
+        title: 送迎あり
+        desc: 「最寄の駅からの送迎サービスがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: high
+        title: じゃらんハイクラス掲載の宿
+        desc: 「じゃらんnet編集部が設けた一定の基準を満たした高級感・上質感のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_ok
+        title: ポイント割引OKの宿
+        desc: 「じゃらんポイント割引が利用できる宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: o_bath
+        title: 露天風呂
+        desc: 「露天風呂のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pour
+        title: 天然温泉掛け流し
+        desc: 「天然温泉掛け流しの温泉のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: cloudy
+        title: にごり湯
+        desc: 「にごり湯の温泉のある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: i_pool
+        title: 屋内プール
+        desc: 「施設内に屋内プールがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: fitness
+        title: フィットネスジム
+        desc: 「施設内にフィットネスジムがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: gym
+        title: 体育館
+        desc: 「施設内に体育館がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: p_field
+        title: グラウンド
+        desc: 「施設内にグラウンドがある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: bbq
+        title: バーベキュー施設
+        desc: 「施設内にバーベキュー施設がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: hall
+        title: 宴会場
+        desc: 「施設内に宴会場がある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_station
+        title: 駅から徒歩5分
+        desc: 「最寄り駅から徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_beach
+        title: ビーチから徒歩5分
+        desc: 「最寄りのビーチから徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 5_slope
+        title: ゲレンデから徒歩5分
+        desc: 「最寄りのゲレンデから徒歩5分以内にある宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_card
+        title: クレジットカードが利用可能
+        desc: 「クレジットカードが利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_jcb
+        title: クレジットカード（JCB）が利用可能
+        desc: 「クレジットカード（JCB）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_visa
+        title: クレジットカード（VISA）が利用可能
+        desc: 「クレジットカード（VISA）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_master
+        title: クレジットカード（Master）が利用可能
+        desc: 「クレジットカード（Master）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_amex
+        title: クレジットカード（AMEX）が利用可能
+        desc: 「クレジットカード（AMEX）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_uc
+        title: クレジットカード（UC）が利用可能
+        desc: 「クレジットカード（UC）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_dc
+        title: クレジットカード（DC）が利用可能
+        desc: 「クレジットカード（DC）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_nicos
+        title: クレジットカード（NICOS）が利用可能
+        desc: 「クレジットカード（NICOS）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_diners
+        title: クレジットカード（ダイナース）が利用可能
+        desc: 「クレジットカード（ダイナース）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_saison
+        title: クレジットカード（セゾン）が利用可能
+        desc: 「クレジットカード（セゾン）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_ufj
+        title: クレジットカード（UFJ）が利用可能
+        desc: 「クレジットカード（UFJ）が利用可能な宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: cvs
+        title: コンビニまで徒歩5分
+        desc: 「最寄のコンビニまで徒歩5分以内の宿泊施設」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: room_b
+        title: 部屋で朝食
+        desc: 「部屋で朝食が食べられる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: room_d
+        title: 部屋で夕食
+        desc: 「部屋で夕食が食べられる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_b
+        title: 個室で朝食
+        desc: 「食事専用の個室で朝食が食べられる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: prv_d
+        title: 個室で夕食
+        desc: 「食事専用の個室で夕食が食べられる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: early_in
+        title: チェックイン14時以前
+        desc: 「チェックインが14時以前の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: late_out
+        title: チェックアウト11時以降
+        desc: 「チェックアウトが11時以降の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: no_smk
+        title: 禁煙ルーム
+        desc: 「禁煙ルームの宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: net
+        title: 部屋でインターネットOK
+        desc: 「部屋でインターネットが利用できる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: r_room
+        title: 露天風呂付き客室
+        desc: 「露天風呂付き客室に泊まれる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sp_room
+        title: 特別室・離れ・スイート
+        desc: 「特別室・離れ・スイートのいずれかに宿泊できる宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: bath_to
+        title: バス・トイレ付き
+        desc: 「客室内にバス・トイレが付いている宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: no_meal
+        title: 食事なしプラン
+        desc: 「食事なしの宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: b_only
+        title: 朝食のみプラン
+        desc: 「朝食のみの宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: d_only
+        title: 夕食のみプラン
+        desc: 「夕食のみの宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 2_meals
+        title: 朝夕食付プラン
+        desc: 「朝食、夕食付きの宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sng_room
+        title: シングルルーム
+        desc: |
+          「シングルベッド（幅100cm程度）、もしくはセミダブルベッド（幅120cm程度）が1つ設置されている客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+          スタジオツインは「シングル」扱いとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: twn_room
+        title: ツインルーム
+        desc: |
+          「ベッド（ベッド幅は問わない）が2つ設置されている客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+          1台がエキストラベッドの場合はシングルとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: dbl_room
+        title: ダブルルーム
+        desc: 「ダブルベッド（幅140cm程度）が1つ設置されている客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: tri_room
+        title: トリプルルーム
+        desc: |
+          「ベッド（ベッド幅は問わない）が3つ設置されている客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+          1台がエキストラベッドの場合はツインとしています。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: 4bed_room
+        title: 4ベッドルーム
+        desc: 「ベッド（ベッド幅は問わない）が4つ設置されている客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: jpn_room
+        title: 和室
+        desc: 「畳敷きの客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: j_w_room
+        title: 和洋室
+        desc: 「洋室部分にベッドが設置され、和室・洋室部分どちらにも寝泊まりできる客室の宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: child_price
+        title: 子供料金設定あり
+        desc: 「子供の宿泊料金設定のある宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_bed_meal
+        title: 幼児向けに布団・食事ともにあり
+        desc: 「幼児向けに布団・食事ともにある宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_no_bed_meal
+        title: 幼児向けに布団・食事ともになし
+        desc: 「幼児向けに布団・食事ともにない宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_meal_only
+        title: 幼児向けに食事のみあり
+        desc: 「幼児向けの食事のある宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: c_bed_only
+        title: 幼児向けに布団のみあり
+        desc: 「幼児向けの布団のある宿泊プラン」という条件で絞込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pict_size
+        title: 画像サイズ
+        desc: 宿泊プランの画像のサイズを指定します。
+        note: |
+          0:pictSS
+          1:pictS
+          2:pict
+          3:pictM（初期値）
+          4:pictL
+          5:pictLL
+          
+          画像のサンプルは http://jws.jalan.net/content/data/pictsample.html をご覧ください。
+        html_note: |
+          0:pictSS<br>
+          1:pictS<br>
+          2:pict<br>
+          3:pictM（初期値）<br>
+          4:pictL<br>
+          5:pictLL<br>
+          <br>
+          画像のサンプルは<a href="/content/data/pictsample.html" target="_blank">こちら</a>をご覧ください。
+      - name: picts
+        title: 宿画像個数
+        desc: 出力される宿泊プランの画像の出力個数を指定します。
+        note: |
+          1 〜 3までの半角数字。
+          初期値:1
+      - name: order
+        title: 並び順
+        desc: |
+          出力されるデータの並び順を指定します。
+          ※この項目を指定せずに宿番号を指定した検索を行った場合は、入力された宿番号順に表示されます。
+          ※この項目を指定せずに緯度経度の検索を行った場合は、指定した緯度経度から近い順に表示されます。
+        note: |
+          0:宿番号順（初期値）
+          1:プラン名 50音順
+          2:合計料金の安い順（宿泊日未定の場合は参考料金の安い順）
+          3:合計料金の高い順（宿泊日未定の場合は参考料金の高い順）
+          4:クチコミ評点の高い順
+      - name: start
+        title: 表示From
+        desc: 出力されるデータの何件目から表示するかを指定します。
+        note: |
+          半角数字。
+          初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 表示件数
+        desc: |
+          出力されるデータの最大出力件数を指定します。
+          該当件数が出力件数よりも少ない場合は、全て表示されます。
+        note: |
+          1 〜 100までの半角数字。
+          初期値:10
+        page_param_size: true
+    return:
+      name: Results
+      options:
+        occurs: 1
+      children:
+        - name: NumberOfResults
+          desc: 該当件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 9
+          options:
+            occurs: 1
+          page_total_entries: true
+        - name: DisplayPerPage
+          desc: 表示件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_entries_per_page: true
+        - name: DisplayFrom
+          desc: 表示From
+          type: int
+          html_type: 半角数字
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: APIVersion
+          desc: APIバージョン
+          type: string
+          html_type: 半角数字・記号
+          examples:
+            - 10
+          options:
+            occurs: 1
+        - name: Plan
+          multiple: true
+          options:
+            occurs: 表示件数分
+          children:
+            - name: PlanName
+              title: プラン名
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 絶景！　パノラマ天然温泉大浴場■季節の会席膳２食付
+              options:
+                occurs: 1
+            - name: RoomName
+              title: 部屋名
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 和室10畳
+              options:
+                occurs: 1
+            - name: PlanDetailURL
+              title: プラン詳細ページURL（宿泊条件指定なし）
+              type: string
+              html_type: 半角英数記号（URL）
+              examples:
+                - http://jws.jalan.net/Redirect/V1/?key=**************&rd_key=MzAwNjI0ICAgIDAwMDE=
+              options:
+                occurs: 1
+            - name: Facilities
+              options:
+                occurs: 1
+              children:
+                - name: Facility
+                  desc: 部屋設備
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - トイレ
+                  options:
+                    occurs: 部屋設備数分
+            - name: PlanCheckIn
+              desc: チェックイン
+              type: string
+              html_type: 半角
+              examples:
+                - 15:00
+              options:
+                occurs: 1
+            - name: PlanCheckOut
+              desc: チェックアウト
+              type: string
+              html_type: 半角
+              examples:
+                - 10:00
+              options:
+                occurs: 1
+            - name: PlanPictureURL
+              desc: プラン画像URL
+              type: string
+              html_type: 半角英数記号（URL）
+              multiple: true
+              examples:
+                - http://www.jalan.net/jalan/images/pictM/Y4/Y300624/Y300624003.jpg
+              options:
+                occurs: 3
+            - name: PlanPictureCaption
+              desc: プラン画像説明
+              type: string
+              html_type: 全角・半角
+              multiple: true
+              examples:
+                - 南アルプス、飯田市街を一望！
+              options:
+                occurs: 3
+            - name: Meal
+              desc: 食事条件
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 朝/夕あり
+              options:
+                occurs: 1
+            - name: RateType
+              desc: 料金タイプ
+              type: string
+              html_type: |
+                全角・半角
+                「大人 1名あたり」あるいは「1室あたり」
+              examples:
+                - 大人 1名あたり
+              options:
+                occurs: 1
+            - name: SampleRate
+              desc: 参考料金
+              type: string
+              html_type: 半角数字
+              examples:
+                - 6300
+              options:
+                occurs: 1
+            - name: Stay
+              desc: ※ 宿泊日未定の場合は、出力されません
+              html_desc: <span class="alert">※ 宿泊日未定の場合は、出力されません</span>
+              multiple: true
+              nullable: true
+              options:
+                occurs: 宿泊日分
+              children:
+                - name: PlanDetailURL
+                  desc: プラン詳細ページURL（宿泊条件指定あり）
+                  type: string
+                  html_type: 半角英数記号（URL）
+                  examples:
+                    - http://jws.jalan.net/Redirect/V1/?key=**************&rd_key=MzAwNjI0ICAgIDAwMDE=
+                  options:
+                    occurs: 1
+                - name: Date
+                  multiple: true
+                  options:
+                    occurs: 宿泊数分
+                  children:
+                    - name: date
+                      desc: 宿泊日（日）
+                      type: string
+                      html_type: 半角数字
+                      examples:
+                        - 30
+                      options:
+                        occurs: 1
+                    - name: month
+                      desc: 宿泊日（月）
+                      type: string
+                      html_type: 半角数字
+                      examples:
+                        - 01
+                      options:
+                        occurs: 1
+                    - name: year
+                      desc: 宿泊日（年）
+                      type: string
+                      html_type: 半角数字
+                      examples:
+                        - 2007
+                      options:
+                        occurs: 1
+                    - name: Rate
+                      desc: 1室1泊あたりの料金
+                      type: int
+                      html_type: 半角数字
+                      examples:
+                        - 9600
+                      options:
+                        occurs: 1
+                    - name: Stock
+                      desc: |
+                        空き室数
+                        ※ 空き室数が10部屋以上ある場合は、空要素となります。
+                      html_desc: 空き室数<br><span class="alert">※ 空き室数が10部屋以上ある場合は、空要素となります。</span>
+                      type: int
+                      html_type: 半角数字
+                      examples:
+                        - 9
+                      options:
+                        occurs: 1
+            - name: Hotel
+              multiple: true
+              options:
+                occurs: 1
+              children:
+                - name: HotelID
+                  desc: 宿番号
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 300624
+                  options:
+                    occurs: 1
+                - name: HotelName
+                  desc: 宿名漢字
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 天空の城三宜亭本館
+                  options:
+                    occurs: 1
+                - name: PostCode
+                  desc: 郵便番号
+                  type: string
+                  html_type: 半角数字・記号
+                  examples:
+                    - 395-0034
+                  options:
+                    occurs: 1
+                - name: HotelAddress
+                  desc: 住所
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 長野県飯田市追手町２−６４１−１０
+                  options:
+                    occurs: 1
+                - name: Area
+                  options:
+                    occurs: 1
+                  children:
+                    - name: Region
+                      desc: 地域_広域エリア漢字名
+                      type: string
+                      html_type: 全角・半角
+                      examples:
+                        - 甲信越
+                      options:
+                        occurs: 1
+                    - name: Prefecture
+                      desc: 地域_都道府県漢字名
+                      type: string
+                      html_type: 全角・半角
+                      examples:
+                        - 長野県
+                      options:
+                        occurs: 1
+                    - name: LargeArea
+                      desc: 地域_大エリア漢字名
+                      type: string
+                      html_type: 全角・半角
+                      examples:
+                        - 伊那・駒ヶ根・飯田・昼神
+                      options:
+                        occurs: 1
+                    - name: SmallArea
+                      desc: 地域_小エリア漢字名
+                      type: string
+                      html_type: 全角・半角
+                      examples:
+                        - 飯田・天竜峡
+                      options:
+                        occurs: 1
+                - name: HotelType
+                  desc: 宿種名
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 旅館
+                  options:
+                    occurs: 1
+                - name: HotelDetailURL
+                  desc: 宿詳細ページURL
+                  type: string
+                  html_type: 半角英数記号（URL）
+                  examples:
+                    - http://jws.jalan.net/Redirect/V1/?key=**************&rd_key=MzAwNjI0ICAgIDAwMDE=
+                  options:
+                    occurs: 1
+                - name: HotelCatchCopy
+                  desc: キャッチ
+                  type: string
+                  html_type: 全角漢字
+                  examples:
+                    - 飯田城址の高台に建つ眺望・味覚・天然温泉の御宿。
+                  options:
+                    occurs: 1
+                - name: HotelCaption
+                  desc: コピー
+                  type: string
+                  html_type: 全角漢字
+                  examples:
+                    - 飯田城址の高台に建つ、眺望・味覚・天然温泉の御宿です。大浴場からは遠く南アルプスを望み、眼下に飯田市街をご覧頂けます。湯上りには、四季折々旬の素材を大切にした季節の会席膳をお楽しみください。
+                  options:
+                    occurs: 1
+                - name: PictureURL
+                  desc: 宿画像URL
+                  type: string
+                  html_type: 半角英数記号（URL）
+                  examples:
+                    - http://www.jalan.net/jalan/images/pictM/8/00218/00218461.jpg
+                  options:
+                    occurs: 1
+                - name: PictureCaption
+                  desc: 宿画像キャプション
+                  type: string
+                  html_type: 全角・半角
+                  examples:
+                    - 南アルプスを一望、飯田市街を眼下に臨む最高の見晴らし
+                  options:
+                    occurs: 1
+                - name: X
+                  desc: |
+                    経度（ミリ秒）
+                    ※ 緯度・経度は日本測地系の値です。
+                  html_desc: |
+                    経度（ミリ秒）<br>
+                    <span class="alert">※ 緯度・経度は日本測地系の値です。</span>
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 496212164
+                  options:
+                    occurs: 1
+                - name: Y
+                  desc: |
+                    緯度（ミリ秒）
+                    ※ 緯度・経度は日本測地系の値です。
+                  html_desc: |
+                    緯度（ミリ秒）<br>
+                    <span class="alert">※ 緯度・経度は日本測地系の値です。</span>
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 127830116
+                  options:
+                    occurs: 1
+                - name: HotelNameKana
+                  desc: 宿名かな
+                  type: string
+                  html_type: 全角かな
+                  examples:
+                    - てんくうのしろさんぎていほんかん
+                  options:
+                    occurs: 1
+                - name: NumberOfRatings
+                  desc: クチコミ件数
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 3
+                  options:
+                    occurs: 1
+                - name: Rating
+                  desc: |
+                    クチコミ評点
+                    ※クチコミ件数が5件未満の宿泊施設については、評点は表示しておりません。
+                  html_desc: |
+                    クチコミ評点<br>
+                    <span class="alert">※クチコミ件数が5件未満の宿泊施設については、評点は表示しておりません。</span>
+                  type: int
+                  html_type: 半角数字
+                  examples:
+                    - 0
+                  options:
+                    occurs: 1
+    error_status:
+      - 400
+      - 403
+      - 503
+    error:
+      name: Error
+      children:
+        - name: Message
+          error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_JALAN_KEY
+          s_area: 137412
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: AreaSearch
+    title: エリア検索API
+    desc: エリア検索APIは、じゃらんnetに登録されているエリアのコード、名称の情報を検索する機能を提供します。
+    url: http://jws.jalan.net/APICommon/AreaSearch/V1/
+    params:
+      - name: key
+        title: APIキー
+        desc: |
+          APIを利用するためのキーです。
+          アカウント登録時に割り当てられるAPIキーを指定してください。
+        note: 半角数字16桁以下
+        require: true
+      - name: reg
+        title: 広域コード
+        desc: 各広域に割り当てられたコードで検索を行います。
+        note: 半角数字2桁
+      - name: pref
+        title: 都道府県コード
+        desc: 各都道府県に割り当てられたコードで検索を行います。
+        note: 半角数字6桁
+      - name: l_area
+        title: 大エリアコード
+        desc: 都道府県を各地域ごとに分けたエリアのコードで検索を行います。
+        note: 半角数字6桁
+    return:
+      name: Results
+      options:
+        occurs: 1
+      children:
+        - name: APIVersion
+          desc: APIバージョン
+          type: string
+          html_type: 半角数字・記号
+          examples:
+            - 1.0
+          options:
+            occurs: 1
+        - name: Area
+          options:
+            occurs: 1
+          children:
+            - name: Region
+              desc: 広域
+              multiple: true
+              options:
+                occurs: 表示広域数分
+              children:
+                - name: cd
+                  desc: 広域コード
+                  type: string
+                  html_type: 半角数字
+                  examples:
+                    - 01
+                  options:
+                    occurs: 1
+                - name: name
+                  desc: 広域名
+                  type: string
+                  html_type: 全角漢字
+                  examples:
+                    - 北海道
+                  options:
+                    occurs: 1
+                - name: Prefecture
+                  desc: 都道府県
+                  multiple: true
+                  options:
+                    occurs: |
+                      広域に含まれる
+                      都道府県数分
+                  children:
+                    - name: cd
+                      desc: 都道府県コード
+                      type: string
+                      html_string: 半角数字
+                      examples:
+                        - 010000
+                      options:
+                        occurs: 1
+                    - name: name
+                      desc: 都道府県名
+                      type: string
+                      html_string: 全角漢字
+                      examples:
+                        - 北海道
+                      options:
+                        occurs: 1
+                    - name: LargeArea
+                      desc: 大エリア
+                      multiple: true
+                      options:
+                        occurs: |
+                          都道府県に含まれる
+                          大エリア数分
+                      children:
+                        - name: cd
+                          desc: 大エリアコード
+                          type: string
+                          html_type: 半角数字
+                          examples:
+                            - 010200
+                          options:
+                            occurs: 1
+                        - name: name
+                          desc: 大エリア名
+                          type: string
+                          html_type: 全角漢字
+                          examples:
+                            - 札幌
+                          options:
+                            occurs: 1
+                        - name: SmallArea
+                          desc: 小エリア
+                          multiple: true
+                          options:
+                            occurs: |
+                              大エリアに含まれる
+                              小エリア数分
+                          children:
+                            - name: cd
+                              desc: 小エリアコード
+                              type: string
+                              html_type: 半角数字
+                              examples:
+                                - 010202
+                              options:
+                                occurs: 1
+                            - name: name
+                              desc: 小エリア名
+                              type: string
+                              html_type: 全角漢字
+                              examples:
+                                - ススキノ・大通り
+                              options:
+                                occurs: 1
+    error_status:
+      - 400
+      - 403
+      - 503
+    error:
+      name: Error
+      children:
+        - name: Message
+          error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_JALAN_KEY
+          reg: 40
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: OnsenSearch
+    title: 温泉検索API
+    desc: 温泉検索APIは、じゃらんnetに登録されている温泉地、温泉のコード、名称の情報を検索する機能を提供します。
+    url: http://jws.jalan.net/APICommon/OnsenSearch/V1/
+    params:
+      - name: key
+        title: APIキー
+        desc: |
+          APIを利用するためのキーです。
+          アカウント登録時に割り当てられるAPIキーを指定してください。
+        note: 半角数字16桁以下
+        require: true
+      - name: reg
+        title: 広域コード
+        desc: 各広域に割り当てられたコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: pref
+        title: 都道府県コード
+        desc: 各都道府県に割り当てられたコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: l_area
+        title: 大エリアコード
+        desc: 都道府県を各地域ごとに分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: s_area
+        title: 小エリアコード
+        desc: 大エリアを更に詳細に分けたエリアのコードで検索を行います。
+        note: エリアコード対応表を参照するか、 あるいはエリア検索APIでの検索結果を参考にしてください。
+        html_note: |
+          <a href="/content/data/area.html" target="_self">エリアコード対応表</a>を参照するか、
+          あるいは<a href="/ws/viw/U01003" target="_self">エリア検索API</a>での検索結果を参考にしてください。<br>
+      - name: onsen_q
+        title: 泉質
+        desc: 泉質で絞り込みを行うかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:単純温泉
+          2:アルカリ単純泉
+          3:単純炭酸泉
+          4:弱アルカリ性低張性泉
+          5:中性低張性高温泉
+          6:塩化物泉
+          7:ナトリウム塩化物泉
+          8:炭酸水素塩泉
+          9:炭酸鉄泉
+          10:硫酸塩泉
+          11:二酸化炭素泉
+          12:含鉄泉
+          13:含銅一鉄泉
+          14:硫黄泉
+          15:酸性泉
+          16:含アルミニウム泉
+          17:放射能泉
+          18:鉱泉
+          99:その他
+      - name: start
+        title: 表示From
+        desc: 出力されるデータの何件目から表示するかを指定します。
+        note: |
+          半角数字。
+          初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 表示件数
+        desc: |
+          出力されるデータの最大出力件数を指定します。
+          該当件数が出力件数よりも少ない場合は、全て表示されます。
+        note: |
+          1 〜 100までの半角数字。
+          初期値:10
+        page_param_size: true
+      - name: xml_ptn
+        title: 出力項目の範囲
+        desc: レスポンスフィールドに出力される項目の範囲を指定します。
+        note: |
+           0:エリア内の温泉全て（初期値）
+           1:エリア内の温泉地全て
+           
+           出力される範囲については、レスポンスフィールドの説明の「範囲」を参考にしてください。
+    return:
+      name: Results
+      options:
+        occurs: 1
+      children:
+        - name: NumberOfResults
+          desc: 該当件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 100
+          options:
+            occurs: 1
+          page_total_entries: true
+        - name: DisplayPerPage
+          desc: 表示件数
+          type: int
+          html_type: 半角数字
+          examples:
+            - 5
+          options:
+            occurs: 1
+          page_entries_per_page: true
+        - name: DisplayFrom
+          desc: 表示From
+          type: int
+          html_type: 半角数字
+          examples:
+            - 1
+          options:
+            occurs: 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: APIVersion
+          desc: APIバージョン
+          type: string
+          html_type: 半角数字・記号
+          examples:
+            - 1.0
+          options:
+            occurs: 1
+        - name: Onsen
+          multiple: true
+          options:
+            occurs: 表示件数分
+          children:
+            - name: OnsenName
+              desc: 温泉名
+              type: string
+              html_type: 全角漢字
+              examples:
+                - 丸駒温泉
+              options:
+                occurs: 1
+                range: 0
+            - name: OnsenNameKana
+              desc: 温泉名かな
+              type: string
+              html_type: 全角かな
+              examples:
+                - まるこまおんせん
+              options:
+                occurs: 1
+                range: 0
+            - name: OnsenID
+              desc: 温泉コード
+              type: string
+              html_type: 半角数字
+              examples:
+                - 0042
+              options:
+                occurs: 1
+                range: 0
+            - name: OnsenAddress
+              desc: 温泉住所
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 北海道千歳市幌美内番外地
+              options:
+                occurs: 1
+                range: 0
+            - name: Area
+              options:
+                range: 0
+              children:
+                - name: Region
+                  desc: 地域_広域エリア漢字名
+                  type: string
+                  html_string: 全角・半角
+                  examples:
+                    - 北海道
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: Prefecture
+                  desc: 地域_都道府県漢字名
+                  type: string
+                  html_string: 全角・半角
+                  examples:
+                    - 北海道
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: LargeArea
+                  desc: 地域_大エリア漢字名
+                  type: string
+                  html_string: 全角・半角
+                  examples:
+                    - 石狩・空知・千歳
+                  options:
+                    occurs: 1
+                    range: 0
+                - name: SmallArea
+                  desc: 地域_小エリア漢字名
+                  type: string
+                  html_string: 全角・半角
+                  examples:
+                    - 支笏湖・千歳
+                  options:
+                    occurs: 1
+                    range: 0
+            - name: NatureOfOnsen
+              desc: 泉質
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 塩化物泉
+              options:
+                occurs: 1
+                range: 0
+            - name: OnsenAreaName
+              desc: 温泉地名
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 支笏湖畔の温泉
+              options:
+                occurs: 1
+                range: 1
+            - name: OnsenAreaNameKana
+              desc: 温泉地名かな
+              type: string
+              html_type: 全角かな
+              examples:
+                - しこつこはんのおんせん
+              options:
+                occurs: 1
+                range: 1
+            - name: OnsenAreaID
+              desc: 温泉地コード
+              type: string
+              html_type: 半角数字
+              examples:
+                - 50024
+              options:
+                occurs: 1
+                range: 0
+            - name: OnsenAreaURL
+              desc: 温泉地ページURL
+              type: string
+              html_type: 半角英数記号（URL）
+              examples:
+                - http://jws.jalan.net/Redirect/V1/?key=guest&rd_key=NTAwMjQgICAgIDAxMDI= 	
+              options:
+                occurs: 1
+                range: 1
+            - name: OnsenAreaCaption
+              desc: コピー
+              type: string
+              html_type: 全角・半角
+              examples:
+                - 千歳市の西端に位置する支笏湖の東岸に支笏湖温泉、対岸の恵庭岳の麓に丸駒温泉と伊藤温泉がある。支笏湖温泉の泉質は重曹泉で、別名「美人の湯」といわれ入浴後は肌がスベスベになる。丸駒温泉と伊藤温泉の露天風呂はともに支笏湖と岩で区切られているだけで、まるで湖の中の温泉につかっているようだ。
+              options:
+                occurs: 1
+                range: 1
+    error_status:
+      - 400
+      - 403
+      - 503
+    error:
+      name: Error
+      children:
+        - name: Message
+          error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_JALAN_KEY
+          l_area: 010300
+          count: 1
+          xml_ptn: 1
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+meta-spec:
+  version: 1.0.1
