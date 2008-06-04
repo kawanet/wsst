@@ -1,50 +1,14 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * This file contains the class "<%[$package_name]%>_Request_Default"
- *
- * PHP versions 4 and 5
-<%[ if ($php_license_abstract) {
-    $OUT .= " *\n";
-    $php_license_abstract =~ s/^\s+//;
-    $php_license_abstract =~ s/\s+$//;
-    $php_license_abstract =~ s/\n/\n * /g;
-    $OUT .= " * LICENSE: $php_license_abstract\n";
-} ]%> *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
+[% INCLUDE inc_file_header.tmpl class_name="${package_name}_Request_Default" -%]
 
 require_once 'PEAR.php';
 
-require_once '<%[$package_dir]%>/Request.php';
-require_once '<%[$package_dir]%>/Factory.php';
+require_once '[% package_dir %]/Request.php';
+require_once '[% package_dir %]/Factory.php';
 
-/**
- * Default implementation of Request class
- *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
-class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
+[% INCLUDE inc_class_header.tmpl class_title="Default implementation of Request class" -%]
+class [% package_name %]_Request_Default extends [% package_name %]_Request
 {
     /**
      * port number
@@ -66,7 +30,7 @@ class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
     /**
      * Send
      *
-     * @return mixed <%[$package_name]%>_Response|PEAR_Error
+     * @return mixed [% package_name %]_Response|PEAR_Error
      */
     function &send()
     {

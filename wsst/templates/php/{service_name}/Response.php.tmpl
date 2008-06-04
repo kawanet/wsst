@@ -1,47 +1,11 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * This file contains the class "<%[$package_name]%>_Response"
- *
- * PHP versions 4 and 5
-<%[ if ($php_license_abstract) {
-    $OUT .= " *\n";
-    $php_license_abstract =~ s/^\s+//;
-    $php_license_abstract =~ s/\s+$//;
-    $php_license_abstract =~ s/\n/\n * /g;
-    $OUT .= " * LICENSE: $php_license_abstract\n";
-} ]%> *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
+[% INCLUDE inc_file_header.tmpl class_name="${package_name}_Response" -%]
 
 require_once 'PEAR.php';
 
-/**
- * Class encapsulating the HTTP Response
- *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
-class <%[$package_name]%>_Response
+[% INCLUDE inc_class_header.tmpl class_title="Class encapsulating the HTTP Response" -%]
+class [% package_name %]_Response
 {
     /**
      * HTTP status line
@@ -83,7 +47,7 @@ class <%[$package_name]%>_Response
      * @param string $headers HTTP response header
      * @param string $content HTTP response message content
      */
-    function <%[$package_name]%>_Response($status = null, $headers = null, $content = null)
+    function [% package_name %]_Response($status = null, $headers = null, $content = null)
     {
         if (!is_null($status)) {
             $this->setStatus($status);

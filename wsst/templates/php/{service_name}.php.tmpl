@@ -1,51 +1,15 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * This file contains the class "<%[$package_name]%>"
- *
- * PHP versions 4 and 5
-<%[ if ($php_license_abstract) {
-    $OUT .= " *\n";
-    $php_license_abstract =~ s/^\s+//;
-    $php_license_abstract =~ s/\s+$//;
-    $php_license_abstract =~ s/\n/\n * /g;
-    $OUT .= " * LICENSE: $php_license_abstract\n";
-} ]%> *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
+[% INCLUDE inc_file_header.tmpl class_name=package_name -%]
 
 require_once 'PEAR.php';
 
-require_once '<%[$package_dir]%>/Factory.php';
-require_once '<%[$package_dir]%>/Request.php';
-require_once '<%[$package_dir]%>/Response.php';
+require_once '[% package_dir %]/Factory.php';
+require_once '[% package_dir %]/Request.php';
+require_once '[% package_dir %]/Response.php';
 
-/**
- * User interface class for accessing Web Service "<%[$title]%>"
- *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
-class Services_<%[$company_name]%>_<%[$service_name]%>
+[% INCLUDE inc_class_header.tmpl class_title="User interface class for accessing Web Service \"$title\"" -%]
+class [% package_name %]
 {
     /**
      * Factory object
@@ -70,10 +34,10 @@ class Services_<%[$company_name]%>_<%[$service_name]%>
      * @param array $params common parameters
      * @param object $fac Factory object
      */
-    function <%[$package_name]%>($params = array(), $fac = null)
+    function [% package_name %]($params = array(), $fac = null)
     {
         if (is_null($fac)) {
-            $fac =& new <%[$package_name]%>_Factory();
+            $fac =& new [% package_name %]_Factory();
         }
         $this->_fac =& $fac;
         $this->_params = $params;
@@ -136,11 +100,28 @@ class Services_<%[$company_name]%>_<%[$service_name]%>
     {
         $this->_params = array_merge($this->_params, $params);
     }
+[% FOREACH method = methods -%]
 
-<%[ foreach my $method (@methods) {
-    $OUT .= include('inc_webservice_method.tmpl', method=>$method);
-    $OUT .= "\n";
-} ]%>
+    /**
+     * Makes a request for [% method.name %] API.
+     * See [% package_name %]_[% method.class_name %] for details.
+     *
+     * @access public
+     * @param array $params parameters
+     * @return mixed [% package_name %]_Method|PEAR_Error
+     * @see [% package_name %]_[% method.class_name %]
+     */
+    function &[% method.interface_name %]($params = array())
+    {
+        require_once '[% package_dir %]/Method/[% method.class_name %].php';
+        $method =& new [% package_name %]_Method_[% method.class_name %]($this->_fac);
+        $res =& $method->execute(array_merge($this->_params, $params));
+        if (PEAR::isError($res)) {
+            return $res;
+        }
+        return $method;
+    }
+[% END -%]
 }
 
 ?>

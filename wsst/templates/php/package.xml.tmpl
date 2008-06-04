@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
- <name><%[$package_name]%></name>
- <channel><%[$php_channel||"pear.php.net"]%></channel>
- <summary>An Interface for <%[$title]%></summary>
- <description><%[$php_description||$abstract]%></description>
-<%[ foreach (@author) {
-    my ($name, $email) = (/^(.*?)\s+<(.*?)>$/);
-    my $user = (split(/\@/, $email))[0];
-    $OUT .=<<EOS;
+ <name>[% package_name %]</name>
+ <channel>[% php_channel or "pear.php.net" %]</channel>
+ <summary>An Interface for [% title %]</summary>
+ <description>[% php_description or abstract %]</description>
+[% FOREACH i = author -%]
  <lead>
-  <name>$name</name>
-  <user>$user</user>
-  <email>$email</email>
+  <name>[% i | $author_name %]</name>
+  <user>[% i | $author_user %]</user>
+  <email>[% i | $author_email %]</email>
   <active>yes</active>
  </lead>
-EOS
-} ]%> <date><%[strftime("%Y-%m-%d", localtime())]%></date>
- <time><%[strftime("%H:%M:%S", localtime())]%></time>
+[% END -%]
+ <date>[% now_strftime("%Y-%m-%d") %]</date>
+ <time>[% now_strftime("%H:%M:%S") %]</time>
  <version>
-  <release><%[$php_version_release||$version]%></release>
-  <api><%[$php_version_api||$version]%></api>
+  <release>[% php_version_release or version %]</release>
+  <api>[% php_version_api or version %]</api>
  </version>
  <stability>
-  <release><%[$php_stability_release||"beta"]%></release>
-  <api><%[$php_stability_api||"beta"]%></api>
+  <release>[% php_stability_release or "beta" %]</release>
+  <api>[% php_stability_api or "beta" %]</api>
  </stability>
- <license uri="<%[$php_license_uri]%>"><%[$license]%></license>
- <notes><%[$php_notes||"#"]%></notes>
+ <license uri="[% php_license_uri %]">[% license %]</license>
+ <notes>[% php_notes or "#" %]</notes>
  <contents>
   <dir name="/">
-<%[make_package_contents()]%>
+[% make_package_contents() %]
   </dir>
  </contents>
  <dependencies>
@@ -61,16 +58,16 @@ EOS
  <changelog>
   <release>
    <version>
-    <release><%[$version]%></release>
-    <api><%[$version]%></api>
+    <release>[% version %]</release>
+    <api>[% version %]</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date><%[strftime("%Y-%m-%d", localtime())]%></date>
-   <license uri="<%[$php_license_uri]%>"><%[$license]%></license>
-   <notes><%[$php_notes||"#"]%></notes>
+   <date>[% now_strftime("%Y-%m-%d") %]</date>
+   <license uri="[% php_license_uri %]">[% license %]</license>
+   <notes>[% php_notes or "#" %]</notes>
   </release>
  </changelog>
 </package>

@@ -1,11 +1,3 @@
-$package_name = sprintf("WebService::%s::%s",
-                        $tmpl->get('company_name'),
-                        $tmpl->get('service_name'));
-
-$package_dir = sprintf("WebService/%s/%s",
-                       $tmpl->get('company_name'),
-                       $tmpl->get('service_name'));
-
 # sort files
 {
     my @tmp = grep(m#t/{test_seq\(\)}_{service_name}\.t\.tmpl$#, @$files);
@@ -28,6 +20,18 @@ $package_dir = sprintf("WebService/%s/%s",
 #{
 #    push(@{$listeners->{post_generate}}, \&exec_make_dist_sh);
 #}
+
+sub package_name {
+    return sprintf("WebService::%s::%s",
+                   $tmpl->get('company_name'),
+                   $tmpl->get('service_name'));
+}
+
+sub package_dir {
+    return sprintf("WebService/%s/%s",
+                   $tmpl->get('company_name'),
+                   $tmpl->get('service_name'));
+}
 
 sub make_query_fields {
     my ($method) = @_;
@@ -64,7 +68,7 @@ sub make_notnull_param {
     my $notnull = [];
     
     foreach my $param (@{$method->{params}}) {
-        push(@$notnull, $param->{name}) if $param->{'require'} eq 'true';
+        push(@$notnull, $param->{name}) if $param->{'require'};
     }
     
     return join(", ", map {"'$_'"} @$notnull);
@@ -109,7 +113,7 @@ sub make_force_array {
             if (exists $n->{children}) {
                 push(@$que, $n->{children});
             }
-            if ($n->{multiple} eq 'true') {
+            if ($n->{multiple}) {
                 $force_array->{$n->{name}}++;
             }
         }
@@ -140,10 +144,12 @@ sub test_seq {
 }
 
 sub make_env_params_check {
-    my (@methods) = @_;
+    my ($methods) = @_;
+
+    $methods = [$methods] if ref($methods) ne 'ARRAY';
     
     my $env_params = {};
-    foreach my $method (@methods) {
+    foreach my $method (@$methods) {
         foreach my $test (@{$method->{tests}}) {
             foreach my $param (values %{$test->{params}}) {
                 next unless $param =~ /^\$(.*)$/;
@@ -173,21 +179,20 @@ EOS
 }
 
 sub make_test_count {
-    my ($base_cnt, @methods) = @_;
+    my ($base_cnt, $methods) = @_;
+
+    $methods = [$methods] if ref($methods) ne 'ARRAY';
     
     my $cnt = $base_cnt;
     
-    foreach my $method (@methods) {
+    foreach my $method (@$methods) {
         foreach my $test (@{$method->{tests}}) {
             if ($test->{type} eq 'lib_error') {
                 # die
                 $cnt++;
             } elsif ($test->{type} eq 'error') {
-                # die / is_error / root
-                $cnt += 3;
-                
-                # each element's can_ok / ok
-                $cnt += _calc_ret_elms($method->{error});
+                # die / is_error
+                $cnt += 2;
             } else {
                 # die / is_error / root
                 $cnt += 3;
@@ -201,15 +206,83 @@ sub make_test_count {
     return $cnt;
 }
 
+sub join {
+    my $str = shift;
+    my $arrayref = shift;
+    return CORE::join($str, @$arrayref);
+}
+
+sub sort_keys {
+    my $hashref = shift;
+    return sort keys %$hashref;
+}
+
+sub env_param {
+    return sub {
+        my $val = shift;
+        unless ($val =~ s/^\$(.*)$/\$ENV{'$1'}/) {
+            $val = "'$val'";
+        }
+        return $val;
+    };
+}
+
+sub tree_to_array {
+    my $tree = shift;
+
+    my $array = [$tree];
+    my $stack = [[$tree, 0]];
+    while (my $val = pop(@$stack)) {
+        my ($node, $i) = @$val;
+        for (; $i < @{$node->{children}}; $i++) {
+            my $child = $node->{children}->[$i];
+            push(@$array, $child);
+            if ($child->{children}) {
+                push(@$stack, [$node, $i+1]);
+                push(@$stack, [$child, 0]);
+                last;
+            }
+        }
+    }
+
+    return $array;
+}
+
+sub count {
+    my $arrayref = shift;
+    return scalar(@$arrayref);
+}
+
+sub node_nullable {
+    my $node = shift;
+    my $path = $node->path;
+    foreach my $p (@$path) {
+        return 1 if $p->nullable;
+    }
+    return 0;
+}
+
+sub node_access {
+    my $node = shift;
+    return "" if $node->depth < 2;
+    my $path = $node->path(2);
+    my $access = [""];
+    foreach my $p (@$path) {
+        push(@$access, $p->name);
+        push(@$access, "[0]") if $p->multiple && $p != $node;
+    }
+    return join("->", @$access);
+}
+
 sub _calc_ret_elms {
     my ($ret_root) = @_;
     
     my $result = 0;
     my $ret_elms = [@{$ret_root->{children}}];
     while (my $ret = shift(@$ret_elms)) {
-        next if $ret->{nullable} eq 'true';
-        $result += 2;
-        $result++ if $ret->{multiple} eq 'true';
+        next if $ret->{nullable};
+        $result += 1;
+        $result++ if $ret->{multiple};
         next unless $ret->{children};
         push(@$ret_elms, @{$ret->{children}});
     }
