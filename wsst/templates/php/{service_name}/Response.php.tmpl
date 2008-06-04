@@ -74,17 +74,6 @@ class <%[$package_name]%>_Response
      * @var array
      */
     var $_data = null;
-    
-    /**
-     * Error message of processData()
-     *
-     * If processData method has error,
-     * the message is set.
-     *
-     * @access protected
-     * @var string
-     */
-    var $processDataError = null;
 
     /**
      * Constructor
@@ -191,25 +180,15 @@ class <%[$package_name]%>_Response
     }
 
     /**
-     * process response XML data
+     * process response data
      * 
      * @access public
-     * @param array $conf conf
-     * @return void
+     * @param array $conf config
+     * @return object PEAR_Error on error, or null.
      */
     function processData($conf = array())
     {
-    }
-    
-    /**
-     * Returns error message of processData()
-     *
-     * @access public
-     * @return string error message
-     */
-    function getProcessDataError()
-    {
-        return $this->processDataError;
+        return null;
     }
 }
 

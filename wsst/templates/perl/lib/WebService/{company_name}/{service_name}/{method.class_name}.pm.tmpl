@@ -28,7 +28,10 @@ sub notnull_param { [
 
 sub elem_class { '<%[$package_name]%>::<%[$method{class_name}]%>::Element'; }
 
-sub root_elem { '<%[$method{return}{name}]%>'; }
+sub root_elem_list { [
+    <%["'$method{return}{name}'"]%>,
+    <%["'$method{error}{name}'" if $method{error} && $method{error}{name} ne $method{return}{name}]%>,
+]; }
 
 sub elem_fields { {
     <%[make_elem_fields(\%method)]%>
@@ -46,7 +49,7 @@ sub force_array { [
 # __PACKAGE__->mk_elem_accessors();
 
 @<%[$package_name]%>::<%[$method{class_name}]%>::Element::ISA = qw( Class::Accessor::Children::Fast );
-<%[$package_name]%>::<%[$method{class_name}]%>::Element->mk_ro_accessors( root_elem() );
+<%[$package_name]%>::<%[$method{class_name}]%>::Element->mk_ro_accessors( @{root_elem_list()} );
 <%[$package_name]%>::<%[$method{class_name}]%>::Element->mk_child_ro_accessors( %{elem_fields()} );
 
 =head1 NAME

@@ -46,8 +46,8 @@ ok( ref $service, 'new <%[$package_name]%>::<%[$method{class_name}]%>()' );
         while (my $ret = shift(@$ret_test)) {
             next if $ret->[1]->{nullable} eq 'true';
             $OUT .= "    can_ok( \$data$ret->[0], '$ret->[1]->{name}' );\n";
-            $OUT .= "    ok( eval { \$data$ret->[0]\->$ret->[1]->{name} }, '${name}: $ret->[1]->{name}' );\n";
-            $OUT .= "    ok( eval { ref \$data$ret->[0]\->$ret->[1]->{name} } eq 'ARRAY', '${name}: $ret->[1]->{name}' );\n"
+            $OUT .= "    ok( eval { defined \$data$ret->[0]\->$ret->[1]->{name} }, '${name}: $ret->[1]->{name}' );\n";
+            $OUT .= "    ok( eval { ref \$data$ret->[0]\->$ret->[1]->{name} eq 'ARRAY' }, '${name}: $ret->[1]->{name}' );\n"
                 if $ret->[1]->{multiple} eq 'true';
             next unless $ret->[1]->{children};
             my $next_node = $ret->[0].'->'.$ret->[1]->{name};
@@ -64,8 +64,8 @@ ok( ref $service, 'new <%[$package_name]%>::<%[$method{class_name}]%>()' );
         while (my $ret = shift(@$ret_test)) {
             next if $ret->[1]->{nullable} eq 'true';
             $OUT .= "    can_ok( \$data$ret->[0], '$ret->[1]->{name}' );\n";
-            $OUT .= "    ok( eval { \$data$ret->[0]\->$ret->[1]->{name} }, '${name}: $ret->[1]->{name}' );\n";
-            $OUT .= "    ok( eval { ref \$data$ret->[0]\->$ret->[1]->{name} } eq 'ARRAY', '${name}: $ret->[1]->{name}' );\n"
+            $OUT .= "    ok( eval { defined \$data$ret->[0]\->$ret->[1]->{name} }, '${name}: $ret->[1]->{name}' );\n";
+            $OUT .= "    ok( eval { ref \$data$ret->[0]\->$ret->[1]->{name} eq 'ARRAY' }, '${name}: $ret->[1]->{name}' );\n"
                 if $ret->[1]->{multiple} eq 'true';
             next unless $ret->[1]->{children};
             my $next_node = $ret->[0].'->'.$ret->[1]->{name};

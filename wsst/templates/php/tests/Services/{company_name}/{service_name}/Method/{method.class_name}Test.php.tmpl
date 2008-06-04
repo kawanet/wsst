@@ -123,8 +123,8 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%>Test extends PHPUnit_F
     if ($test->{type} eq 'lib_error') {
         $OUT .= "        \$this->assertTrue(PEAR::isError(\$res), '${name}: isError');\n";
     } elsif ($test->{type} eq 'error') {
-        $OUT .= "        \$this->assertFalse(PEAR::isError(\$res), '${name}: isError');\n";
-        $OUT .= "        \$data = \$res->getData();\n";
+        $OUT .= "        \$this->assertTrue(PEAR::isError(\$res), '${name}: isError');\n";
+        $OUT .= "        \$data = \$obj->getData();\n";
         $OUT .= "        \$this->assertNotNull(\$data, '${name}: getData');\n";
         my $ret_test = [map {['', $_]} @{$method{'error'}->{children}}];
         while (my $ret = shift(@$ret_test)) {

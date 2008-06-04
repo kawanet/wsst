@@ -91,6 +91,10 @@ sub make_response_conf {
         $conf->{'force_array'} = [sort keys %{$conf->{'force_array'}}];
     }
     
+    if (exists $method->{'error_status'}) {
+        $conf->{'error_status'} = [@{$method->{'error_status'}}];
+    }
+    
     my $result = make_php_array($conf, $indent, $indstr);
     $result =~ s/^\s+//;
     
@@ -98,9 +102,10 @@ sub make_response_conf {
 }
 
 sub make_php_array {
-    my ($data, $indent, $indstr) = @_;
+    my ($data, $indent, $indstr, $join) = @_;
     $indent ||= 0;
     $indstr ||= "    ";
+    $join ||= "\n";
     
     sub rec_func {
         my ($dd, $ii, $is) = @_;
@@ -117,7 +122,7 @@ sub make_php_array {
                 push(@$res, "$pf$is'$ddd' => $dddd,");
             }
             push(@$res, "${pf})");
-            return join("\n", @$res);
+            return join($join, @$res);
         } elsif ($ref eq 'ARRAY') {
             my $res = [];
             push(@$res, "${pf}array(");
@@ -125,7 +130,7 @@ sub make_php_array {
                 push(@$res, rec_func($ddd, $ii+1, $is) . ",");
             }
             push(@$res, "${pf})");
-            return join("\n", @$res);
+            return join($join, @$res);
         }
         
         return "$pf'$dd'";
@@ -167,6 +172,187 @@ EOS
     
     my $str = join("", @$strs);
     $str =~ s/\s+$//;
+    
+    return $str;
+}
+
+sub make_is_error {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    return "return false;" unless $method->{'error'};
+    
+    my $strs = [];
+    push(@$strs, "\$data =& \$this->getData();");
+    
+    my $ret_test = [map {['', $_]} @{$method->{'error'}->{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+        push(@$strs, ($indstr x $indent) . "if (!isset($php_var)) {");
+        push(@$strs, ($indstr x ($indent + 1)) . "return false;");
+        if ($ret->[1]->{'values'}) {
+            my $php_array = sprintf('array(%s)', join(", ", map {qq|"$_"|} @{$ret->[1]->{'values'}}));
+            push(@$strs, ($indstr x ($indent)) . "} elseif (!in_array($php_var, $php_array)) {");
+            push(@$strs, ($indstr x ($indent + 1)) . "return false;");
+        }
+        push(@$strs, ($indstr x $indent) . "}");
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+
+    push(@$strs, ($indstr x $indent) . "return true;");
+    
+    return join("\n", @$strs);
+}
+
+sub make_error_message {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    my $ret_test = [map {['', $_]} @{$method->{'error'}->{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        if ($ret->[1]->{error_message} eq 'true') {
+            my $strs = [];
+            push(@$strs, "\$data =& \$this->getData();");
+            my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+            if ($ret->[1]->{error_message_map}) {
+                my $msg_map = $ret->[1]->{error_message_map};
+                my $php_array = make_php_array($msg_map, $indent, $indstr);
+                $php_array =~ s/^\s+//;
+                push(@$strs, ($indstr x $indent) . "\$msg_map = $php_array;");
+                push(@$strs, ($indstr x $indent) . "\$val = $php_var;");
+                push(@$strs, ($indstr x $indent) . "if (array_key_exists(\$val, \$msg_map)) {");
+                push(@$strs, ($indstr x ($indent + 1)) . "return \$msg_map[\$val];");
+                push(@$strs, ($indstr x $indent) . "}");
+                push(@$strs, ($indstr x ($indent)) . "return \$val;");
+            } else {
+                push(@$strs, ($indstr x $indent) . "return $php_var;");
+            }
+            return join("\n", @$strs);
+        }
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+    
+    return "return 'Unknown error';";
+}
+
+sub make_total_entries {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        if ($ret->[1]->{page_total_entries} eq 'true') {
+            my $strs = [];
+            push(@$strs, "\$data =& \$this->getData();");
+            my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+            push(@$strs, ($indstr x $indent) . "return $php_var;");
+            return join("\n", @$strs);
+        }
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+    
+    return "return 0;";
+}
+
+sub make_entries_per_page {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        if ($ret->[1]->{page_entries_per_page} eq 'true') {
+            my $strs = [];
+            push(@$strs, "\$data =& \$this->getData();");
+            my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+            push(@$strs, ($indstr x $indent) . "return $php_var;");
+            return join("\n", @$strs);
+        }
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+    
+    return "return 0;";
+}
+
+sub make_current_page {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
+    while (my $ret = shift(@$ret_test)) {
+        next if $ret->[1]->{nullable} eq 'true';
+        if ($ret->[1]->{page_current_page} eq 'true') {
+            my $strs = [];
+            push(@$strs, "\$data =& \$this->getData();");
+            my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+            push(@$strs, ($indstr x $indent) . "return $php_var;");
+            return join("\n", @$strs);
+        } elsif ($ret->[1]->{page_current_offset} eq 'true') {
+            my $orig = $ret->[1]->{page_current_offset_origin} ? " - $ret->[1]->{page_current_offset_origin}" : "";
+            my $strs = [];
+            push(@$strs, "\$data =& \$this->getData();");
+            push(@$strs, ($indstr x $indent) . "\$epp = \$this->getEntriesPerPage();");
+            push(@$strs, ($indstr x $indent) . "if (\$epp == 0) {");
+            push(@$strs, ($indstr x ($indent + 1)) . "return 0;");
+            push(@$strs, ($indstr x $indent) . "}");
+            my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
+            push(@$strs, ($indstr x $indent) . "return (($php_var$orig) / \$epp) + 1;");
+            return join("\n", @$strs);
+        }
+        next unless $ret->[1]->{children};
+        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
+        $next_node .= '[0]'
+            if $ret->[1]->{multiple} eq 'true';
+        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
+    }
+    
+    return "return 0;";
+}
+
+sub make_page_param {
+    my ($method, $indent, $indstr) = @_;
+    $indent ||= 0;
+    $indstr ||= "    ";
+    
+    my $strs = [];
+    
+    foreach my $param (@{$method->{params}}) {
+        if ($param->{page_param_number} eq 'true') {
+            push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = \$page;");
+        } elsif ($param->{page_param_offset} eq 'true') {
+            my $orig = $param->{page_param_offset_origin} ? " + $param->{page_param_offset_origin}" : "";
+            push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = (\$page - 1) * \$size$orig;");
+        } elsif ($param->{page_param_size} eq 'true') {
+            push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = \$size;");
+        }
+    }
+    
+    my $str = join("\n", @$strs);
+    $str =~ s/^\s+//;
     
     return $str;
 }
