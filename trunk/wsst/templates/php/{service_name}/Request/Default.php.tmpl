@@ -109,7 +109,8 @@ class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
             $status = trim(fgets($fp, 4096));
             sscanf($status, "HTTP/1.%d %d %s", $minor, $statusCode, $statusstr);
         }
-        if (!$statusCode || ($statusCode < 200 || 300 <= $statusCode)) {
+        if (!$statusCode || (($statusCode < 200 || 300 <= $statusCode)
+                             && !$this->isIgnoreStatusCode($statusCode))) {
             $content = '';
             while (!feof($fp)) {
                 $content .= fread($fp, 8192);
@@ -135,7 +136,8 @@ class <%[$package_name]%>_Request_Default extends <%[$package_name]%>_Request
         
         fclose($fp);
 
-        if ($headers['Transfer-Encoding'] == 'chunked') {
+        if (array_key_exists('Transfer-Encoding', $headers)
+            && $headers['Transfer-Encoding'] == 'chunked') {
             $content = $this->_decodeChunked($content);
         }
         

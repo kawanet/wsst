@@ -50,7 +50,8 @@ class <%[$package_name]%>_Response_Default extends <%[$package_name]%>_Response
      * @var array
      */
     var $_options = array(XML_UNSERIALIZER_OPTION_COMPLEXTYPE => 'object',
-                          XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => TRUE);
+                          XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE => true,
+                          XML_UNSERIALIZER_OPTION_CONTENT_KEY => '_text');
     
     /**
      *　set XML_Unserializer option
@@ -69,11 +70,11 @@ class <%[$package_name]%>_Response_Default extends <%[$package_name]%>_Response
      * 
      * @access public
      * @param array $conf config
-     * @return void
+     * @return object PEAR_Error on error, or null.
      */
     function processData($conf = array())
     {
-        $options = $this->_options;    
+        $options = $this->_options;
         
         if (array_key_exists('force_array', $conf)) {
             $options[XML_UNSERIALIZER_OPTION_FORCE_ENUM]
@@ -94,11 +95,12 @@ class <%[$package_name]%>_Response_Default extends <%[$package_name]%>_Response
         
         $status = $unserializer->unserialize($content, false);
         if (PEAR::isError($status)) {
-            $this->processDataError = $status->getMessage();
-            return;
+            return $status;
         }
         
         $this->_data = $unserializer->getUnserializedData();
+        
+        return null;
     }
 }
 

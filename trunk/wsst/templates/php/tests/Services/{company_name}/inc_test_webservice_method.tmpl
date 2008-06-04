@@ -22,21 +22,7 @@
     if ($test->{type} eq 'lib_error') {
         $OUT .= "        \$this->assertTrue(PEAR::isError(\$res), '${name}: isError');\n";
     } elsif ($test->{type} eq 'error') {
-        $OUT .= "        \$this->assertFalse(PEAR::isError(\$res), '${name}: isError');\n";
-        $OUT .= "        \$data = \$res->getData();\n";
-        $OUT .= "        \$this->assertNotNull(\$data, '${name}: getData');\n";
-        my $ret_test = [map {['', $_]} @{$method{'error'}->{children}}];
-        while (my $ret = shift(@$ret_test)) {
-            next if $ret->[1]->{nullable} eq 'true';
-            $OUT .= "        \$this->assertObjectHasAttribute('$ret->[1]->{name}', \$data$ret->[0], '${name}: $ret->[1]->{name}');\n";
-            $OUT .= "        \$this->assertType('array', \$data$ret->[0]\->$ret->[1]->{name}, '${name}: $ret->[1]->{name}');\n"
-                if $ret->[1]->{multiple} eq 'true';
-            next unless $ret->[1]->{children};
-            my $next_node = $ret->[0].'->'.$ret->[1]->{name};
-            $next_node .= '[0]'
-                if $ret->[1]->{multiple} eq 'true';
-            push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
-        }
+        $OUT .= "        \$this->assertTrue(PEAR::isError(\$res), '${name}: isError');\n";
     } else {
         $OUT .= "        \$this->assertFalse(PEAR::isError(\$res), '${name}: isError');\n";
         $OUT .= "        \$data = \$res->getData();\n";
