@@ -1,19 +1,16 @@
 #
-# Test case for <%[$package_name]%>
+# Test case for [% package_name %]
 #
 
 use strict;
-use Test::More tests => <%[@methods * 2]%>;
+use Test::More tests => [% count(methods) * 2 %];
 
-
-<%[ foreach my $method (@methods) {
-    $OUT .=<<EOS;
+[% FOREACH method = methods -%]
 {
-    use_ok('${package_name}::$method->{class_name}');
-    my \$obj = new ${package_name}::$method->{class_name}();
-    ok( ref \$obj, 'new ${package_name}::$method->{class_name}()');
+    use_ok('[% "${package_name}::${method.class_name}" %]');
+    my $obj = new [% "${package_name}::${method.class_name}" %]();
+    ok( ref $obj, 'new [% "${package_name}::${method.class_name}" %]()');
 }
 
-EOS
-} ]%>
+[% END -%]
 1;

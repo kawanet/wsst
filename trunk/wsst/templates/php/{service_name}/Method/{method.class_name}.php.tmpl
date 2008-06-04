@@ -1,47 +1,11 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+[% INCLUDE inc_file_header.tmpl class_name="${package_name}_Method_${method.class_name}" -%]
 
-/**
- * This file contains the class "<%[$package_name]%>_Method_<%[$method{class_name}]%>"
- *
- * PHP versions 4 and 5
-<%[ if ($php_license_abstract) {
-    $OUT .= " *\n";
-    $php_license_abstract =~ s/^\s+//;
-    $php_license_abstract =~ s/\s+$//;
-    $php_license_abstract =~ s/\n/\n * /g;
-    $OUT .= " * LICENSE: $php_license_abstract\n";
-} ]%> *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
+require_once '[% package_dir %]/Method.php';
 
-require_once '<%[$package_dir]%>/Method.php';
-
-/**
- * Implementation of Method class for accessing "<%[$method{name}]%>"
- *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
-class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_name]%>_Method
+[% INCLUDE inc_class_header.tmpl class_title="Implementation of Method class for accessing \"${method.name}\"" -%]
+class [% package_name %]_Method_[% method.class_name %] extends [% package_name %]_Method
 {
     /**
      * Returns the URL
@@ -50,7 +14,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getUrl()
     {
-        return '<%[$method{url}]%>';
+        return '[% method.url %]';
     }
 
     /**
@@ -61,7 +25,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getRequestMethod()
     {
-        return '<%[$method{request_method}||'GET']%>';
+        return '[% method.request_method or "GET" %]';
     }
     
     /**
@@ -72,7 +36,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getParamsConf()
     {
-        return <%[make_params_conf(\%method,2)||'array()']%>;
+        return [% make_params_conf(method, 2) or "array()" %];
     }
     
     /**
@@ -83,7 +47,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getResponseConf()
     {
-        return <%[make_response_conf(\%method,2)||'array()']%>;
+        return [% make_response_conf(method, 2) or "array()" %];
     }
     
     /**
@@ -97,7 +61,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
         if (!is_null($this->getRequest()) && is_null($this->getData())) {
             return true;
         }
-        <%[make_is_error(\%method,2)]%>
+        [% make_is_error(method, 2) %]
     }
     
     /**
@@ -111,7 +75,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
         if (!$this->isError()) {
             return 'No error';
         }
-        <%[make_error_message(\%method,2)]%>
+        [% make_error_message(method, 2) %]
     }
     
     /**
@@ -122,7 +86,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getTotalEntries()
     {
-        <%[make_total_entries(\%method,2)]%>
+        [% make_total_entries(method, 2) %]
     }
     
     /**
@@ -133,7 +97,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getEntriesPerPage()
     {
-        <%[make_entries_per_page(\%method,2)]%>
+        [% make_entries_per_page(method, 2) %]
     }
     
     /**
@@ -144,7 +108,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
      */
     function getCurrentPage()
     {
-        <%[make_current_page(\%method,2)]%>
+        [% make_current_page(method, 2) %]
     }
     
     /**
@@ -167,7 +131,7 @@ class <%[$package_name]%>_Method_<%[$method{class_name}]%> extends <%[$package_n
         if (is_null($params)) {
             $params = array();
         }
-        <%[make_page_param(\%method,2)]%>
+        [% make_page_param(method, 2) %]
         return $params;
     }
 }

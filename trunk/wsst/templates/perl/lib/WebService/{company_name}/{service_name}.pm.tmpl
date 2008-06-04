@@ -1,13 +1,13 @@
-package <%[$package_name]%>;
+package [% package_name %];
 
 use strict;
 use base qw( Class::Accessor::Fast );
 use vars qw( $VERSION );
-$VERSION = '<%[$version]%>';
+$VERSION = '[% version %]';
 
-<%[ foreach my $method (@methods) {
-    $OUT .= "use ${package_name}::$method->{class_name};\n";
-} ]%>
+[% FOREACH method = methods -%]
+use [% "${package_name}::${method.class_name}" %];
+[% END -%]
 
 my $TPPCFG = [qw( user_agent lwp_useragent http_lite utf8_flag )];
 __PACKAGE__->mk_accessors( @$TPPCFG, 'param' );
@@ -55,47 +55,46 @@ sub init_query_param {
     }
 }
 
-<%[ foreach my $method (@methods) {
-    $OUT .= include('inc_webservice_method.tmpl', method=>$method);
-    $OUT .= "\n";
-} ]%>
+[% FOREACH method = methods -%]
+sub [% method.interface_name %] {
+    my $self = shift or return;
+    $self = $self->new() unless ref $self;
+    my $api = [% package_name %]::[% method.class_name %]->new();
+    $self->init_treepp_config( $api );
+    $self->init_query_param( $api );
+    $api->add_param( @_ );
+    $api->request();
+    $api;
+}
+
+[% END -%]
 =head1 NAME
 
-<%[$package_name]%> - An Interface for <%[$title]%>
+[% package_name %] - An Interface for [% title %]
 
 =head1 SYNOPSIS
 
-    use <%[$package_name]%>;
+    use [% package_name %];
     
-    my $service = <%[$package_name]%>->new();
+    my $service = [% package_name %]->new();
     
     my $param = {
-<%[ foreach my $key (sort keys %{$methods[0]{tests}[0]{params}}) {
-    my $val = $methods[0]{tests}[0]{params}{$key};
-    unless ($val =~ s/^\$(.*)$/\$ENV{'$1'}/) {
-        $val = "'$val'";
-    }
-    $OUT .= "        '$key' => $val,\n";
-} ]%>    };
-    my $res = $service-><%[$methods[0]{interface_name}]%>( %$param );
+[% FOREACH key = sort_keys(methods.0.first_good_test.params) -%]
+        '[% key %]' => [% methods.0.first_good_test.params.$key | $env_param %],
+[% END -%]
+    };
+    my $res = $service->[% methods.0.interface_name %]( %$param );
     my $root = $res->root;
-<%[ my $ret_test = [map {['', $_]} @{$methods[0]{'return'}{children}}];
-    my $n = 5;
-    while (my $ret = shift(@$ret_test)) {
-        last unless $n--;
-        next if $ret->[1]->{nullable} eq 'true';
-        $OUT .= qq|    printf("$ret->[1]->{name}: %s\\n", \$root$ret->[0]\->$ret->[1]->{name});\n|;
-        next unless $ret->[1]->{children};
-        my $next_node = $ret->[0].'->'.$ret->[1]->{name};
-        $next_node .= '->[0]'
-            if $ret->[1]->{multiple} eq 'true';
-        push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
-    }
-]%>    print "...\n";
+[% FOREACH node = tree_to_array(methods.0.return) -%]
+[% LAST IF loop.index > 6 -%]
+[% NEXT IF node.depth == 1 -%]
+    printf("[% node.name %]: %s\n", $root[% node_access(node) %]);
+[% END -%]
+    print "...\n";
 
 =head1 DESCRIPTION
 
-<%[$perl_abstract||$abstract]%>
+[% perl_abstract or abstract %]
 
 =head1 METHODS
 
@@ -103,7 +102,7 @@ sub init_query_param {
 
 This is the constructor method for this class.
 
-    my $service = <%[$package_name]%>->new();
+    my $service = [% package_name %]->new();
 
 This accepts optional parameters.
 
@@ -113,7 +112,7 @@ This accepts optional parameters.
             # common parameters of this web service 
         },
     };
-    my $service = <%[$package_name]%>->new( %$conf );
+    my $service = [% package_name %]->new( %$conf );
 
 =head2 add_param
 
@@ -133,17 +132,16 @@ Returns common parameter value of the specified key.
 
     my $param_value = $service->get( 'param_key' );
 
-<%[ foreach my $method (@methods) {
-    $OUT .=<<EOS;
-=head2 $method->{interface_name}
+[% FOREACH method = methods -%]
+=head2 [% method.interface_name %]
 
-This makes a request for C<$method->{name}> API.
-See L<${package_name}::$method->{class_name}> for details.
+This makes a request for C<[% method.name %]> API.
+See L<[% "${package_name}::${method.class_name}" %]> for details.
 
-    my \$res = \$service->$method->{interface_name}( %\$param );
+    my $res = $service->[% method.interface_name %]( %$param );
 
-EOS
-} ]%>=head2 utf8_flag / user_agent / lwp_useragent / http_lite
+[% END -%]
+=head2 utf8_flag / user_agent / lwp_useragent / http_lite
 
 This modules uses L<XML::TreePP> module internally.
 Following methods are available to configure it.
@@ -153,25 +151,21 @@ Following methods are available to configure it.
     $service->lwp_useragent( LWP::UserAgent->new() );
     $service->http_lite( HTTP::Lite->new() );
 
-<%[ if ($perl_see_also||$see_also) {
-    local $see_also = ($perl_see_also||$see_also);
-    $OUT .=<<EOS;
+[% IF perl_see_also or see_also -%]
 =head1 SEE ALSO
 
-$see_also
+[% perl_see_also or see_also %]
 
-EOS
-} ]%>=head1 AUTHOR
+[% END -%]
+=head1 AUTHOR
 
-<%[join(",\n", @author)]%>
+[% join(",\n", author) %]
 
-<%[ if ($perl_copyright||$copyright) {
-    local $copyright = ($perl_copyright||$copyright);
-    $OUT .=<<EOS;
+[% IF perl_copyright or copyright -%]
 =head1 COPYRIGHT
 
-$copyright
+[% perl_copyright or copyright %]
 
-EOS
-} ]%>=cut
+[% END -%]
+=cut
 1;

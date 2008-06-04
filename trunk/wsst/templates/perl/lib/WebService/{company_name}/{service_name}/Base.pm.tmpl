@@ -1,8 +1,8 @@
-package <%[$package_name]%>::Base;
+package [% package_name %]::Base;
 use strict;
 use base qw( XML::OverHTTP );
 use vars qw( $VERSION );
-$VERSION = '0.10';
+$VERSION = '[% version %]';
 
 use Class::Accessor::Children::Fast;
 
@@ -17,20 +17,18 @@ sub is_error {
 
 =head1 NAME
 
-WebService::<%[$company_name]%>::<%[$service_name]%>::Base - Base class for <%[$title]%>
+WebService::[% company_name %]::[% service_name %]::Base - Base class for [% title %]
 
 =head1 DESCRIPTION
 
-This is a base class for <%[$title]%>.
-L<WebService::<%[$company_name]%>::<%[$service_name]%>> uses this internally.
+This is a base class for [% title %].
+L<[% package_name %]> uses this internally.
 
-<%[ if ($perl_copyright||$copyright) {
-    local $copyright = ($perl_copyright||$copyright);
-    $OUT .=<<EOS;
+[% IF perl_copyright or copyright -%]
 =head1 COPYRIGHT
 
-$copyright
+[% perl_copyright or copyright %]
 
-EOS
-} ]%>=cut
+[% END -%]
+=cut
 1;

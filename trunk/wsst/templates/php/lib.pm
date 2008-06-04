@@ -1,34 +1,51 @@
 use POSIX qw(strftime);
 use Digest::MD5 ();
 
-$package_name = sprintf("Services_%s_%s",
-                        $tmpl->get('company_name'),
-                        $tmpl->get('service_name'));
-
-$package_dir = sprintf("Services/%s/%s",
-                       $tmpl->get('company_name'),
-                       $tmpl->get('service_name'));
-
-$php_license_uri ||= {
-    'PHP' => 'http://www.php.net/license/',
-    'Apache' => 'http://www.apache.org/licenses/',
-    'LGPL' => 'http://www.gnu.org/copyleft/lesser.html',
-    'BSD style' => 'http://www.opensource.org/licenses/bsd-license.php',
-    'BSD' => 'http://www.opensource.org/licenses/bsd-license.php',
-    'MIT' => 'http://www.opensource.org/licenses/mit-license.html',
-}->{$tmpl->get('license')};
-
-$php_channel ||= "__uri";
-$php_copyright ||= "";
-$php_link ||= sprintf("http://localhost/%s", $package_name);
-$php_license_abstract ||= "";
-
 # sort files
 {
     my @package_xml = grep(/package\.xml\.tmpl$/, @$files);
     my @other = grep(!/package\.xml\.tmpl$/, @$files);
     push(@other, @package_xml);
     @$files = @other;
+}
+
+sub package_name {
+    return sprintf("Services_%s_%s",
+                   $tmpl->get('company_name'),
+                   $tmpl->get('service_name'));
+}
+
+sub package_dir {
+    return sprintf("Services/%s/%s",
+                   $tmpl->get('company_name'),
+                   $tmpl->get('service_name'));
+}
+
+sub php_license_uri {
+    return $schema->{php_license_uri} || {
+        'PHP' => 'http://www.php.net/license/',
+        'Apache' => 'http://www.apache.org/licenses/',
+        'LGPL' => 'http://www.gnu.org/copyleft/lesser.html',
+        'BSD style' => 'http://www.opensource.org/licenses/bsd-license.php',
+        'BSD' => 'http://www.opensource.org/licenses/bsd-license.php',
+        'MIT' => 'http://www.opensource.org/licenses/mit-license.html',
+    }->{$tmpl->get('license')};
+}
+
+sub php_channel {
+    return $schema->{php_channel} || "__uri";
+}
+
+sub php_copyright {
+    return $schema->{php_copyright} || "";
+}
+
+sub php_link {
+    return $schema->{php_link} || sprintf("http://localhost/%s", &package_name);
+}
+
+sub php_license_abstract {
+    return $schema->{php_license_abstract} || "";
 }
 
 sub make_params_conf {
@@ -44,7 +61,7 @@ sub make_params_conf {
     }
     
     foreach my $param (@{$method->{params}}) {
-        if ($param->{'require'} eq 'true') {
+        if ($param->{'require'}) {
             $conf->{'notnull'}->{$param->{name}}++;
         }
         
@@ -81,7 +98,7 @@ sub make_response_conf {
             if (exists $n->{children}) {
                 push(@$que, $n->{children});
             }
-            if ($n->{multiple} eq 'true') {
+            if ($n->{multiple}) {
                 $conf->{'force_array'}->{$n->{name}}++;
             }
         }
@@ -188,7 +205,7 @@ sub make_is_error {
     
     my $ret_test = [map {['', $_]} @{$method->{'error'}->{children}}];
     while (my $ret = shift(@$ret_test)) {
-        next if $ret->[1]->{nullable} eq 'true';
+        next if $ret->[1]->{nullable};
         my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
         push(@$strs, ($indstr x $indent) . "if (!isset($php_var)) {");
         push(@$strs, ($indstr x ($indent + 1)) . "return false;");
@@ -201,7 +218,7 @@ sub make_is_error {
         next unless $ret->[1]->{children};
         my $next_node = $ret->[0].'->'.$ret->[1]->{name};
         $next_node .= '[0]'
-            if $ret->[1]->{multiple} eq 'true';
+            if $ret->[1]->{multiple};
         push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
     }
 
@@ -217,8 +234,8 @@ sub make_error_message {
     
     my $ret_test = [map {['', $_]} @{$method->{'error'}->{children}}];
     while (my $ret = shift(@$ret_test)) {
-        next if $ret->[1]->{nullable} eq 'true';
-        if ($ret->[1]->{error_message} eq 'true') {
+        next if $ret->[1]->{nullable};
+        if ($ret->[1]->{error_message}) {
             my $strs = [];
             push(@$strs, "\$data =& \$this->getData();");
             my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
@@ -240,7 +257,7 @@ sub make_error_message {
         next unless $ret->[1]->{children};
         my $next_node = $ret->[0].'->'.$ret->[1]->{name};
         $next_node .= '[0]'
-            if $ret->[1]->{multiple} eq 'true';
+            if $ret->[1]->{multiple};
         push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
     }
     
@@ -254,8 +271,8 @@ sub make_total_entries {
     
     my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
     while (my $ret = shift(@$ret_test)) {
-        next if $ret->[1]->{nullable} eq 'true';
-        if ($ret->[1]->{page_total_entries} eq 'true') {
+        next if $ret->[1]->{nullable};
+        if ($ret->[1]->{page_total_entries}) {
             my $strs = [];
             push(@$strs, "\$data =& \$this->getData();");
             my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
@@ -265,7 +282,7 @@ sub make_total_entries {
         next unless $ret->[1]->{children};
         my $next_node = $ret->[0].'->'.$ret->[1]->{name};
         $next_node .= '[0]'
-            if $ret->[1]->{multiple} eq 'true';
+            if $ret->[1]->{multiple};
         push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
     }
     
@@ -279,8 +296,8 @@ sub make_entries_per_page {
     
     my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
     while (my $ret = shift(@$ret_test)) {
-        next if $ret->[1]->{nullable} eq 'true';
-        if ($ret->[1]->{page_entries_per_page} eq 'true') {
+        next if $ret->[1]->{nullable};
+        if ($ret->[1]->{page_entries_per_page}) {
             my $strs = [];
             push(@$strs, "\$data =& \$this->getData();");
             my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
@@ -290,7 +307,7 @@ sub make_entries_per_page {
         next unless $ret->[1]->{children};
         my $next_node = $ret->[0].'->'.$ret->[1]->{name};
         $next_node .= '[0]'
-            if $ret->[1]->{multiple} eq 'true';
+            if $ret->[1]->{multiple};
         push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
     }
     
@@ -304,14 +321,14 @@ sub make_current_page {
     
     my $ret_test = [map {['', $_]} @{$method->{'return'}->{children}}];
     while (my $ret = shift(@$ret_test)) {
-        next if $ret->[1]->{nullable} eq 'true';
-        if ($ret->[1]->{page_current_page} eq 'true') {
+        next if $ret->[1]->{nullable};
+        if ($ret->[1]->{page_current_page}) {
             my $strs = [];
             push(@$strs, "\$data =& \$this->getData();");
             my $php_var = sprintf('$data%s->%s', $ret->[0], $ret->[1]->{name});
             push(@$strs, ($indstr x $indent) . "return $php_var;");
             return join("\n", @$strs);
-        } elsif ($ret->[1]->{page_current_offset} eq 'true') {
+        } elsif ($ret->[1]->{page_current_offset}) {
             my $orig = $ret->[1]->{page_current_offset_origin} ? " - $ret->[1]->{page_current_offset_origin}" : "";
             my $strs = [];
             push(@$strs, "\$data =& \$this->getData();");
@@ -326,7 +343,7 @@ sub make_current_page {
         next unless $ret->[1]->{children};
         my $next_node = $ret->[0].'->'.$ret->[1]->{name};
         $next_node .= '[0]'
-            if $ret->[1]->{multiple} eq 'true';
+            if $ret->[1]->{multiple};
         push(@$ret_test, map {[$next_node, $_]} @{$ret->[1]->{children}});
     }
     
@@ -341,12 +358,12 @@ sub make_page_param {
     my $strs = [];
     
     foreach my $param (@{$method->{params}}) {
-        if ($param->{page_param_number} eq 'true') {
+        if ($param->{page_param_number}) {
             push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = \$page;");
-        } elsif ($param->{page_param_offset} eq 'true') {
+        } elsif ($param->{page_param_offset}) {
             my $orig = $param->{page_param_offset_origin} ? " + $param->{page_param_offset_origin}" : "";
             push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = (\$page - 1) * \$size$orig;");
-        } elsif ($param->{page_param_size} eq 'true') {
+        } elsif ($param->{page_param_size}) {
             push(@$strs, ($indstr x $indent) . "\$params['$param->{name}'] = \$size;");
         }
     }
@@ -355,6 +372,75 @@ sub make_page_param {
     $str =~ s/^\s+//;
     
     return $str;
+}
+
+sub sort_keys {
+    my $hashref = shift;
+    return sort keys %$hashref;
+}
+
+sub env_param {
+    return sub {
+        my $val = shift;
+        unless ($val =~ s/^\$(.*)$/getenv('$1')/) {
+            $val = "'$val'";
+        }
+        return $val;
+    };
+}
+
+sub node_nullable {
+    my $node = shift;
+    my $path = $node->path;
+    foreach my $p (@$path) {
+        return 1 if $p->nullable;
+    }
+    return 0;
+}
+
+sub node_access {
+    my $node = shift;
+    my $with_array = shift;
+    return "" if $node->depth < 2;
+    my $path = $node->path(2);
+    my $access = [""];
+    foreach my $p (@$path) {
+        push(@$access, $p->name);
+        $access->[-1] .= "[0]" if $p->multiple && ($with_array || $p != $node);
+    }
+    return join("->", @$access);
+}
+
+sub author_name {
+    return sub {
+        my $author = shift;
+        my ($name, $email) = ($author =~ /^(.*?)\s+<(.*?)>$/);
+        my $user = (split(/\@/, $email))[0];
+        return $name;
+    };
+}
+
+sub author_user {
+    return sub {
+        my $author = shift;
+        my ($name, $email) = ($author =~ /^(.*?)\s+<(.*?)>$/);
+        my $user = (split(/\@/, $email))[0];
+        return $user;
+    };
+}
+
+sub author_email {
+    return sub {
+        my $author = shift;
+        my ($name, $email) = ($author =~ /^(.*?)\s+<(.*?)>$/);
+        my $user = (split(/\@/, $email))[0];
+        return $email;
+    };
+}
+
+sub now_strftime {
+    my $fmt = shift;
+    return strftime($fmt, localtime());
 }
 
 1;

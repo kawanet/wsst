@@ -1,50 +1,14 @@
 <?php
 
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
-/**
- * This file contains the class "<%[$package_name]%>_Request"
- *
- * PHP versions 4 and 5
-<%[ if ($php_license_abstract) {
-    $OUT .= " *\n";
-    $php_license_abstract =~ s/^\s+//;
-    $php_license_abstract =~ s/\s+$//;
-    $php_license_abstract =~ s/\n/\n * /g;
-    $OUT .= " * LICENSE: $php_license_abstract\n";
-} ]%> *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
+[% INCLUDE inc_file_header.tmpl class_name="${package_name}_Request" -%]
 
 require_once 'PEAR.php';
 
-require_once '<%[$package_dir]%>/Factory.php';
-require_once '<%[$package_dir]%>/Response.php';
+require_once '[% package_dir %]/Factory.php';
+require_once '[% package_dir %]/Response.php';
 
-/**
- * Class encapsulating the HTTP Request
- *
- * @category   Services
- * @package    <%[$package_name]%>
-<%[ foreach (@author) {
-    $OUT .= " * \@author     $_\n";
-} ]%><%[ if ($php_copyright||$copyright) {
-    local $copyright = ($php_copyright||$copyright);
-    $OUT .= " * \@copyright  $copyright\n";
-} ]%> * @license    <%[$php_license_uri]%> <%[$license]%>
- * @version    Release: @package_version@
- * @link       <%[$php_link]%>
- */
-class <%[$package_name]%>_Request
+[% INCLUDE inc_class_header.tmpl class_title="Class encapsulating the HTTP Request" -%]
+class [% package_name %]_Request
 {
     /**
      * Factory object
@@ -92,7 +56,7 @@ class <%[$package_name]%>_Request
      * @access public
      * @param object $fac Factory object
      */
-    function <%[$package_name]%>_Request(&$fac)
+    function [% package_name %]_Request(&$fac)
     {
         $this->fac =& $fac;
     }
@@ -205,7 +169,7 @@ class <%[$package_name]%>_Request
      * Send Request to destination URL
      *
      * @access public
-     * @return mixed <%[$package_name]%>_Response|PEAR_Error
+     * @return mixed [% package_name %]_Response|PEAR_Error
      */
     function &send()
     {

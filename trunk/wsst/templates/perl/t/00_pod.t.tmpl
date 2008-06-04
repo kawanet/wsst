@@ -2,7 +2,7 @@ use strict;
 use Test::More;
 
 my $FILES = [qw(
-<%[make_pod_test_files()]%>
+[% make_pod_test_files() %]
 )];
 local $@;
 eval "use Test::Pod 1.00";
