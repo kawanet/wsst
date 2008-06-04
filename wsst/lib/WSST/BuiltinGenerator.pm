@@ -8,14 +8,14 @@ use File::Path qw(mkpath);
 use WSST::Exception;
 use WSST::CodeTemplate;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.0.2';
 
 my $TMPL_PACKAGE_ID = 0;
 
 sub new {
     my $class = shift;
     my $self = {};
-    $self->{tmpl_dir} = $WSST::COMMAND_OPTS->{defs}->{tmpl_dir} || 'templates';
+    $self->{tmpl_dir} = $ENV{WSST_TMPL_DIR} || 'templates';
     return bless($self, $class);
 }
 
@@ -104,7 +104,8 @@ sub generate {
         my $hash = \%{$WSST::BuiltinGenerator::{"${tmpl_pkg_name}::"}};
         foreach my $key (keys %$hash) {
             next if $tmpl->get($key);
-            $tmpl->set($key => $hash->{$key});
+            #$tmpl->set($key => $hash->{$key});
+            $tmpl->set($key => \&{$hash->{$key}});
         }
     }
     
@@ -126,7 +127,10 @@ sub generate {
                 $ofile2 = $odir . $ofile2;
                 
                 $tmpl->set('method' => $method);
-                my $odata = $tmpl->expand($file);
+                
+                my $tmpl_name = $file;
+                $tmpl_name =~ s#^\Q$tmpl_dir/\E##;
+                my $odata = $tmpl->expand($tmpl_name);
                 
                 my $osubdir = dirname($ofile2);
                 unless (-d $osubdir) {
@@ -146,7 +150,9 @@ sub generate {
                 if $tmpl_pkg;
             $ofile = $odir . $ofile;
 
-            my $odata = $tmpl->expand($file);
+            my $tmpl_name = $file;
+            $tmpl_name =~ s#^\Q$tmpl_dir/\E##;
+            my $odata = $tmpl->expand($tmpl_name);
             
             my $osubdir = dirname($ofile);
             unless (-d $osubdir) {

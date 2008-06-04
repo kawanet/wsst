@@ -1,15 +1,9 @@
 package WSST::CodeTemplate;
 
 use strict;
-use Text::Template;
+use Template;
 
-our $VERSION = '0.0.1';
-
-BEGIN {
-    *Text::Template::_install_hash = \&_my_install_hash;
-}
-
-our $DELIMITERS = [ '<%[', ']%>' ];
+our $VERSION = '0.0.2';
 
 sub new {
     my $class = shift;
@@ -20,8 +14,6 @@ sub new {
     $self->{vars} ||= {};
     
     bless($self, $class);
-    
-    $self->{vars}->{include} = sub { $self->expand(@_); };
     
     return $self;
 }
@@ -42,83 +34,31 @@ sub expand {
     my $name = shift;
     my %local_vars = @_;
     
-    my $fpath = $self->get_template_path($name) || return;
-    my $tmpl = $self->new_template($fpath);
+    my $tmpl = $self->new_template($name);
     
     my $vars = {%{$self->{vars}}, %local_vars};
     
-    my $res = $tmpl->fill_in(HASH => $vars);
+    my $output;
+    my $res = $tmpl->process($name, $vars, \$output);
+
+    WSST::Exception->raise("TemplateError: $name: " . $tmpl->error()) unless $res;
     
     foreach my $key (keys %$vars) {
         next if exists $local_vars{$key};
         $self->{vars}->{$key} = $vars->{$key};
     }
     
-    return $res;
+    return $output;
 }
 
 sub new_template {
     my $self = shift;
-    my $fpath = shift;
-    
-    my $src = undef;
-    {
-        open(TMPL, $fpath)
-            || WSST::Exception->raise("failed new_template: ", $!);
-        local $/ = undef;
-        $src = <TMPL>;
-        close(TMPL);
-    }
-
-    $src =~ s/\r?\n/\n/sg;
-
-    my $tmpl = new Text::Template(DELIMITERS => $DELIMITERS,
-                                  TYPE => 'STRING',
-                                  SOURCE => $src);
-
-    WSST::Exception->raise("failed new_template: ", $!)
-        unless $tmpl;
-
-    return $tmpl;
-}
-
-sub get_template_path {
-    my $self = shift;
     my $name = shift;
-    
-    return $name if -r $name;
-    
-    foreach my $dir (@{$self->{tmpl_dirs}}) {
-        my $fpath = "$dir/$self->{tmpl_prefix}$name";
-        return $fpath if -r $fpath;
-        $fpath = "$fpath.tmpl";
-        return $fpath if -r $fpath;
-    }
-    
-    return undef;
-}
 
-sub _my_install_hash {
-    my $hashlist = shift;
-    my $dest = shift;
-    if (UNIVERSAL::isa($hashlist, 'HASH')) {
-        $hashlist = [$hashlist];
-    }
-    my $hash;
-    foreach $hash (@$hashlist) {
-        my $name;
-        foreach $name (keys %$hash) {
-            my $val = $hash->{$name};
-            no strict 'refs';
-            if (! defined $val) {
-                delete ${"$ {dest}::"}{$name};
-            } elsif (ref $val) {
-                *{"$ {dest}::$name"} = $val;
-            } else {
-                *{"$ {dest}::$name"} = \$val;
-            }
-        }
-    }
+    my $conf = {
+        INCLUDE_PATH => $self->{tmpl_dirs},
+    };
+    return Template->new($conf);
 }
 
 =head1 NAME
@@ -127,7 +67,7 @@ WSST::CodeTemplate - CodeTemplate class of WSST
 
 =head1 DESCRIPTION
 
-CodeTemplate is class encapsulating the Text::Template.
+CodeTemplate is class encapsulating the Template Toolkit.
 
 =head1 METHODS
 
@@ -149,11 +89,7 @@ Expand the specified template file.
 
 =head2 new_template
 
-Create new Text::Template object.
-
-=head2 get_template_path
-
-Returns template file path.
+Create new Template object.
 
 =head1 SEE ALSO
 
