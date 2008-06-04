@@ -11,7 +11,7 @@ sub new {
     my $class = shift;
 
     my $self = {@_};
-    $self->{plugin_dir} ||= "plugins";
+    $self->{plugin_dir} ||= $ENV{WSST_PLUGIN_DIR} || "plugins";
     $self->{plugins} ||= [];
     $self->{plugin_name_map} ||= {};
     
