@@ -1,0 +1,499 @@
+# ドコイク？Webサービス
+
+company_name: Recruit
+service_name: Dokoiku
+version: 0.0.1
+title: Dokoiku Web Service
+title_m17n:
+  ja: ドコイク？Webサービス（β版）
+abstract: ドコイク？WEBサービスは、ドコイク？の持つ日本全国の店舗・スポット情報を利用して、新しいサービス、サイト、アプリケーションを作成するためのWebサービスです。
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://www.doko.jp/api/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: searchPOI
+    title: 店舗情報検索API
+    desc: 各種条件で店舗などのPOIデータを検索し、店舗リストと結果全体で共有される関連データを取得することができます。
+    url: http://api.doko.jp/v1/searchPOI.do
+    params:
+      - name: key
+        title: 認証キー
+        desc: 認証に使用
+        type: string
+        require: true
+      - name: format
+        title: 返却データ形式
+        desc: 「xml」または「json」いずれか
+        type: string
+        default: xml
+      - name: callback
+        title: JSONP用 Function
+        desc: |
+          JavaScript のコールバック関数名を指定
+          ・format=jsonの場合のみ指定可能
+        type: string
+      - name: pagenum
+        title: 取得ページ
+        desc: 1以上の整数
+        type: int
+        page_param_number: true
+        options:
+          default: 1
+      - name: pagesize
+        title: 1ページあたりの取得件数
+        desc: 1以上20以下の整数
+        type: int
+        page_param_size: true
+        options:
+          default: 10
+      - name: keyword
+        title: 検索キーワード(*1)
+        desc: |
+          複数の店舗データに対して全文検索を実施
+          
+          【複数キーワードの指定方法】
+          ・キーワードを、"+"で連結
+          ・日本語文字列はUTF-8でURLエンコード
+        type: string
+      - name: name
+        title: 店舗名称(*1)
+        desc: 店舗名称だけに部分一致検索を実施
+        type: string
+      - name: tel
+        title: 電話番号(*1)
+        desc: |
+          電話番号に完全一致検索を実施
+          ・電話番号は数字のみ
+          ・ハイフンや括弧は指定不可
+        type: string
+      - name: lat_jgd
+        title: 検索中心緯度(*1)
+        desc: |
+          単位：世界測地系 Degree
+          (例)
+          35.6686
+        examples:
+          - 35.6686
+        type: double
+      - name: lon_jgd
+        title: 検索中心経度(*1)
+        desc: |
+          単位：世界測地系Degree
+          (例)
+          139.7593
+        examples:
+          - 139.7593
+        type: double
+      - name: radius
+        title: 検索半径距離(*1)
+        desc: |
+          単位:m
+          検索対象とする検索中心緯度・経度からの半径距離
+        type: int
+      - name: lmcode
+        title: 基点コード(*1)
+        desc: |
+          基点コード
+          完全一致検索
+        type: string
+      - name: iarea
+        title: iエリアコード(*1)
+        desc: |
+          NTTドコモが提供しているiエリアコード
+          (例)
+          05700（東京駅周辺）
+        examples:
+          - 05700
+        type: string
+      - name: order
+        title: 表示順
+        desc: |
+          【検索結果の表示順】
+          　1=おまかせ順
+          　2=距離の近い順
+          　3=オススメ順
+        type: int
+        optiones:
+          default: 1
+    params_footnotes:
+      - 複数の検索条件が指定された場合、それらは全てAND条件として扱われる。
+    return:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=承認エラー
+            　300=パラメーターエラー
+        - name: totalcount
+          desc: 検索結果総数
+          page_total_entries: true
+        - name: pagenum
+          desc: ページ番号
+          page_current_page: true
+        - name: pagesize
+          desc: ページ
+          page_entries_per_page: true
+        - name: poi
+          multiple: true
+          children:
+            - name: code
+              desc: RPIN (Recruit Place Identification Number)
+            - name: name
+              desc: POI名称
+            - name: kana
+              desc: POI名称よみかな
+            - name: tel
+              desc: POI電話番号(ハイフン付き)
+            - name: address
+              desc: 住所
+            - name: stationcode
+              desc: 最寄り駅の基点コード
+            - name: station
+              desc: 最寄り駅名称
+            - name: distance
+              desc: 最寄り駅からの距離(m)
+            - name: dokopcurl
+              desc: ドコイクPC版での店舗詳細URL
+            - name: dokomburl
+              desc: ドコイク？携帯版での店舗詳細URL
+            - name: dokomapurl
+              desc: ドコイク地図での店舗詳細URL
+            - name: reviewrank
+              desc: レビュー評価平均値
+            - name: tag
+              desc: 最新タグ文字列
+              multiple: true
+    error:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=承認エラー
+            　300=パラメーターエラー
+          values:
+            - 100
+            - 200
+            - 300
+          error_message: true
+          error_message_map:
+            100: システムエラー
+            200: 承認エラー
+            300: パラメーターエラー
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_DOKOIKU_KEY
+          pagenum: 1
+          pagesize: 3
+          keyword: リクルート
+          lat_jgd: 35.6686
+          lon_jgd: 139.7593
+          order: 2
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: getLandmark
+    title: 基点マスタ検索API
+    desc: 指定した条件で、基点データ(駅も含む)を検索することができます。
+    url: http://api.doko.jp/v1/getLandmark.do
+    params:
+      - name: key
+        title: 認証キー
+        desc: 認証に使用
+        type: string
+        require: true
+      - name: format
+        title: 返却データ形式
+        desc: 「xml」または「json」いずれか
+        type: string
+        default: xml
+      - name: callback
+        title: JSONP用Function
+        desc: |
+          JavaScript のコールバック関数名を指定
+          ・format=jsonの場合のみ指定可能。
+        type: string
+      - name: pagenum
+        title: 取得ページ
+        desc: 1以上の整数
+        type: int
+        page_param_number: true
+        options:
+          default: 1
+      - name: pagesize
+        title: 1ページあたりの取得件数
+        desc: 1以上、20以下の整数
+        type: int
+        page_param_size: true
+        options:
+          default: 10
+      - name: name
+        title: 基点名(*1)
+        desc: 基点名の部分一致検索を実施
+        type: string
+      - name: code
+        title: 基点コード
+        desc: 基点コードの完全一致検索を実施
+        type: string
+      - name: lat_jgd
+        title: 検索中心緯度(*1)
+        desc: |
+          単位：世界測地系 Degree
+          (例)
+          35.6686
+        examples:
+          - 35.6686
+        type: double
+      - name: lon_jgd
+        title: 検索中心経度(*1)
+        desc: |
+          単位：世界測地系 Degree
+          (例)
+          139.7593
+        examples:
+          - 139.7593
+        type: double
+      - name: radius
+        title: 検索半径距離(*1)
+        desc: |
+          単位:m
+          検索対象とする検索中心緯度・経度からの半径距離
+        type: int
+        options:
+          default: 1000
+      - name: iarea
+        title: iエリアコード(*1)
+        desc: |
+          NTTドコモが提供しているiエリアコード。
+          (例)
+          05700（東京駅周辺）
+        examples:
+          - 05700
+        type: string
+    params_footnotes:
+      - 複数の検索条件が指定された場合、それらは全てAND条件として扱われる。
+    return:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=承認エラー
+            　300=パラメーターエラー
+        - name: totalcount
+          desc: 検索結果総数
+          page_total_entries: true
+        - name: pagenum
+          desc: ページ番号
+          page_current_page: true
+        - name: pagesize
+          desc: ページ
+          page_entries_per_page: true
+        - name: landmark
+          multiple: true
+          children:
+            - name: code
+              desc: 基点コード
+            - name: name
+              desc: 基点名
+            - name: dokopcurl
+              desc: ドコイクPC版での店舗詳細URL
+            - name: dokomburl
+              desc: ドコイク？携帯版での店舗詳細URL
+            - name: dokomapurl
+              desc: ドコイク地図での店舗詳細URL
+    error:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=承認エラー
+            　300=パラメーターエラー
+          values:
+            - 100
+            - 200
+            - 300
+          error_message: true
+          error_message_map:
+            100: システムエラー
+            200: 承認エラー
+            300: パラメーターエラー
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_DOKOIKU_KEY
+          name: リクルート 銀座
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: getStation
+    title: 駅マスタ検索API
+    desc: 指定した条件で、基点データのうち駅だけを対象に検索することができます。
+    url: http://api.doko.jp/v1/getStation.do
+    params:
+      - name: key
+        title: 認証キー
+        desc: 認証に使用
+        type: string
+        require: true
+      - name: format
+        title: 返却データ形式
+        desc: 「xml」または「json」いずれか
+        type: string
+        default: xml
+      - name: callback
+        title: JSONP用Function
+        desc: |
+          JavaScript のコールバック関数名を指定
+          ・format=json の場合のみ指定可能
+        type: string
+      - name: pagenum
+        title: 取得ページ
+        desc: 1以上の整数
+        type: int
+        page_param_number: true
+        options:
+          default: 1
+      - name: pagesize
+        title: 1ページあたりの取得件数
+        desc: 1以上20以下の整数
+        type: int
+        page_param_size: true
+        options:
+          default: 10
+      - name: name
+        title: 駅名(*1)
+        desc: 駅名の部分一致検索を実施
+        type: string
+      - name: code
+        title: 基点コード
+        desc: 基点コードの完全一致検索を実施
+        type: string
+      - name: lat_jgd
+        title: 検索中心緯度(*1)
+        desc: |
+          単位：世界測地系Degree
+          (例)
+          35.6686
+        examples:
+          - 35.6686
+        type: double
+      - name: lon_jgd
+        title: 検索中心経度(*1)
+        desc: |
+          単位：世界測地系Degree
+          (例)
+          139.7593
+        examples:
+          - 139.7593
+        type: double
+      - name: radius
+        title: 検索半径距離(*1)
+        desc: |
+          単位:m
+          検索対象とする検索中心緯度・経度からの半径距離
+        type: int
+        options:
+          default: 1000
+      - name: iarea
+        title: iエリアコード(*1)
+        desc: |
+          NTTドコモが提供しているiエリアコード。
+          (例)
+          05700（東京駅周辺）
+        examples:
+          - 05700
+    params_footnotes:
+      - 複数の検索条件が指定された場合、それらは全てAND条件として扱われる。
+    return:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=認証エラー
+            　300=パラメーター
+        - name: totalcount
+          desc: 検索結果総数
+          page_total_entries: true
+        - name: pagenum
+          desc: ページ番号
+          page_current_page: true
+        - name: pagesize
+          desc: ページ
+          page_entries_per_page: true
+        - name: landmark
+          multiple: true
+          children:
+            - name: code
+              desc: 基点コード
+            - name: name
+              desc: 駅名
+            - name: dokopcurl
+              desc: ドコイクPC版での店舗詳細URL
+            - name: dokomburl
+              desc: ドコイク？携帯版での店舗詳細URL
+            - name: dokomapurl
+              desc: ドコイク地図での店舗詳細URL
+            - name: lat_jgd
+              desc: 緯度(世界測地系 Degree)
+            - name: lon_jgd
+              desc: 経度(世界測地系 Degree)
+            - name: lat_tky
+              desc: 緯度(日本測地系 Degree)
+            - name: lon_tky
+              desc: 経度(日本測地系 Degree)
+    error:
+      name: results
+      children:
+        - name: status
+          desc: |
+            【実行結果】
+            　0=成功
+            　100=システムエラー
+            　200=認証エラー
+            　300=パラメーター
+          values:
+            - 100
+            - 200
+            - 300
+          error_message: true
+          error_message_map:
+            100: システムエラー
+            200: 認証エラー
+            300: パラメーター
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_DOKOIKU_KEY
+          lat_jgd: 35.6686
+          lon_jgd: 139.7593
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+meta-spec:
+  version: 1.0.1

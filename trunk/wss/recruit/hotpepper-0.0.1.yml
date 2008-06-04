@@ -1,0 +1,1603 @@
+# ホットペッパー Webサービス
+
+company_name: Recruit
+service_name: HotPepper
+version: 0.0.1
+title: HotPepper Web Service
+title_m17n:
+  ja: ホットペッパー Webサービス
+abstract: ホットペッパー.jpの提供する日本全国の飲食店情報にアクセスして、アプリケーションを構築することができます。 
+license: BSD
+author:
+  - RECRUIT Media Technology Labs <mtl@cpan.org>
+see_also: http://webservice.recruit.co.jp/hotpepper/
+copyright: Copyright 2008 RECRUIT Media Technology Labs
+
+php_link: http://code.google.com/p/recruit-mtl/
+
+methods:
+  - name: gourmet
+    title: グルメサーチAPI
+    url: http://webservice.recruit.co.jp/hotpepper/gourmet/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: id
+        title: お店ID
+        desc: お店に割り当てられた番号で検索します。
+        note: |
+          (例) J999999999
+          20個まで指定可。*2
+        examples:
+          - J999999999
+      - name: name
+        title: 掲載店名
+        desc: お店の名前で検索(部分一致)します。
+      - name: name_kana
+        title: 掲載店名かな
+        desc: お店の読みかなで検索(部分一致)します。
+      - name: name_any
+        title: 掲載店名 OR かな
+        desc: お店の名前または読みかな両方をOR検索(部分一致)します。
+      - name: tel
+        title: 電話番号
+        desc: お店の電話番号で検索します。半角数字(ハイフンなし)
+        note: (例) 035550000
+        examples:
+          - 035550000
+      - name: address
+        title: 住所
+        desc: お店の住所で検索(部分一致)します。
+      - name: large_service_area
+        title: 大サービスエリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+      - name: service_area
+        title: サービスエリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: 3個まで指定可。*2
+      - name: large_area
+        title: 大エリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: 3個まで指定可。*2
+      - name: middle_area
+        title: 中エリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: 5個まで指定可。*2
+      - name: small_area
+        title: 小エリアコード
+        desc: エリアに割り当てられたコード番号で検索します。指定できるコード番号はエリアマスタAPIを参照。
+        note: 5個まで指定可。*2
+      - name: keyword
+        title: キーワード
+        desc: 店名かな、店名、住所、駅名、お店ジャンルキャッチ、キャッチのフリーワード検索(部分一致)が可能です。文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2
+        multiple: true
+      - name: lat
+        title: 緯度
+        desc: ある地点からの範囲内のお店の検索を行う場合の緯度です。
+        note: (例) 35.669220
+        examples:
+          - 35.669220
+      - name: lng
+        title: 経度
+        desc: ある地点からの範囲内のお店の検索を行う場合の経度です。
+        note: (例) 139.761457
+        examples:
+          - 139.761457
+      - name: range
+        title: 検索範囲
+        desc: ある地点からの範囲内のお店の検索を行う場合の範囲を5段階で指定できます。
+        note: |
+          1: 300m
+          2: 500m
+          3: 1000m (初期値)
+          4: 2000m
+          5: 3000m
+      - name: datum
+        title: 測地系
+        desc: 緯度・経度の測地系を指定できます。world: 世界測地系、tokyo: 旧日本測地系。初期値は world。
+        note: (例) world
+        examples:
+          - world
+      - name: ktai_coupon
+        title: 携帯クーポン掲載
+        desc: 携帯クーポンの有無で絞り込み条件を指定します。
+        note: |
+          1：携帯クーポンなし
+          0：携帯クーポンあり
+          指定なし：絞り込みなし
+      - name: genre
+        title: お店ジャンルコード
+        desc: お店のジャンルで絞込むことができます。指定できるコードについてはジャンルマスタAPI参照
+        note: 3個まで指定可。*2
+      - name: food
+        title: 料理コード
+        desc: 料理で絞りこむことができます。指定できるコードについては料理マスタAPI参照
+        note: 5個まで指定可。*2
+      - name: budget
+        title: 検索用予算コード
+        desc: 予算で絞り込むことができます。指定できるコードについては予算マスタAPI参照
+        note: 2個まで指定可。*2
+      - name: party_capacity
+        title: 宴会収容人数
+        desc: 宴会収容人数で絞り込むことができます。指定数より大きな収容人数のお店を検索します
+        note: (例) 50
+        examples:
+          - 50
+      - name: wedding
+        title: ウェディング二次会等
+        desc: ウェディング・二次会等のお問い合わせが可能なお店を絞り込みます。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: course
+        title: コースあり
+        desc: 「コースあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: free_drink
+        title: 飲み放題
+        desc: 「飲み放題」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: free_food
+        title: 食べ放題
+        desc: 「食べ放題」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: private_room
+        title: 個室あり
+        desc: 「個室あり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: horigotatsu
+        title: 掘りごたつあり
+        desc: 「掘りごたつあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: tatami
+        title: 座敷あり
+        desc: 「座敷あり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: cocktail
+        title: カクテル充実
+        desc: 「カクテル充実」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: shochu
+        title: 焼酎充実
+        desc: 「焼酎充実」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sake
+        title: 日本酒充実
+        desc: 「日本酒充実」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: wine
+        title: ワイン充実
+        desc: 「ワイン充実」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: card
+        title: カード可
+        desc: 「カード可」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: non_smoking
+        title: 禁煙席
+        desc: 「禁煙席」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: charter
+        title: 貸切
+        desc: 「貸切可」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: ktai
+        title: 携帯電話OK
+        desc: 「携帯電話OK」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: parking
+        title: 駐車場あり
+        desc: 「駐車場あり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: barrier_free
+        title: バリアフリー
+        desc: 「バリアフリー」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: sommelier
+        title: ソムリエがいる
+        desc: 「ソムリエがいる」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: night_view
+        title: 夜景がキレイ
+        desc: 「夜景がキレイ」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: open_air
+        title: オープンエア
+        desc: 「オープンエア」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: show
+        title: ライブ・ショーあり
+        desc: 「ライブ・ショーあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: equipment
+        title: エンタメ設備
+        desc: 「エンタメ設備」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: karaoke
+        title: カラオケあり
+        desc: 「カラオケあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: band
+        title: バンド演奏可
+        desc: 「バンド演奏可」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: tv
+        title: TV・プロジェクター
+        desc: 「TV・プロジェクター」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: lunch
+        title: ランチあり
+        desc: 「ランチあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: midnight
+        title: 23時以降も営業
+        desc: 「23時以降も営業」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: midnight_meal
+        title: 23時以降食事OK
+        desc: 「23時以降食事OK」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: english
+        title: 英語メニューあり
+        desc: 「英語メニューあり」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: pet
+        title: ペット可
+        desc: 「ペット可」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: child
+        title: お子様連れOK
+        desc: 「お子様連れOK」という条件で絞り込むかどうかを指定します。
+        note: |
+          0:絞り込まない（初期値）
+          1:絞り込む
+      - name: credit_card
+        title: クレジットカード
+        desc: クレジットカードの種別ごとに絞り込むことができます。指定できるコードについてはクレジットカードマスタAPI参照。(2008/02/08追加)
+        note: 複数指定可
+        multiple: true
+      - name: type
+        title: 出力タイプ
+        desc: |
+          レスポンス項目の項目数を指定できます。
+          liteを指定すると、主要項目のみ出力されます。出力項目はレスポンスフィールドを参照してください。
+          
+          credit_cardを指定すると、クレジットカードを含むすべての項目が出力されるようになりました。(2008/02/08タイプ名追加)
+        note: |
+          lite:主要項目のみ
+          credit_card:すべて（クレジットカード含む）を出力
+          指定なし:クレジットカード以外をすべて出力（初期値）
+      - name: order
+        title: ソート順
+        desc: |
+          検索結果の並び順を指定します。おススメ順は定期的に更新されます。
+          ※ 位置検索の場合、「4:オススメ順」以外は指定に関係なく、強制的に距離順でソートされます。
+        note: |
+          1:店名かな順
+          2:ジャンルコード順
+          3:小エリアコード順
+          4:おススメ順
+          初期値はおススメ順。位置から検索を行った場合は距離順
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：10、最小1、最大100
+        page_param_size: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      - いずれか最低1つが必要
+      - |
+        複数可のパラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: shop
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: id
+              desc: お店ID
+              examples:
+                - J999999999
+            - name: name
+              desc: 掲載店名
+              examples:
+                - 居酒屋 ホットペッパー
+            - name: name_kana
+              desc: 掲載店名かな
+              examples:
+                - いざかや　ほっとぺっぱー
+            - name: address
+              desc: 住所
+              examples:
+                - 東京都中央区銀座８−４−１７
+            - name: station_name
+              desc: 最寄駅名
+              examples:
+                - 銀座
+            - name: ktai_coupon
+              desc: |
+                携帯用クーポン掲載
+                0:あり、1:なし
+            - name: large_service_area
+              desc: 大サービスエリア
+              children:
+                - name: code
+                  desc: 大サービスエリアコード
+                  examples:
+                    - SS10
+                - name: name
+                  desc: 大サービスエリア名
+                  examples:
+                    - 関東
+            - name: service_area
+              desc: サービスエリア
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA11
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 東京
+            - name: large_area
+              desc: 大エリア
+              children:
+                - name: code
+                  desc: 大エリアコード
+                  examples:
+                    - Z011
+                - name: name
+                  desc: 大エリア名
+                  examples:
+                    - 東京
+            - name: middle_area
+              desc: 中エリア
+              children:
+                - name: code
+                  desc: 中エリアコード
+                  examples:
+                    - Y005
+                - name: name
+                  desc: 中エリア名
+                  examples:
+                    - 銀座・有楽町・新橋・築地・月島
+            - name: small_area
+              desc: 小エリア
+              children:
+                - name: code
+                  desc: 小エリアCD
+                  examples:
+                    - X010
+                - name: name
+                  desc: 小エリア名
+                  examples:
+                    - 銀座5〜8丁目
+            - name: lat
+              desc: 緯度（測地系は検索時に指定したもの）
+              examples:
+                - 35.6608183454
+            - name: lng
+              desc: 経度（測地系は検索時に指定したもの）
+              examples:
+                - 139.7754267645
+            - name: genre
+              desc: お店ジャンル
+              children:
+                - name: code
+                  desc: お店ジャンルコード
+                  examples:
+                    - G001
+                - name: name
+                  desc: お店ジャンル名
+                  examples:
+                    - 居酒屋
+                - name: catch
+                  desc: お店ジャンルキャッチ
+                  examples:
+                    - 一口餃子専門店
+            - name: food
+              desc: 料理
+              children:
+                - name: code
+                  desc: 料理名コード
+                  examples:
+                    - R021
+                - name: name
+                  desc: 料理名
+                  examples:
+                    - 和風創作料理
+            - name: budget
+              desc: 予算
+              children:
+                - name: code
+                  desc: 検索用予算コード
+                  examples:
+                    - B001
+                - name: name
+                  desc: 検索用予算
+                  examples:
+                    - 〜1000
+                - name: average
+                  desc: 平均予算
+                  examples:
+                    - 「900円」「フリー2500円　宴会3500円」など
+            - name: catch
+              desc: お店キャッチ
+              examples:
+                - TVの口コミランキングで堂々1位に輝いた一口餃子専門店！！
+            - name: capacity
+              desc: 総席数
+              examples:
+                - 300
+            - name: access
+              desc: 交通アクセス
+              examples:
+                - 銀座駅A2出口でて､みゆき通り右折､徒歩1分
+            - name: mobile_access
+              desc: 携帯用交通アクセス
+              examples:
+                - 銀座一丁目駅10番出口徒歩3分
+            - name: urls
+              desc: 店舗URL
+              children:
+                - name: pc
+                  desc: PC向けURL
+                - name: mobile
+                  desc: 携帯向けURL
+                - name: qr
+                  desc: QRコード画像へのURL
+                  html_desc: QRコード画像へのURL<br/><a href="http://webservice.recruit.co.jp/common/qr-code.html">画像サイズ等の変更方法はこちら</a>
+            - name: photo
+              desc: 写真
+              children:
+                - name: pc
+                  desc: PC向け
+                  children:
+                    - name: l
+                      desc: 店舗トップ写真(大）画像URL
+                    - name: m
+                      desc: 店舗トップ写真(中）画像URL
+                    - name: s
+                      desc: 店舗トップ写真(小）画像URL
+                - name: mobile
+                  desc: 携帯向け
+                  children:
+                    - name: l
+                      desc: 店舗トップ写真(大）画像URL
+                    - name: s
+                      desc: 店舗トップ写真(小）画像URL
+            - name: open
+              desc: 営業時間
+              examples:
+                - 月〜金／11：30〜14：00
+            - name: close
+              desc: 定休日
+              examples:
+                - 日
+            - name: party_capacity
+              desc: 最大宴会収容人数
+              examples:
+                - 185
+            - name: wedding
+              desc: ウェディング･二次会
+              examples:
+                - 応相談
+            - name: course
+              desc: コース
+              examples:
+                - あり
+            - name: free_drink
+              desc: 飲み放題
+              examples:
+                - あり
+            - name: free_food
+              desc: 食べ放題
+              examples:
+                - あり
+            - name: private_room
+              desc: 個室
+              examples:
+                - あり
+            - name: horigotatsu
+              desc: 掘りごたつ
+              examples:
+                - なし
+            - name: tatami
+              desc: 座敷
+              examples:
+                - なし
+            - name: card
+              desc: カード可
+              examples:
+                - 利用可
+            - name: non_smoking
+              desc: 禁煙席
+              examples:
+                - 一部禁煙
+            - name: charter
+              desc: 貸切可
+              examples:
+                - 貸切不可
+            - name: ktai
+              desc: 携帯電話OK
+              examples:
+                - つながりにくい
+            - name: parking
+              desc: 駐車場
+              examples:
+                - なし
+            - name: barrier_free
+              desc: バリアフリー
+              examples:
+                - なし
+            - name: sommelier
+              desc: ソムリエ
+              examples:
+                - いる
+            - name: open_air
+              desc: オープンエア
+              examples:
+                - あり
+            - name: show
+              desc: ライブ・ショー
+              examples:
+                - なし
+            - name: equipment
+              desc: エンタメ設備
+              examples:
+                - なし
+            - name: karaoke
+              desc: カラオケ
+              examples:
+                - なし
+            - name: band
+              desc: バンド演奏可
+              examples:
+                - 不可
+            - name: tv
+              desc: TV・プロジェクター
+              examples:
+                - なし
+            - name: english
+              desc: 英語メニュー
+              examples:
+                - あり
+            - name: pet
+              desc: ペット可
+              examples:
+                - 可
+            - name: child
+              desc: お子様連れ
+              examples:
+                - お子様連れ歓迎
+        - name: credit_card
+          desc: クレジットカード
+          multiple: true
+          nullable: true
+          children:
+            - name: code
+              desc: クレジットカードコード
+              examples:
+                - c99
+            - name: name
+              desc: クレジットカード名
+              examples:
+                - ○○カード
+    return_footnotes:
+      - ○印がついている項目のみが、type=liteを指定したときに出力される。
+      - credit_cardは、type=credit_cardのときに付加されます。type=lite+credit_cardと指定すると、lite対象の項目にクレジットカードが付加されます。
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          large_area: Z011
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: shop
+    title: 店名サーチAPI
+    url: http://webservice.recruit.co.jp/hotpepper/shop/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: keyword
+        title: キーワード
+        desc: お店の名前・読みがな・住所で検索（部分一致）します。文字コードはUTF8。半角スペース区切りの文字列を渡すことでAND検索になる。複数指定可能*2。
+        multiple: true
+      - name: tel
+        title: 電話番号
+        desc: お店の電話番号で検索(完全一致)します。半角数字(ハイフンなし)
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：30、最小1、最大30
+        page_param_size: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      - いずれか最低1つが必要
+      - |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: shop
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: id
+              desc: お店ID
+              examples:
+                - J999999999
+            - name: name
+              desc: 掲載店名
+              examples:
+                - 居酒屋 ホットペッパー
+            - name: name_kana
+              desc: 掲載店名かな
+              examples:
+                - いざかや　ほっとぺっぱー
+            - name: address
+              desc: 住所
+              examples:
+                - 東京都中央区銀座８−４−１７
+            - name: genre
+              desc: お店ジャンル
+              children:
+                - name: name
+                  desc: お店ジャンル名
+                  examples:
+                    - 居酒屋
+            - name: urls
+              desc: 店舗URL
+              children:
+                - name: pc
+                  desc: PC向けURL
+                - name: mobile
+                  desc: 携帯向けURL
+                - name: qr
+                  desc: QRコード画像へのURL
+                  html_desc: QRコード画像へのURL<br/><a href="http://webservice.recruit.co.jp/common/qr-code.html">画像サイズ等の変更方法はこちら</a>
+            - name: desc
+              desc: 詳細フラグ。1の場合グルメサーチAPI対象店舗
+              examples:
+                - 0:なし、1:あり
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          keyword: オーガニック　東京
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: budget
+    title: 検索用予算マスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/budget/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 6
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 6
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: budget
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 検索用予算コード
+              examples:
+                - B001
+            - name: name
+              desc: 検索用予算テキスト
+              examples:
+                - 〜2000円
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: large_service_area
+    title: 大サービスエリアマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/large_service_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 9
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 9
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: large_service_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 大サービスエリアコード
+              examples:
+                - SS20
+            - name: name
+              desc: 大サービスエリア名
+              examples:
+                - 関西
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: service_area
+    title: サービスエリアマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/service_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: service_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: サービスエリアコード
+              examples:
+                - SA11
+            - name: name
+              desc: サービスエリア名
+              examples:
+                - 東京
+            - name: large_service_area
+              children:
+                - name: code
+                  desc: 大サービスエリアコード
+                  examples:
+                    - SS10
+                - name: name
+                  desc: 大サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: large_area
+    title: 大エリアマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/large_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: large_area
+        title: 大エリアコード
+        desc: 大エリアコードで検索(完全一致)します。（3個まで指定可、4個以上指定すると4個目以降無視します）*2
+        note: Y005
+        multiple: true
+      - name: keyword
+        title: 大エリア名
+        desc: 大エリア名で検索(部分一致)します。UTF8(URLエンコード)で指定
+        note: 神奈川
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      2: |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: large_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 大エリアコード
+              examples:
+                - Z011
+            - name: name
+              desc: 大エリア名
+              examples:
+                - 東京
+            - name: service_area
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA11
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 東京
+            - name: large_service_area
+              children:
+                - name: code
+                  desc: 大サービスエリアコード
+                  examples:
+                    - SS10
+                - name: name
+                  desc: 大サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: middle_area
+    title: 中エリアマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/middle_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: middle_area
+        title: 中エリアコード
+        desc: 中エリアコードで検索(完全一致)します。（5個まで指定可、6個以上指定すると6個目以降無視します）*2
+        note: Y005
+        multiple: true
+      - name: large_area
+        title: 大エリアコード
+        desc: 大エリアコードで検索(完全一致)します。（3個まで指定可、4個以上指定すると4個目以降無視します）*2
+        note: Z011
+        multiple: true
+      - name: keyword
+        title: 中エリア名
+        desc: 中エリア名で検索(部分一致)します。UTF8(URLエンコード)で指定
+        note: 飯田橋
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：なし、最小1、最大：なし（すべて取得）
+        page_param_size: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      2: |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: middle_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 中エリアコード
+              examples:
+                - Y055
+            - name: name
+              desc: 中エリア名
+              examples:
+                - 新宿
+            - name: large_area
+              children:
+                - name: code
+                  desc: 大エリアコード
+                  examples:
+                    - Z011
+                - name: name
+                  desc: 大エリア名
+                  examples:
+                    - 東京
+            - name: service_area
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA11
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 東京
+            - name: large_service_area
+              children:
+                - name: code
+                  desc: 大サービスエリアコード
+                  examples:
+                    - SS10
+                - name: name
+                  desc: 大サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          middle_area: Y005
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: small_area
+    title: 小エリアマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/small_area/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: small_area
+        title: 小エリアコード
+        desc: 小エリアコードで検索(完全一致)します。（5個まで指定可、6個以上指定すると6個目以降無視します）*2
+        note: X005
+        multiple: true
+      - name: middle_area
+        title: 中エリアコード
+        desc: 中エリアコードで検索(完全一致)します。（5個まで指定可、6個以上指定すると6個目以降無視します）*2
+        note: Y005
+        multiple: true
+      - name: keyword
+        title: 小エリア名
+        desc: 小エリア名で検索(部分一致)します。UTF8(URLエンコード)で指定
+        note: 銀座
+      - name: start
+        title: 検索の開始位置
+        desc: 検索結果の何件目から出力するかを指定します。
+        note: 初期値:1
+        page_param_offset: true
+        page_param_offset_origin: 1
+      - name: count
+        title: 1ページあたりの取得数
+        desc: 検索結果の最大出力データ数を指定します。
+        note: 初期値：なし、最小1、最大：なし（すべて取得）
+        page_param_size: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      2: |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 530
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 530
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: small_area
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 小エリアコード
+              examples:
+                - X150
+            - name: name
+              desc: 小エリア名
+              examples:
+                - 東口・歌舞伎町方面
+            - name: middle_area
+              children:
+                - name: code
+                  desc: 中エリアコード
+                  examples:
+                    - Y055
+                - name: name
+                  desc: 中エリア名
+                  examples:
+                    - 新宿
+            - name: large_area
+              children:
+                - name: code
+                  desc: 大エリアコード
+                  examples:
+                    - Z011
+                - name: name
+                  desc: 大エリア名
+                  examples:
+                    - 東京
+            - name: service_area
+              children:
+                - name: code
+                  desc: サービスエリアコード
+                  examples:
+                    - SA11
+                - name: name
+                  desc: サービスエリア名
+                  examples:
+                    - 東京
+            - name: large_service_area
+              children:
+                - name: code
+                  desc: 大サービスエリアコード
+                  examples:
+                    - SS10
+                - name: name
+                  desc: 大サービスエリア名
+                  examples:
+                    - 関東
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+          middle_area: Y005
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: genre
+    title: ジャンルマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/genre/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: ジャンルコード
+        desc: ジャンルコードで検索(完全一致)します。（２個まで指定可、3個以上指定すると3個目以降無視します）*2
+        note: G002
+        multiple: true
+      - name: keyword
+        title: ジャンル名
+        desc: ジャンル名で検索(部分一致)します。  	UTF8(URLエンコード)で指定
+        note: バー
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      2: |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 15
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 15
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: genre
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: ジャンルコード
+              examples:
+                - G002
+            - name: name
+              desc: ジャンル名
+              examples:
+                - ダイニングバー
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: food
+    title: 料理名マスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/food/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: code
+        title: 料理コード
+        desc: 料理コードで検索(完全一致)します。（3個まで指定可、4個以上指定すると4個目以降無視します）*2
+        note: R001
+        multiple: true
+      - name: keyword
+        title: 料理名
+        desc: 料理名で検索(部分一致)します。UTF8(URLエンコード)で指定
+        note: 和食
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    params_footnotes:
+      2: |
+        複数指定可能パラメータの指定方法
+        name=value1&name=value2&...または name=value1,value2,...
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 64
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 64
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: food
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: 料理コード
+              examples:
+                - R001
+            - name: name
+              desc: 料理名
+              examples:
+                - 和食全般
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+  - name: credit_card
+    title: クレジットカードマスタAPI
+    url: http://webservice.recruit.co.jp/hotpepper/credit_card/v1/
+    params:
+      - name: key
+        title: APIキー
+        desc: APIを利用するために割り当てられたキーを設定します。
+        require: true
+      - name: format
+        title: レスポンス形式
+        desc: レスポンスをXMLかJSONかJSONPかを指定します。JSONPの場合、さらにパラメータ callback=コールバック関数名 を指定する事により、javascript側コールバック関数の名前を指定できます。
+        note: 初期値:xml。xml または json または jsonp。
+        fixed: xml
+    return:
+      name: results
+      children:
+        - name: api_version
+          desc: APIのバージョン
+          examples:
+            - 1.20
+        - name: results_available
+          desc: クエリー条件にマッチする、検索結果の全件数
+          examples:
+            - 47
+          page_total_entries: true
+        - name: results_returned
+          desc: このＸＭＬに含まれる検索結果の件数
+          examples:
+            - 47
+          page_entries_per_page: true
+        - name: results_start
+          desc: 検索結果の開始位置
+          examples:
+            - 1
+          page_current_offset: true
+          page_current_offset_origin: 1
+        - name: credit_card
+          desc: "[複数要素]"
+          multiple: true
+          children:
+            - name: code
+              desc: クレジットカードコード
+              examples:
+                - c99
+            - name: name
+              desc: クレジットカード名
+              examples:
+                - ○○カード
+    error:
+      name: results
+      children:
+        - name: api_version
+        - name: error
+          children:
+            - name: message
+              error_message: true
+    tests:
+      - type: good
+        params:
+          key: $WEBSERVICE_RECRUIT_KEY
+      - type: error
+        params:
+          key: TEST
+      - type: lib_error
+
+meta-spec:
+  version: 1.0.1
