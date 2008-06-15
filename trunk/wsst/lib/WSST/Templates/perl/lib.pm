@@ -134,7 +134,7 @@ sub make_pod_test_files {
 #    $odir =~ s/([\&\;\`\'\\\"\|\*\?\~\<\>\^\(\)\[\]\{\}\$\n\r ])/\\$1/g;
 #    print STDERR ">>> exec make-dist.sh\n";
 #    `$tmpl_dir/make-dist.sh $odir >&2`;
-#    WSST::Exception->raise("failed exec_make_dist_sh: ret=$?") if $?;
+#    die "failed exec_make_dist_sh: ret=$?" if $?;
 #    print STDERR "<<< done make-dist.sh\n\n";
 #}
 

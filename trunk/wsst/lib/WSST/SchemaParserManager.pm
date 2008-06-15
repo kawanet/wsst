@@ -2,7 +2,6 @@ package WSST::SchemaParserManager;
 
 use strict;
 use File::Basename qw(fileparse);
-use WSST::Exception;
 use WSST::SchemaParser;
 use WSST::SchemaParser::YAML;
 
@@ -32,7 +31,7 @@ sub get_schema_parser {
     my $cls = "WSST::SchemaParser::$ext";
     eval "require $cls;";
     if ($@) {
-        WSST::Exception->raise("parser not found: $path");
+        die "parser not found: $path";
     }
     return $cls->new();
 }

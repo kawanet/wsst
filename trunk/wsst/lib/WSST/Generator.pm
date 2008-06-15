@@ -5,7 +5,6 @@ use base qw(WSST::Generator);
 use File::Find qw(find);
 use File::Basename qw(dirname);
 use File::Path qw(mkpath);
-use WSST::Exception;
 use WSST::Schema;
 use WSST::CodeTemplate;
 
@@ -26,7 +25,7 @@ sub generator_names {
     my $names = [];
     
     opendir(DIR, $self->{tmpl_dir})
-        || WSST::Exception->raise("failed opendir('$self->{tmpl_dir}'): $!");
+        || die "failed opendir('$self->{tmpl_dir}'): $!";
     while (my $ent = readdir(DIR)) {
         next if $ent =~ /^\./ || ! -d "$self->{tmpl_dir}/$ent";
         push(@$names, $ent);
@@ -56,7 +55,7 @@ sub generate {
     
     my $odir = ($opts->{outdir} || "output") . "/$name";
     unless (-d $odir) {
-        mkdir($odir) || WSST::Exception->raise("failed mkdir('$odir'): $!");
+        mkdir($odir) || die "failed mkdir('$odir'): $!";
     }
 
     my $files = [];
@@ -136,11 +135,11 @@ sub generate {
                 my $osubdir = dirname($ofile2);
                 unless (-d $osubdir) {
                     mkpath($osubdir)
-                        || WSST::Exception->raise("failed mkpath('$osubdir'): $!");
+                        || die "failed mkpath('$osubdir'): $!";
                 }
                 
                 open(OUT, ">$ofile2")
-                    || WSST::Exception->raise("failed open('>$ofile2'): $!");
+                    || die "failed open('>$ofile2'): $!";
                 print OUT $odata;
                 close(OUT);
 
@@ -158,11 +157,11 @@ sub generate {
             my $osubdir = dirname($ofile);
             unless (-d $osubdir) {
                 mkpath($osubdir)
-                    || WSST::Exception->raise("failed mkpath('$osubdir'): $!");
+                    || die "failed mkpath('$osubdir'): $!";
             }
             
             open(OUT, ">$ofile")
-                || WSST::Exception->raise("failed open('>$ofile'): $!");
+                || die "failed open('>$ofile'): $!";
             print OUT $odata;
             close(OUT);
         

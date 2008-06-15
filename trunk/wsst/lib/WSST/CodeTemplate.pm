@@ -3,14 +3,13 @@ package WSST::CodeTemplate;
 use strict;
 use Template;
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.1.0';
 
 sub new {
     my $class = shift;
     
     my $self = {@_};
     $self->{tmpl_dirs} ||= [];
-    $self->{tmpl_prefix} ||= "";
     $self->{vars} ||= {};
     
     bless($self, $class);
@@ -41,7 +40,7 @@ sub expand {
     my $output;
     my $res = $tmpl->process($name, $vars, \$output);
 
-    WSST::Exception->raise("TemplateError: $name: " . $tmpl->error()) unless $res;
+    die "TemplateError: $name: " . $tmpl->error() unless $res;
     
     foreach my $key (keys %$vars) {
         next if exists $local_vars{$key};
