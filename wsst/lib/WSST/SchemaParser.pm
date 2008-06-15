@@ -3,7 +3,7 @@ package WSST::SchemaParser;
 use strict;
 use WSST::Schema;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.1.0';
 
 sub types;
 

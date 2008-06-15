@@ -3,9 +3,8 @@ package WSST::SchemaParser::YAML;
 use strict;
 use base qw(WSST::SchemaParser);
 use YAML ();
-use WSST::Exception;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.1.0';
 
 sub new {
     my $class = shift;
@@ -21,12 +20,7 @@ sub parse {
     my $self = shift;
     my $path = shift;
     
-    my $data = eval {
-        YAML::LoadFile($path);
-    };
-    if ($@) {
-        WSST::Exception->raise($@);
-    }
+    my $data = YAML::LoadFile($path);
     
     return WSST::Schema->new($data);
 }
