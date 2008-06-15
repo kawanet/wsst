@@ -1,4 +1,4 @@
-package WSST::BuiltinSchemaParser;
+package WSST::SchemaParser::YAML;
 
 use strict;
 use base qw(WSST::SchemaParser);
@@ -33,11 +33,11 @@ sub parse {
 
 =head1 NAME
 
-WSST::BuiltinSchemaParser - BuiltinSchemaParser class of WSST
+WSST::SchemaParser::YAML - YAML SchemaParser class of WSST
 
 =head1 DESCRIPTION
 
-BuiltinSchemaParser is builtin YAML schema parser.
+This class is YAML schema parser.
 
 =head1 METHODS
 

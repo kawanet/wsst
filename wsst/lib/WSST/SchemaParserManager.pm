@@ -4,10 +4,9 @@ use strict;
 use File::Basename qw(fileparse);
 use WSST::Exception;
 use WSST::SchemaParser;
-use WSST::BuiltinSchemaParser;
-use WSST::PluginManager;
+use WSST::SchemaParser::YAML;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.1.0';
 
 my $SINGLETON_INSTANCE = undef;
 
@@ -23,13 +22,19 @@ sub new {
 }
 
 sub get_schema_parser {
-    my ($self, $path) = @_;
-    my @exts = sort keys %{$self->{parser_type_map}};
-    my ($fname, $dir, $ext) = fileparse($path, @exts);
-    unless ($self->{parser_type_map}->{$ext}) {
+    my $self = shift;
+    my $path = shift;
+    my ($fname, $dir, $ext) = fileparse($path, qr/\.[^.]*/);
+    return $self->{parser_type_map}->{$ext}
+        if $self->{parser_type_map}->{$ext};
+    $ext =~ s/^\.//;
+    $ext = uc($ext);
+    my $cls = "WSST::SchemaParser::$ext";
+    eval "require $cls;";
+    if ($@) {
         WSST::Exception->raise("parser not found: $path");
     }
-    return $self->{parser_type_map}->{$ext};
+    return $cls->new();
 }
 
 sub instance {
@@ -47,20 +52,12 @@ sub init {
     
     my $self = $SINGLETON_INSTANCE = $class->new();
 
-    {
-        my $builtin = WSST::BuiltinSchemaParser->new();
-        push(@{$self->{parsers}}, $builtin);
-        foreach my $type (@{$builtin->types}) {
-            $self->{parser_type_map}->{$type} = $builtin;
-        }
-    }
-    
-    my $pm = WSST::PluginManager->instance;
-    foreach my $plugin (@{$pm->{plugins}}) {
-        next unless $plugin->isa("WSST::SchemaParser");
-        push(@{$self->{parsers}}, $plugin);
-        foreach my $type (@{$plugin->types}) {
-            $self->{parser_type_map}->{$type} = $plugin;
+    foreach my $key (keys %WSST::SchemaParser::) {
+        next if $key !~ /^(.+)::$/;
+        my $cls = "WSST::SchemaParser::$1";
+        my $obj = $cls->new();
+        foreach my $type (@{$obj->types}) {
+            $self->{parser_type_map}->{$type} = $obj;
         }
     }
 }
