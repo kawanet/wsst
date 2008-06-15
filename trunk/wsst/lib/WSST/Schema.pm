@@ -3,7 +3,9 @@ package WSST::Schema;
 use strict;
 use Storable qw(dclone);
 
-our $VERSION = '0.0.2';
+use WSST::Schema::Data;
+
+our $VERSION = '0.1.0';
 
 sub new {
     my $class = shift;
@@ -66,204 +68,6 @@ sub _update_lang {
     }
 }
 
-package WSST::Schema::Base;
-
-use strict;
-use base qw(Class::Accessor::Fast);
-
-use constant BOOL_FIELDS => ();
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-    foreach my $fld ($class->BOOL_FIELDS) {
-        $self->{$fld} = ($self->{$fld} eq "true");
-    }
-    return $self;
-}
-
-package WSST::Schema::Data;
-
-use strict;
-use base qw(WSST::Schema::Base);
-__PACKAGE__->mk_accessors(qw(company_name service_name version title abstract
-                             license author see_also copyright methods));
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-    if ($self->{methods}) {
-        foreach my $method (@{$self->{methods}}) {
-            $method = WSST::Schema::Method->new($method);
-        }
-    }
-    return $self;
-}
-
-sub meta_spec {
-    my $self = shift;
-    $self->{'meta-spec'} = $_[0] if scalar(@_);
-    return $self->{'meta-spec'};
-}
-
-package WSST::Schema::Method;
-
-use strict;
-use base qw(WSST::Schema::Base);
-__PACKAGE__->mk_accessors(qw(name title desc url params params_footnotes return
-                             return_footnotes error error_footnotes tests
-                             sample_response));
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-    if ($self->{params}) {
-        foreach my $param (@{$self->{params}}) {
-            $param = WSST::Schema::Param->new($param);
-        }
-    }
-    $self->{return} = WSST::Schema::Return->new($self->{return});
-    $self->{error} = WSST::Schema::Error->new($self->{error});
-    if ($self->tests) {
-        foreach my $test (@{$self->{tests}}) {
-            $test = WSST::Schema::Test->new($test);
-        }
-    }
-    foreach my $fld_base (qw(params return error)) {
-        my $fld = "${fld_base}_footnotes";
-        next unless defined $self->{$fld};
-        my $ref = ref $self->{$fld};
-        if ($ref eq 'ARRAY') {
-            my $n = 1;
-            $self->{$fld} = [map {{name=>$n++, value=>$_}} @{$self->{$fld}}];
-        } elsif ($ref eq 'HASH') {
-            $self->{$fld} = [map {{name=>$_, value=>$self->{$fld}->{$_}}}
-                             sort keys %{$self->{$fld}}];
-        }
-    }
-    return $self;
-}
-
-sub sample_query {
-    my $self = shift;
-    $self->{sample_query} = $_[0] if scalar(@_);
-    return $self->{sample_query} if defined $self->{sample_query};
-    my $good_test = $self->first_good_test || return;
-    require URI;
-    my $url = URI->new($self->url);
-    my $params = {%{$good_test->params}};
-    foreach my $key (keys %$params) {
-        $params->{$key} =~ s/^\$(.*)$/$ENV{$1}||'XXXXXXXX'/e;
-    }
-    $url->query_form(%$params);
-    my $sample_query = {
-        url => $url->as_string,
-    };
-    return $sample_query;
-}
-
-sub first_good_test {
-    my $self = shift;
-    return unless defined $self->tests;
-    foreach my $test (@{$self->tests}) {
-        return $test if $test->type eq 'good';
-    }
-    return undef;
-}
-
-package WSST::Schema::Param;
-
-use strict;
-use base qw(WSST::Schema::Base);
-__PACKAGE__->mk_accessors(qw(name title desc type require));
-
-use constant BOOL_FIELDS => qw(require);
-
-package WSST::Schema::Node;
-
-use strict;
-use base qw(WSST::Schema::Base);
-__PACKAGE__->mk_accessors(qw(name title desc examples type children multiple
-                             nullable));
-__PACKAGE__->mk_ro_accessors(qw(parent depth));
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-    $self->{depth} = ($self->parent ? $self->parent->depth + 1 : 1);
-    if ($self->{children}) {
-        foreach my $node (@{$self->{children}}) {
-            $node->{parent} = $self;
-            $node = $class->new($node);
-        }
-    }
-    return $self;
-}
-
-sub path {
-    my $self = shift;
-    my $min = shift || 0;
-    my $path = [];
-    for (my $p = $self; $p && $p->depth >= $min; $p = $p->parent) {
-        unshift(@$path, $p);
-    }
-    return $path;
-}
-
-sub path_names {
-    my $self = shift;
-    my $min = shift || 0;
-    return [map {$_->name} @{$self->path($min)}];
-}
-
-sub to_array {
-    my $self = shift;
-
-    my $array = [$self];
-    my $stack = [[$self, 0]];
-    while (my $val = pop(@$stack)) {
-        my ($node, $i) = @$val;
-        for (; $i < @{$node->{children}}; $i++) {
-            my $child = $node->{children}->[$i];
-            push(@$array, $child);
-            if ($child->{children}) {
-                push(@$stack, [$node, $i+1]);
-                push(@$stack, [$child, 0]);
-                last;
-            }
-        }
-    }
-
-    return $array;
-}
-
-use constant BOOL_FIELDS => qw(multiple nullable);
-
-package WSST::Schema::Return;
-
-use strict;
-use base qw(WSST::Schema::Node);
-__PACKAGE__->mk_accessors(qw(options page_total_entries page_current_page
-                             page_entries_per_page));
-
-use constant BOOL_FIELDS => qw(multiple nullable page_total_entries
-                               page_current_page page_entries_per_page);
-
-package WSST::Schema::Error;
-
-use strict;
-use base qw(WSST::Schema::Node);
-__PACKAGE__->mk_accessors(qw(values error_message error_message_map));
-
-use constant BOOL_FIELDS => qw(multiple nullable error_message);
-
-package WSST::Schema::Test;
-
-use strict;
-use base qw(WSST::Schema::Base);
-__PACKAGE__->mk_accessors(qw(type name params));
-
-
 =head1 NAME
 
 WSST::Schema - Schema class of WSST
@@ -281,6 +85,10 @@ Constructor.
 =head2 clone_data
 
 Returns schema data which copied deeply.
+
+=head2 data
+
+Returns schema data.
 
 =head2 lang
 

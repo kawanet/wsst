@@ -5,8 +5,6 @@ BEGIN { use_ok("WSST::SchemaParserManager"); }
 
 can_ok("WSST::SchemaParserManager", qw(get_schema_parser instance init));
 
-WSST::PluginManager->init(plugin_dir => 't/test_plugins');
-
 my $obj = WSST::SchemaParserManager->instance;
 
 ok(ref $obj, '$obj->instance');
