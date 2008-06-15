@@ -15,7 +15,13 @@ my $TMPL_PACKAGE_ID = 0;
 sub new {
     my $class = shift;
     my $self = {};
-    $self->{tmpl_dir} = $ENV{WSST_TMPL_DIR} || 'templates';
+    foreach my $base_dir (@INC) {
+        my $dir = "$base_dir/WSST/Templates";
+        if (-d $dir) {
+            $self->{tmpl_dir} = $dir;
+            last;
+        }
+    }
     return bless($self, $class);
 }
 
