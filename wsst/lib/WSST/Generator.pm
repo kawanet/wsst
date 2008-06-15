@@ -113,7 +113,7 @@ sub generate {
         my $ofile = $file;
         $ofile =~ s/^\Q$tmpl_dir\E//;
         $ofile =~ s/\.tmpl$//;
-        $ofile =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)}/$tmpl->get($1)||"{$1}"/eg;
+        #$ofile =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)}/$tmpl->get($1)||"{$1}"/eg;
         
         my $fdir = dirname($file);
         unshift(@{$tmpl->{tmpl_dirs}}, $fdir);
@@ -121,8 +121,13 @@ sub generate {
             foreach my $method (@{$tmpl->get('methods')}) {
                 my $ofile2 = $ofile;
                 $ofile2 =~ s/{method\.([a-zA-Z_][a-zA-Z0-9_]*)}/$method->{$1}||"{$1}"/eg;
-                $ofile2 =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)\((.*?)\)}/eval "${tmpl_pkg}::${1}($2)"/eg
-                    if $tmpl_pkg;
+                #$ofile2 =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)\((.*?)\)}/eval "${tmpl_pkg}::${1}($2)"/eg
+                #    if $tmpl_pkg;
+                $ofile2 =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)}/
+                    my $val = $tmpl->get($1);
+                    $val = &{$val}() if (ref $val eq 'CODE');
+                    $val;
+                /egx;
                 die $@ if $@;
                 $ofile2 = $odir . $ofile2;
                 
@@ -146,8 +151,13 @@ sub generate {
                 push(@$result, $ofile2);
             }
         } else {
-            $ofile =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)\((.*?)\)}/eval "${tmpl_pkg}::${1}($2)"/eg
-                if $tmpl_pkg;
+            #$ofile =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)\((.*?)\)}/eval "${tmpl_pkg}::${1}($2)"/eg
+            #    if $tmpl_pkg;
+                $ofile =~ s/{([a-zA-Z_][a-zA-Z0-9_]*)}/
+                    my $val = $tmpl->get($1);
+                    $val = &{$val}() if (ref $val eq 'CODE');
+                    $val;
+                /egx;
             $ofile = $odir . $ofile;
 
             my $tmpl_name = $file;
