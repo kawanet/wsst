@@ -1,6 +1,9 @@
 #!/bin/sh
 
-BIN_DIR=`dirname $0`
-LIB_DIR="${BIN_DIR}/../lib"
+cmd=$1; shift
 
-exec perl -I ${LIB_DIR} ${BIN_DIR}/wsst.pl "$@"
+if [ -z "$cmd" ]; then
+    cmd=help
+fi
+
+exec perl -MWSST -e $cmd -- "$@"
