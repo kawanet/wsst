@@ -17,7 +17,6 @@ unless ($ENV{WSST_HOME}) {
 }
 
 $ENV{WSST_PLUGIN_DIR} ||= "$ENV{WSST_HOME}/plugins";
-$ENV{WSST_TMPL_DIR} ||= "$ENV{WSST_HOME}/templates";
 
 sub generate {
     my $tcm = WSST::CommandManager->instance;
