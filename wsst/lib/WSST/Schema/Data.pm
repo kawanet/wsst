@@ -26,4 +26,76 @@ sub meta_spec {
     return $self->{'meta-spec'};
 }
 
+=head1 NAME
+
+WSST::Schema::Data - Schema::Data class of WSST
+
+=head1 DESCRIPTION
+
+This class represents the top-level elements of schema.
+
+=head1 METHODS
+
+=head2 new
+
+Constructor.
+
+=head2 company_name
+
+Accessor for the company name.
+
+=head2 service_name
+
+Accessor for the service name.
+
+=head2 version
+
+Accessor for the version.
+
+=head2 title
+
+Accessor for the title.
+
+=head2 abstract
+
+Accessor for the abstract.
+
+=head2 license
+
+Accessor for the license.
+
+=head2 author
+
+Accessor for the author.
+
+=head2 see_also
+
+Accessor for the see_also.
+
+=head2 copyright
+
+Accessor for the copyright.
+
+=head2 methods
+
+Accessor for the methods.
+
+=head2 meta_spec
+
+Accessor for the meta-spec.
+
+=head1 SEE ALSO
+
+http://code.google.com/p/wsst/
+
+=head1 AUTHORS
+
+Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
+Yusuke Kawasaki <u-suke@kawa.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008 WSS Project Team
+
+=cut
 1;
