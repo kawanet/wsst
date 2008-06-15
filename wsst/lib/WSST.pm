@@ -92,6 +92,7 @@ perl -MWSST -e command [wss_file] [options]
    generate         generate modules
    help             print help message
    version          print version message
+   dumpschema       dump schema object
 
  Options of generate command:
    -o --outdir=dir      set the output directory
