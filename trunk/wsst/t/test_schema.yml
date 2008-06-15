@@ -1,211 +1,62 @@
-# DokoAdAPIスキーマ
+---
+company_name: Test
+service_name: TestService
+version: 0.0.1
+title: Test Web Service
+abstract: Test Web Service Schema
+license: BSD
+author:
+  - author name <author@example.com>
+see_also: http://example.com/service/
+copyright: Copyright 2008 WSS Project Team
 
-# サービス定義
-DokoAdService:
-  name: 広告配信サービス
-  desc: |
-    キーワードや位置情報などから合致する広告を配信するサービス
-  base_url: http://match.doko.jp/haishin/
+methods:
+  - name: doSomething
+    title: Do something and return response
+    url: http://example.com/service/doSomething
+    params:
+      - name: param1
+        title: The parameter 1
+        desc: This parameter is XXXXX
+        require: true
+      - name: param2
+        title: The parameter 2
+        desc: This parameter is XXXXX
+        multiple: true
+        examples:
+          - TEST
+    return:
+      name: root
+      children:
+        - name: val1
+          desc: Value 1
+          examples:
+            - 1.0
+        - name: val2
+          desc: Value 2
+          multiple: true
+          children:
+            - name: val2_1
+              desc: Value 2.1
+              examples:
+                - TEST
+    error:
+      name: root
+      children:
+        - name: status
+        - name: error
+          children:
+            - name: message
+    tests:
+      - type: good
+        params:
+          param1: $ENV_VALUE
+          param2: XXXXX
+      - type: error
+        params:
+          param1: $ENV_VALUE
+      - type: lib_error
 
-  methods:
-    getAdList:
-      name: 広告表出依頼
-      desc: >
-        キーワードや位置情報などの抽出条件を受けとり、
-        合致する広告の一覧を返す
-      url: a
+meta-spec:
+  version: 1.0
 
-      params:
-        - key: i
-          name: サイトID
-          desc: 表出対象サイトの識別子
-          type: string
-          require: true
-
-        - key: a
-          name: 認証key
-          desc: |
-            システム日付(yyyyMMdd)+サイトパスワード(8 桁)をMD5 により暗号化する。
-            本システムでは、[システム日付+サイトパスワード]
-            または[(昨日の)システム日付+サイトパスワード]
-            または[(翌日の)システム日付+サイトパスワード]を正しい認証Key とみなす。
-          type: string
-          require: true
-
-        - key: ip
-          name: IPアドレス
-          desc: |
-            ユーザPC のIP アドレス(999.999.999.999)またはFQDN
-            ※空文字（0byte）でも可
-          type: string
-          require: true
-
-        - key: u
-          name: UserAgent
-          desc: |
-            ユーザからのhttp request に含まれるUserAgent情報
-            ※空文字（0byte）でも可
-          type: string
-          require: true
-
-        - key: m
-          name: 媒体区分
-          desc: >
-            広告を表出する媒体（PC、携帯）を示す
-            ‘p’(PC)、’d’(DoCoMo)、’a’(au)、’s’(SoftBank)のいずれか
-          type: char
-          require: true
-
-        - key: d
-          name: デラックス表出区分
-          desc: >
-            ‘a’デラックス広告含む全て(All)、’d’(デラックス広告のみDeluxe Only)、
-             ’n’ デラックス広告以外(not deluxe) のいずれか指定がない場合は’a’
-          type: char
-
-        - key: k
-          name: キーワード
-          desc: |
-            64 バイト以内のキーワードを半角Space で連結したもの
-            キーワードは10 個まで連結可能で、それ以上は無視する。
-          type: string
-
-        - key: g
-          name: 位置情報（測地系区分）
-          desc: |
-            ‘j’(日本測地系)、’w’(世界測地系)のいずれか。
-            入力のない場合はエラーとせず’j’とする
-            指定がない場合は’j’
-          type: char
-
-        - key: x
-          name: 位置情報（経度）（ミリ秒）
-          desc: 広告の抽出条件。位置を含む範囲の広告を抽出する
-          type: int
-
-        - key: y
-          name: 位置情報（緯度）（ミリ秒）
-          desc: 広告の抽出条件。位置を含む範囲の広告を抽出する
-          type: int
-
-        - key: c
-          name: 最大取得件数
-          desc: |
-            広告を返却する最大取得件数（１件〜10 件）
-            指定がない場合は10
-          type: int
-
-        - key: r
-          name: 広告データ形式
-          desc: ‘1’(html)、’2’(xml)、’3’(xhtml)のいずれか
-          type: char
-          require: true
-
-        - key: im
-          name: 画像表出区分
-          desc: |
-            ‘a’（返却可）、’n’(返却不可)のいずれか
-            指定がない場合は’a’
-          type: char
-
-        - key: rc
-          name: ランダム取得件数
-          desc: 広告をランダムに返却する件数（0 件〜10 件）
-          type: int
-
-        - key: pg
-          name: ページ識別子
-          desc: 表出サイト側で広告が表示されるページの識別子
-          type: string
-
-      return:
-        - key: result
-          name: 取得結果データ
-          type:
-            - key: adLength
-              name: 広告返却件数
-              desc: |
-                返却する広告の件数（0〜10）
-                ※表出要求で指定された最大取得件数まで返却する
-              type: int
-
-        - key: ad
-          name: 広告データのリスト
-          type: DokoAdData[]
-
-# 広告データ
-DokoAdData:
-  name: 一件の広告データ
-  desc: DokoAdService#getAdListで返される広告データの一つ
-
-  attrs:
-    - key: adId
-      name: 広告ID
-      desc: |
-        返却する広告の識別子
-        ※埋め草の場合は連番（0〜9）
-      type: string
-
-    - key: adType
-      name: 広告種類
-      desc: >
-        ‘a’（エリア）、’k’（キーワード）、
-        ’d’（デラックス）、’u’（埋め草）のいずれか
-      type: char
-
-    - key: adTitle
-      name: 広告タイトル
-      desc: |
-        エリア、キーワード広告の場合は30バイト以内
-        ※携帯の場合は18 バイト以内
-      type: string
-
-    - key: adText1
-      name: 広告テキスト１
-      desc: |
-        エリア、キーワード広告の場合は36バイト以内
-        ※携帯の場合は18 バイト以内
-      type: string
-
-    - key: adText2
-      name: 広告テキスト２
-      desc: |
-        エリア、キーワード広告の場合は36バイト以内
-        ※携帯の場合は返却しない
-      type: string
-
-    - key: adUrl
-      name: 広告選択URL
-      desc: >
-        広告クリック時の要求先URL
-        （リダイレクトして指定された広告のURLに遷移する）
-      type: string
-
-    - key: picUrl
-      name: 広告画像URL
-      desc: |
-        エリア広告デラックス用の広告画像URL
-        ※エリア広告デラックスで画像返却ありと指定された場合のみ返却。
-      type: string
-
-    - key: geoType
-      name: 測地系区分
-      desc: |
-        広告に指定された店舗位置情報の測地系
-        ‘j’(日本測地系)、’w’(世界測地系)のいずれか。
-        ※店舗の位置情報が指定された広告のみ返却
-      type: char
-
-    - key: positionX
-      name: 店舗位置情報（経度）
-      desc: |
-        広告に指定された店舗の位置情報
-        ※店舗の位置情報が指定された広告のみ返却
-      type: int
-
-    - key: positionY
-      name: 店舗位置情報（緯度）
-      desc: |
-        広告に指定された店舗の位置情報
-        ※店舗の位置情報が指定された広告のみ返却
-      type: int

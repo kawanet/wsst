@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 BEGIN { use_ok("WSST::SchemaParserManager"); }
 
@@ -19,5 +19,10 @@ ok(!$@, '$obj->get_schema_parser(t/test_schema.yml)');
 $parser = eval { $obj->get_schema_parser('t/XXXXX.test'); };
 ok(!$parser, '$obj->get_schema_parser(t/XXXXX.test)');
 ok($@, '$obj->get_schema_parser(t/XXXXX.test)');
+
+local @INC = ('t/test_schema_parsers', @INC);
+$parser = eval { $obj->get_schema_parser('t/TEST.test'); };
+ok($parser, '$obj->get_schema_parser(t/TEST.test)');
+ok(!$@, '$obj->get_schema_parser(t/TEST.test)');
 
 1;

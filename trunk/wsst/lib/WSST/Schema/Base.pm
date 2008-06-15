@@ -11,7 +11,7 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
     foreach my $fld ($class->BOOL_FIELDS) {
-        $self->{$fld} = ($self->{$fld} eq "true");
+        $self->{$fld} = ($self->{$fld} && $self->{$fld} eq "true");
     }
     return $self;
 }
