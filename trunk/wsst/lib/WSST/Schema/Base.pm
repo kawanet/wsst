@@ -16,4 +16,32 @@ sub new {
     return $self;
 }
 
+=head1 NAME
+
+WSST::Schema::Base - Base class for Schema elements
+
+=head1 DESCRIPTION
+
+This is a base class for schema elements.
+
+=head1 METHODS
+
+=head2 new
+
+Constructor.
+
+=head1 SEE ALSO
+
+http://code.google.com/p/wsst/
+
+=head1 AUTHORS
+
+Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
+Yusuke Kawasaki <u-suke@kawa.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008 WSS Project Team
+
+=cut
 1;

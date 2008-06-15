@@ -70,4 +70,84 @@ sub first_good_test {
     return undef;
 }
 
+=head1 NAME
+
+WSST::Schema::Method - Schema::Method class of WSST
+
+=head1 DESCRIPTION
+
+This class represents the method element of schema.
+
+=head1 METHODS
+
+=head2 new
+
+Constructor.
+
+=head2 name
+
+Accessor for the name.
+
+=head2 title
+
+Accessor for the title.
+
+=head2 desc
+
+Accessor for the desc.
+
+=head2 url
+
+Accessor for the url.
+
+=head2 params
+
+Accessor for the params.
+
+=head2 params_footnotes
+
+Accessor for the params_footnotes.
+
+=head2 return
+
+Accessor for the return.
+
+=head2 return_footnotes
+
+Accessor for the return_footnotes.
+
+=head2 error
+
+Accessor for the error.
+
+=head2 error_footnotes
+
+Accessor for the error_footnotes.
+
+=head2 tests
+
+Accessor for the tests.
+
+=head2 sample_response
+ 
+Accessor for the sample_response.
+
+=head2 first_good_test
+
+Returns the first good test or undef.
+
+=head1 SEE ALSO
+
+http://code.google.com/p/wsst/
+
+=head1 AUTHORS
+
+Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
+Yusuke Kawasaki <u-suke@kawa.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008 WSS Project Team
+
+=cut
 1;

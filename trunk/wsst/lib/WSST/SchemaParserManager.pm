@@ -51,7 +51,7 @@ sub init {
     
     my $self = $SINGLETON_INSTANCE = $class->new();
 
-    foreach my $key (keys %WSST::SchemaParser::) {
+    foreach my $key (sort keys %WSST::SchemaParser::) {
         next if $key !~ /^(.+)::$/;
         my $cls = "WSST::SchemaParser::$1";
         my $obj = $cls->new();
