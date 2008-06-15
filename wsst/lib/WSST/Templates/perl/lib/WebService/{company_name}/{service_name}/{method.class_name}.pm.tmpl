@@ -60,6 +60,8 @@ sub is_error {
     return 0 unless $root[% node_access(node.parent) %]->can('[% node.name %]');
 [% IF node.values -%]
     return 0 unless $root[% node_access(node) %] =~ /^([% join("|", node.values) %])$/;
+[% ELSE -%]
+    return 0 unless defined $root[% node_access(node) %];
 [% END -%]
 [% END -%]
     return 1;
