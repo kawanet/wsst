@@ -1,0 +1,40 @@
+NAME
+    WSST - WebService Specification Schema Tool(WSST)
+
+SYNOPSIS
+    perl -MWSST -e command [wss_file] [options]
+
+     Commands:
+       generate         generate modules
+       help             print help message
+       version          print version message
+       dumpschema       dump schema object
+
+     Options of generate command:
+       -o --outdir=dir      set the output directory
+       -l --lang=lang       specify a generate language
+       -v --var="name=val"  set a variable
+
+OPTIONS
+    -o,--outdir
+            Set the output directory. (default="output")
+
+    -l,--lang
+            Specify a generate language.
+
+    -v,--var
+            Set a variable. This variable can be used from Template.
+
+DESCRIPTION
+    WSST is a tool to generate libraries which manipulate web service.
+
+SEE ALSO
+    http://code.google.com/p/wsst/
+
+AUTHORS
+    Mitsuhisa Oshikawa <mitsuhisa [at] gmail.com> Yusuke Kawasaki <u-suke
+    [at] kawa.net>
+
+COPYRIGHT AND LICENSE
+    Copyright 2008 WSS Project Team
+
