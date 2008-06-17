@@ -8,7 +8,7 @@ use Pod::Usage;
 use WSST::SchemaParserManager;
 use WSST::Generator;
 
-$VERSION = '0.1.1';
+$VERSION = '0.1.2';
 
 @EXPORT = qw(generate help version dumpschema);
 

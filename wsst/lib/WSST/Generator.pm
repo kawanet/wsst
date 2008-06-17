@@ -1,14 +1,13 @@
 package WSST::Generator;
 
 use strict;
-use base qw(WSST::Generator);
 use File::Find qw(find);
 use File::Basename qw(dirname);
 use File::Path qw(mkpath);
 use WSST::Schema;
 use WSST::CodeTemplate;
 
-our $VERSION = '0.1.1';
+our $VERSION = '0.1.2';
 
 my $TMPL_PACKAGE_ID = 0;
 
