@@ -8,7 +8,7 @@ __PACKAGE__->mk_ro_accessors(qw(parent depth));
 
 use constant BOOL_FIELDS => qw(multiple nullable);
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 sub new {
     my $class = shift;
@@ -124,8 +124,8 @@ http://code.google.com/p/wsst/
 
 =head1 AUTHORS
 
-Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
-Yusuke Kawasaki <u-suke@kawa.net>
+Mitsuhisa Oshikawa <mitsuhisa [at] gmail.com>
+Yusuke Kawasaki <u-suke [at] kawa.net>
 
 =head1 COPYRIGHT AND LICENSE
 

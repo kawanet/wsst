@@ -8,7 +8,7 @@ use Pod::Usage;
 use WSST::SchemaParserManager;
 use WSST::Generator;
 
-$VERSION = '0.1.0';
+$VERSION = '0.1.1';
 
 @EXPORT = qw(generate help version dumpschema);
 
@@ -128,8 +128,8 @@ http://code.google.com/p/wsst/
 
 =head1 AUTHORS
 
-Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
-Yusuke Kawasaki <u-suke@kawa.net>
+Mitsuhisa Oshikawa <mitsuhisa [at] gmail.com>
+Yusuke Kawasaki <u-suke [at] kawa.net>
 
 =head1 COPYRIGHT AND LICENSE
 

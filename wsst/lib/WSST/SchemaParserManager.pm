@@ -5,7 +5,7 @@ use File::Basename qw(fileparse);
 use WSST::SchemaParser;
 use WSST::SchemaParser::YAML;
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 my $SINGLETON_INSTANCE = undef;
 
@@ -94,8 +94,8 @@ http://code.google.com/p/wsst/
 
 =head1 AUTHORS
 
-Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
-Yusuke Kawasaki <u-suke@kawa.net>
+Mitsuhisa Oshikawa <mitsuhisa [at] gmail.com>
+Yusuke Kawasaki <u-suke [at] kawa.net>
 
 =head1 COPYRIGHT AND LICENSE
 

@@ -8,7 +8,7 @@ __PACKAGE__->mk_accessors(qw(options page_total_entries page_current_page
 use constant BOOL_FIELDS => qw(multiple nullable page_total_entries
                                page_current_page page_entries_per_page);
 
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 =head1 NAME
 
@@ -46,8 +46,8 @@ http://code.google.com/p/wsst/
 
 =head1 AUTHORS
 
-Mitsuhisa Oshikawa <mitsuhisa@gmail.com>
-Yusuke Kawasaki <u-suke@kawa.net>
+Mitsuhisa Oshikawa <mitsuhisa [at] gmail.com>
+Yusuke Kawasaki <u-suke [at] kawa.net>
 
 =head1 COPYRIGHT AND LICENSE
 
